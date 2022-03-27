@@ -15,6 +15,7 @@ import { CHALLENGE_URL_PATTERN, SUBMISSION_URL_PATTERN } from './constants.js';
     ["blocking"]
   );
   
+  browser.runtime.onMessage.addListener(handlemessage);
   
   function getAnswerKey(details) {   
     let filter = browser.webRequest.filterResponseData(details.requestId);
@@ -37,5 +38,10 @@ import { CHALLENGE_URL_PATTERN, SUBMISSION_URL_PATTERN } from './constants.js';
 
   function checkAnswerKey(details) {
     return {cancel: true};
+  }
+
+  function handlemessage(req, sender, sendResponse) {
+    console.log("Message: " + req.answer);
+    sendResponse({correct: true});
   }
 })();
