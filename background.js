@@ -1,4 +1,4 @@
-import { CHALLENGE_URL_PATTERN, SUBMISSION_URL_PATTERN } from './constants.js';
+import { CHALLENGE_URL_PATTERN } from './constants.js';
 
 (function() {
   let answerkey_JSON;
@@ -9,12 +9,6 @@ import { CHALLENGE_URL_PATTERN, SUBMISSION_URL_PATTERN } from './constants.js';
     ["blocking"]
   );
   
-  browser.webRequest.onBeforeRequest.addListener(
-    checkAnswerKey,
-    {urls: [SUBMISSION_URL_PATTERN]},
-    ["blocking"]
-  );
-  
   browser.runtime.onMessage.addListener(handlemessage);
   
   function getAnswerKey(details) {   
@@ -22,26 +16,27 @@ import { CHALLENGE_URL_PATTERN, SUBMISSION_URL_PATTERN } from './constants.js';
     
     filter.onstart = event => {
       answerkey_JSON = "";
-     };
+    };
   
-     filter.ondata = event => {
-       let decoder = new TextDecoder("utf-8");
-       answerkey_JSON += decoder.decode(event.data);
-       filter.write(event.data);
-     };
-     filter.onstop = event => {
-       let answerkey = JSON.parse(answerkey_JSON).challenges;
-       console.log("Answer key JSON: " + answerkey);
-       filter.disconnect();
-     };
-  }
+    filter.ondata = event => {
+      const decoder = new TextDecoder("utf-8");
+      answerkey_JSON += decoder.decode(event.data);
+      filter.write(event.data);
+    };
 
-  function checkAnswerKey(details) {
-    return {cancel: true};
+    filter.onstop = event => {
+      const answerkey = JSON.parse(answerkey_JSON).challenges;
+      console.log("Answer key JSON: " + answerkey);
+      filter.disconnect();
+    };
   }
 
   function handlemessage(req, sender, sendResponse) {
     console.log("Message: " + req.answer);
-    sendResponse({correct: true});
+    sendResponse({correct: false});
   }
 })();
+
+chrome.webNavigation.onHistoryStateUpdated.addListener(function(details) {
+  chrome.tabs.executeScript(null,{file:"../content.js"});
+});

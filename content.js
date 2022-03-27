@@ -1,5 +1,3 @@
-var PLAYERFOOTER_ID = "root";
-
 document.addEventListener(
     'keydown',
     async function (e){
@@ -12,7 +10,7 @@ document.addEventListener(
                 answer: "Test answer",
             })
             console.log("Passed: " + sending.correct);
-            if (!sending.correct) {
+            if (sending.correct) {
                 const submit = new KeyboardEvent('keydown', {key: "Enter"});
                 document.dispatchEvent(submit);
             }

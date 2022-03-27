@@ -15,7 +15,7 @@
     "content_scripts": [
       {
         "matches": [
-          "https://www.duolingo.com/skill/ru/Alphabet-1/practice"
+          "https://www.duolingo.com/skill/*/practice"
           ],
         "js": ["content.js"]
       }
@@ -28,6 +28,8 @@
     "permissions": [
       "https://www.duolingo.com/*/sessions",
       "https://excess.duolingo.com/challenge_response/batch",
+      "https://www.duolingo.com/skill/*/practice",
+      "webNavigation",
       "webRequest",
       "webRequestBlocking"
     ],
