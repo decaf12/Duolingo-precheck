@@ -1,5 +1,5 @@
 export default {
-    input: ['src/background.js', 'src/webRequestListeners.js'],
+    input: ['src/background.js', 'src/constants.js'],
     output: {
       dir: '.',
       format: 'es'
