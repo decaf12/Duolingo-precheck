@@ -25,5 +25,3 @@ export function getAnswerKey(details) {
        filter.disconnect();
      }
 }
-
-const foo = 42;
