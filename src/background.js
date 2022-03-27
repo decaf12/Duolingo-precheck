@@ -1,4 +1,4 @@
-import { getAnswerKey } from './webRequestListeners.js';
+import { getAnswerKey } from "./webRequestListeners";
 
 // function logURL(details) {
 //   console.log("Loading url: " + details.url);
