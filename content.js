@@ -1,6 +1,10 @@
 document.addEventListener(
     'keydown',
     function (e){
-        e.preventDefault();
+        if (e.key === "Enter")
+        {
+            console.log("Enter key pressed");
+            e.stopImmediatePropagation();
+        }
     }
 )
