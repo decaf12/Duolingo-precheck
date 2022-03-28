@@ -1,3 +1,4 @@
 *.docx
 XhrIntercept.js
 DL*.js
+events.js
