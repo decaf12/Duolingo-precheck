@@ -1,4 +1,5 @@
 import { CHALLENGE_URL_PATTERN } from './constants.js';
+import { Map } from 'typescript-map';
 
 (function() {
   let answerkey_JSON;
@@ -42,7 +43,7 @@ import { CHALLENGE_URL_PATTERN } from './constants.js';
     if (req.answer === "Is Anna there?") {
       isCorrect = true;
     }
-    sendResponse({correct: isCorrect});
+    sendResponse({ correct: isCorrect });
   }
 })();
 

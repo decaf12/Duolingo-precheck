@@ -1,4 +1,5 @@
 import * as constants from "./constants.js";
+import { Map } from "typescript-map";
 
 (function() {
   let answerkey_JSON;
