@@ -7,7 +7,7 @@ document.addEventListener(
             e.stopImmediatePropagation();
             console.log("Enter key pressed");
             let sending = await browser.runtime.sendMessage({
-                answer: "Test answer",
+                answer: document.getElementsByTagName("textarea")[0].value,
             })
             console.log("Passed: " + sending.correct);
             if (sending.correct) {

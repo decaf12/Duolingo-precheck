@@ -2,6 +2,7 @@ import { CHALLENGE_URL_PATTERN } from './constants.js';
 
 (function() {
   let answerkey_JSON;
+  const answerkey = new Map();
 
   browser.webRequest.onBeforeRequest.addListener(
     getAnswerKey,
@@ -16,6 +17,7 @@ import { CHALLENGE_URL_PATTERN } from './constants.js';
     
     filter.onstart = event => {
       answerkey_JSON = "";
+      answerkey.clear();
     };
   
     filter.ondata = event => {
@@ -25,7 +27,10 @@ import { CHALLENGE_URL_PATTERN } from './constants.js';
     };
 
     filter.onstop = event => {
-      const answerkey = JSON.parse(answerkey_JSON).challenges;
+      const challenges = JSON.parse(answerkey_JSON).challenges;
+      challenges.forEach(challenge => {
+        answerkey.set(challenge.prompt, true);
+      });
       console.log("Answer key JSON: " + answerkey);
       filter.disconnect();
     };
@@ -33,7 +38,11 @@ import { CHALLENGE_URL_PATTERN } from './constants.js';
 
   function handlemessage(req, sender, sendResponse) {
     console.log("Message: " + req.answer);
-    sendResponse({correct: false});
+    let isCorrect = false;
+    if (req.answer === "Is Anna there?") {
+      isCorrect = true;
+    }
+    sendResponse({correct: isCorrect});
   }
 })();
 
