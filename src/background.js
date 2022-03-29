@@ -1,5 +1,5 @@
 import * as constants from "./constants.js";
-import { Map } from "typescript-map";
+// import { Map } from "typescript-map";
 
 (function() {
   let answerkey_JSON;
@@ -47,6 +47,6 @@ import { Map } from "typescript-map";
   }
 })()
 
-chrome.webNavigation.onHistoryStateUpdated.addListener(function(details) {
-  chrome.tabs.executeScript(null,{file:"../content.js"});
+browser.webNavigation.onHistoryStateUpdated.addListener(function(details) {
+  browser.tabs.executeScript(null, {file:"../content.js"});
 });
