@@ -1,4 +1,5 @@
-// import * as constants from "./constants.js";
+const PROMPT_FILTER = '[data-test="hint-token"]';
+const ANSWER_FILTER_TEXTBOX = '[data-test="challenge-translate-input"]';
 
 document.addEventListener(
     'keydown',
@@ -8,10 +9,12 @@ document.addEventListener(
             e.preventDefault();
             e.stopImmediatePropagation();
             console.log("Enter key pressed");
-            // const prompt = document.getElementsByClassName(constants.TRANSLATION_CLASS);
-            // console.log(prompt);
+            const promptCollection = Array.from(document.querySelectorAll(PROMPT_FILTER));
+            const prompt = promptCollection.map(x => x.innerHTML).join("");
+
             let sending = await browser.runtime.sendMessage({
-                answer: document.getElementsByTagName("textarea")[0].value,
+                prompt: prompt,
+                answer: document.querySelectorAll(ANSWER_FILTER_TEXTBOX)[0].value,
             })
             console.log("Passed: " + sending.correct);
             if (sending.correct) {
