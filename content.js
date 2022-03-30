@@ -11,9 +11,9 @@ document.addEventListener(
             console.log("Enter key pressed");
             const promptCollection = Array.from(document.querySelectorAll(PROMPT_FILTER));
             const prompt = promptCollection.map(x => x.innerHTML).join("");
-            console.log(`Prompt: ${prompt}`);
 
             let sending = await browser.runtime.sendMessage({
+                prompt: prompt,
                 answer: document.querySelectorAll(ANSWER_FILTER_TEXTBOX)[0].value,
             });
             console.log("Passed: " + sending.correct);
