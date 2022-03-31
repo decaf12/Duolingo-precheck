@@ -8,7 +8,7 @@ export default [
   },
   
   {
-    input: ['src/content.js', 'src/constants.js'],
+    input: ['src/content.js'],
     output: {
       dir: '.',
       format: 'es'

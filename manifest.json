@@ -10,7 +10,7 @@
       "48": "icons/border-48.png"
     },
 
-    "web_accessible_resources": ["XhrIntercept.js"],
+    "web_accessible_resources": ["src/makeSubmssion.js"],
 
     "content_scripts": [
       {

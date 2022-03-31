@@ -1,5 +1,12 @@
-const PROMPT_FILTER = '[data-test="hint-token"]';
-const ANSWER_FILTER_TEXTBOX = '[data-test="challenge-translate-input"]';
+'use strict';
+
+const submissionScript = document.createElement('script');
+submissionScript.setAttribute("type", "module");
+submissionScript.setAttribute("src", browser.runtime.getURL('makeSubmission.js'));
+const submissionHead = document.head || document.getElementsByTagName("head")[0] || document.documentElement;
+submissionHead.insertBefore(submissionScript, submissionHead.lastChild);
+
+import { makeSubmission } from "./makeSubmission.js";
 
 document.addEventListener(
     'keydown',
@@ -9,12 +16,11 @@ document.addEventListener(
             e.preventDefault();
             e.stopImmediatePropagation();
             console.log("Enter key pressed");
-            const promptCollection = Array.from(document.querySelectorAll(PROMPT_FILTER));
-            const prompt = promptCollection.map(x => x.innerHTML).join("");
 
+            const [prompt, answer] = makeSubmission();
             let sending = await browser.runtime.sendMessage({
                 prompt: prompt,
-                answer: document.querySelectorAll(ANSWER_FILTER_TEXTBOX)[0].value,
+                answer: answer,
             })
             console.log("Passed: " + sending.correct);
             if (sending.correct) {

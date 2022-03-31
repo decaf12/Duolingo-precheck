@@ -1,5 +1,7 @@
 {
-  "modules": ["constants.js"],
+  "modules": [
+    "constants.js"
+  ],
   "dependencies": {
     "es6-map": "^0.1.5"
   }

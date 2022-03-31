@@ -1,5 +1,5 @@
 import * as constants from "./constants.js";
-// import { Map } from "typescript-map";
+// import { Map } from "es6-map";
 
 (function() {
   let answerkey_JSON;
@@ -9,12 +9,6 @@ import * as constants from "./constants.js";
     getAnswerKey,
     {urls: [constants.CHALLENGE_URL_PATTERN]},
     ["blocking"]
-  );
-
-  browser.webRequest.onBeforeRequest.addListener(
-    questionTypeFilter,
-    {urls: [constants.CHALLENGE_URL_PATTERN]},
-    ["blocking", "requestBody"]
   );
   
   browser.runtime.onMessage.addListener(handlemessage);
@@ -41,28 +35,6 @@ import * as constants from "./constants.js";
       console.log("Answer key JSON: " + answerkey)
       filter.disconnect();
     }
-  }
-
-
-  function questionTypeFilter(requestDetails) {
-    console.log(`Challenge original: ${new Uint8Array(requestDetails.requestBody.raw[0].bytes)}`)
-
-    let body = decodeURIComponent(new TextDecoder().decode(requestDetails.requestBody.raw[0].bytes));
-    console.log(`Challenge types: ${body}`)
-    
-    let body_object = JSON.parse(body);
-    // body_object.challengeTypes = ["translate"];
-    body = JSON.stringify(body_object);
-    console.log(`Challenge post-change: ${body}`);
-    
-    const encoded_Uint8 = new TextEncoder().encode(encodeURIComponent(body));
-    const encoded_ArrayBuffer = encoded_Uint8.buffer.slice(encoded_Uint8.byteOffset, encoded_Uint8.byteLength + encoded_Uint8.byteOffset);
-    requestDetails.requestBody.raw[0].bytes = encoded_ArrayBuffer;
-
-    const body2 = decodeURIComponent(new TextDecoder().decode(requestDetails.requestBody.raw[0].bytes));
-    console.log(`Challenge sent: ${body2}`);
-    
-    console.log(`Challenge bytes: ${new Uint8Array(requestDetails.requestBody.raw[0].bytes)}`)
   }
 
   function handlemessage(req, sender, sendResponse) {
