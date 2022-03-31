@@ -3,6 +3,11 @@
     "constants.js"
   ],
   "dependencies": {
-    "es6-map": "^0.1.5"
+    "es6-map": "^0.1.5",
+    "typescript-map": "^0.1.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.0.3",
+    "@rollup/plugin-node-resolve": "^13.1.3"
   }
 }

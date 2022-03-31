@@ -1,9 +1,9 @@
 import * as constants from "./constants.js";
-// import { Map } from "es6-map";
+import * as map from "typescript-map";
 
 (function() {
   let answerkey_JSON;
-  const answerkey = new Map();
+  const answerkey = new map.TSMap();  
 
   browser.webRequest.onHeadersReceived.addListener(
     getAnswerKey,
@@ -28,21 +28,20 @@ import * as constants from "./constants.js";
     }
 
     filter.onstop = event => {
-      const challenges = JSON.parse(answerkey_JSON).challenges;
-      challenges.forEach(challenge => {
-        answerkey.set(challenge.prompt, true);
+      const response = JSON.parse(answerkey_JSON);
+      response.challenges.forEach(challenge => {
+        answerkey.set(challenge.prompt, challenge.compactTranslations);
       })
-      console.log("Answer key JSON: " + answerkey)
       filter.disconnect();
     }
   }
 
   function handlemessage(req, sender, sendResponse) {
     console.log("Message: " + req.answer);
-    let isCorrect = false;
-    if (req.answer === "Is Anna there?") {
-      isCorrect = true;
-    }
+    const correctAnswers = answerkey.get(req.prompt);
+    const isCorrect = req.answer === correctAnswers[0];
+    console.log(`Correct answer: ${correctAnswers[0]}`);
+    console.log(`Submitted answer: ${req.answer}`);
     sendResponse({ correct: isCorrect });
   }
 })()
