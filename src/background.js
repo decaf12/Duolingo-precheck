@@ -1,9 +1,10 @@
 import * as constants from "./constants.js";
 import * as map from "typescript-map";
+import * as checkAnswers from "./checkAnswers.js"
 
 (function() {
   let answerkey_JSON;
-  const answerkey = new map.TSMap();  
+  const answerKey = new map.TSMap();  
 
   browser.webRequest.onHeadersReceived.addListener(
     getAnswerKey,
@@ -18,7 +19,7 @@ import * as map from "typescript-map";
     
     filter.onstart = event => {
       answerkey_JSON = "";
-      answerkey.clear();
+      answerKey.clear();
     }
   
     filter.ondata = event => {
@@ -29,19 +30,19 @@ import * as map from "typescript-map";
 
     filter.onstop = event => {
       const response = JSON.parse(answerkey_JSON);
-      response.challenges.forEach(challenge => {
-        answerkey.set(challenge.prompt, challenge.compactTranslations);
-      })
+      checkAnswers.addToKey(answerKey, response.challenges);
+      // checkAnswers.addToKey(answerKey, response.adaptiveChallenges);
       filter.disconnect();
     }
   }
 
   function handlemessage(req, sender, sendResponse) {
-    console.log("Message: " + req.answer);
-    const correctAnswers = answerkey.get(req.prompt);
-    const isCorrect = req.answer === correctAnswers[0];
-    console.log(`Correct answer: ${correctAnswers[0]}`);
-    console.log(`Submitted answer: ${req.answer}`);
+    console.log("Answer submitted: " + req.answer);
+    const isCorrect = checkAnswers.checkAnswer(answerKey, req.answer, req.prompt, req.challengeType);
+    // const correctAnswers = answerKey.get(req.prompt);
+    // const isCorrect = req.answer === correctAnswers[0];
+    // console.log(`Correct answer: ${correctAnswers[0]}`);
+    // console.log(`Submitted answer: ${req.answer}`);
     sendResponse({ correct: isCorrect });
   }
 })()

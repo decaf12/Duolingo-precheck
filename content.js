@@ -7,7 +7,8 @@ function makeSubmission() {
         const promptCollection = Array.from(document.querySelectorAll(TRANSLATE_PROMPT));
         const prompt = promptCollection.map(x => x.innerHTML).join("");
         const answer = document.querySelectorAll(ANSWER_FILTER_TEXTBOX)[0].value;
-        return [prompt, answer];
+        const challengeType = "translate";
+        return [prompt, answer, challengeType];
     }
 }
 
@@ -26,10 +27,11 @@ document.addEventListener(
             e.stopImmediatePropagation();
             console.log("Enter key pressed");
 
-            const [prompt, answer] = makeSubmission();
+            const [prompt, answer, challengeType] = makeSubmission();
             let sending = await browser.runtime.sendMessage({
                 prompt: prompt,
                 answer: answer,
+                challengeType: challengeType
             });
             console.log("Passed: " + sending.correct);
             if (sending.correct) {

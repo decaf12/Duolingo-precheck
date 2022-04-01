@@ -323,9 +323,20 @@ var TSMap = /** @class */ (function () {
 }());
 TSMap_1 = typescriptMap.TSMap = TSMap;
 
+function addToKey(answerKey, challenges) {
+    challenges.forEach(challenge => {
+        answerKey.set(`${challenge.prompt}: ${challenge.type}`, challenge.compactTranslations);
+    });
+}
+
+function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
+    const answerList = answerKey.get(`${challengePrompt}: ${challengeType}`);
+    return answer === answerList[0];
+}
+
 (function() {
   let answerkey_JSON;
-  const answerkey = new TSMap_1();  
+  const answerKey = new TSMap_1();  
 
   browser.webRequest.onHeadersReceived.addListener(
     getAnswerKey,
@@ -340,7 +351,7 @@ TSMap_1 = typescriptMap.TSMap = TSMap;
     
     filter.onstart = event => {
       answerkey_JSON = "";
-      answerkey.clear();
+      answerKey.clear();
     };
   
     filter.ondata = event => {
@@ -351,19 +362,19 @@ TSMap_1 = typescriptMap.TSMap = TSMap;
 
     filter.onstop = event => {
       const response = JSON.parse(answerkey_JSON);
-      response.challenges.forEach(challenge => {
-        answerkey.set(challenge.prompt, challenge.compactTranslations);
-      });
+      addToKey(answerKey, response.challenges);
+      // checkAnswers.addToKey(answerKey, response.adaptiveChallenges);
       filter.disconnect();
     };
   }
 
   function handlemessage(req, sender, sendResponse) {
-    console.log("Message: " + req.answer);
-    const correctAnswers = answerkey.get(req.prompt);
-    const isCorrect = req.answer === correctAnswers[0];
-    console.log(`Correct answer: ${correctAnswers[0]}`);
-    console.log(`Submitted answer: ${req.answer}`);
+    console.log("Answer submitted: " + req.answer);
+    const isCorrect = checkAnswer(answerKey, req.answer, req.prompt, req.challengeType);
+    // const correctAnswers = answerKey.get(req.prompt);
+    // const isCorrect = req.answer === correctAnswers[0];
+    // console.log(`Correct answer: ${correctAnswers[0]}`);
+    // console.log(`Submitted answer: ${req.answer}`);
     sendResponse({ correct: isCorrect });
   }
 })();

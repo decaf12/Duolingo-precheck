@@ -17,10 +17,11 @@ document.addEventListener(
             e.stopImmediatePropagation();
             console.log("Enter key pressed");
 
-            const [prompt, answer] = makeSubmission();
+            const [prompt, answer, challengeType] = makeSubmission();
             let sending = await browser.runtime.sendMessage({
                 prompt: prompt,
                 answer: answer,
+                challengeType: challengeType
             })
             console.log("Passed: " + sending.correct);
             if (sending.correct) {
