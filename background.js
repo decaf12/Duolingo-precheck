@@ -325,7 +325,12 @@ TSMap_1 = typescriptMap.TSMap = TSMap;
 
 function addToKey(answerKey, challenges) {
     challenges.forEach(challenge => {
-        answerKey.set(`${challenge.prompt}: ${challenge.type}`, challenge.compactTranslations);
+        let value;
+        if (challenge.type === "translate") {
+            value = challenge.compactTranslations;
+        }
+    
+        answerKey.set(`${challenge.prompt}: ${challenge.type}`, value);
     });
 }
 
@@ -363,7 +368,7 @@ function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
     filter.onstop = event => {
       const response = JSON.parse(answerkey_JSON);
       addToKey(answerKey, response.challenges);
-      // checkAnswers.addToKey(answerKey, response.adaptiveChallenges);
+      addToKey(answerKey, response.adaptiveChallenges);
       filter.disconnect();
     };
   }
@@ -371,10 +376,6 @@ function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
   function handlemessage(req, sender, sendResponse) {
     console.log("Answer submitted: " + req.answer);
     const isCorrect = checkAnswer(answerKey, req.answer, req.prompt, req.challengeType);
-    // const correctAnswers = answerKey.get(req.prompt);
-    // const isCorrect = req.answer === correctAnswers[0];
-    // console.log(`Correct answer: ${correctAnswers[0]}`);
-    // console.log(`Submitted answer: ${req.answer}`);
     sendResponse({ correct: isCorrect });
   }
 })();

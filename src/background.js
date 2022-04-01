@@ -31,7 +31,7 @@ import * as checkAnswers from "./checkAnswers.js"
     filter.onstop = event => {
       const response = JSON.parse(answerkey_JSON);
       checkAnswers.addToKey(answerKey, response.challenges);
-      // checkAnswers.addToKey(answerKey, response.adaptiveChallenges);
+      checkAnswers.addToKey(answerKey, response.adaptiveChallenges);
       filter.disconnect();
     }
   }
@@ -39,10 +39,6 @@ import * as checkAnswers from "./checkAnswers.js"
   function handlemessage(req, sender, sendResponse) {
     console.log("Answer submitted: " + req.answer);
     const isCorrect = checkAnswers.checkAnswer(answerKey, req.answer, req.prompt, req.challengeType);
-    // const correctAnswers = answerKey.get(req.prompt);
-    // const isCorrect = req.answer === correctAnswers[0];
-    // console.log(`Correct answer: ${correctAnswers[0]}`);
-    // console.log(`Submitted answer: ${req.answer}`);
     sendResponse({ correct: isCorrect });
   }
 })()

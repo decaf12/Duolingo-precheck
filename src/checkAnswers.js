@@ -1,6 +1,11 @@
 export function addToKey(answerKey, challenges) {
     challenges.forEach(challenge => {
-        answerKey.set(`${challenge.prompt}: ${challenge.type}`, challenge.compactTranslations);
+        let value;
+        if (challenge.type === "translate") {
+            value = challenge.compactTranslations;
+        }
+    
+        answerKey.set(`${challenge.prompt}: ${challenge.type}`, value);
     });
 }
 
