@@ -1,48 +1,49 @@
-import * as constants from "./constants.js";
-import * as map from "typescript-map";
-import * as checkAnswers from "./checkAnswers.js"
+import * as map from 'typescript-map';
+import CHALLENGE_URL_PATTERN from './constants';
+import * as checkAnswers from './checkAnswers';
 
-(function() {
-  let answerkey_JSON;
-  const answerKey = new map.TSMap();  
+(function loadAnswerKey() {
+  let answerkeyJSON;
+  const answerKey = new map.TSMap();
 
-  browser.webRequest.onHeadersReceived.addListener(
-    getAnswerKey,
-    {urls: [constants.CHALLENGE_URL_PATTERN]},
-    ["blocking"]
-  );
-  
-  browser.runtime.onMessage.addListener(handlemessage);
+  function getAnswerKey(details) {
+    const filter = browser.webRequest.filterResponseData(details.requestId);
 
-  function getAnswerKey(details) {   
-    let filter = browser.webRequest.filterResponseData(details.requestId);
-    
-    filter.onstart = event => {
-      answerkey_JSON = "";
+    filter.onstart = () => {
+      answerkeyJSON = '';
       answerKey.clear();
-    }
-  
-    filter.ondata = event => {
-      const decoder = new TextDecoder("utf-8");
-      answerkey_JSON += decoder.decode(event.data);
-      filter.write(event.data);
-    }
+    };
 
-    filter.onstop = event => {
-      const response = JSON.parse(answerkey_JSON);
+    filter.ondata = (event) => {
+      const decoder = new TextDecoder('utf-8');
+      answerkeyJSON += decoder.decode(event.data);
+      filter.write(event.data);
+    };
+
+    filter.onstop = () => {
+      const response = JSON.parse(answerkeyJSON);
       checkAnswers.addToKey(answerKey, response.challenges);
       checkAnswers.addToKey(answerKey, response.adaptiveChallenges);
       filter.disconnect();
-    }
+    };
   }
 
   function handlemessage(req, sender, sendResponse) {
-    console.log("Answer submitted: " + req.answer);
+    console.log(`Answer submitted: ${req.answer}`);
+    // eslint-disable-next-line max-len
     const isCorrect = checkAnswers.checkAnswer(answerKey, req.answer, req.prompt, req.challengeType);
     sendResponse({ correct: isCorrect });
   }
-})()
 
-browser.webNavigation.onHistoryStateUpdated.addListener(function(details) {
-  browser.tabs.executeScript(null, {file:"../content.js"});
+  browser.webRequest.onHeadersReceived.addListener(
+    getAnswerKey,
+    { urls: [CHALLENGE_URL_PATTERN] },
+    ['blocking'],
+  );
+
+  browser.runtime.onMessage.addListener(handlemessage);
+}());
+
+browser.webNavigation.onHistoryStateUpdated.addListener(() => {
+  browser.tabs.executeScript(null, { file: '../content' });
 });

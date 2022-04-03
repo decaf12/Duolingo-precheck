@@ -1,4 +1,4 @@
-import { CHALLENGE_URL_PATTERN } from './constants.js';
+import CHALLENGE_URL_PATTERN from './constants.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -324,52 +324,49 @@ var TSMap = /** @class */ (function () {
 TSMap_1 = typescriptMap.TSMap = TSMap;
 
 function addToKey(answerKey, challenges) {
-    challenges.forEach(challenge => {
-        let value;
-        
-        switch (challenge.type) {
-            case "translate":
-                value = challenge.compactTranslations;
-                break;
-        }
-    
-        answerKey.set(`${challenge.prompt}: ${challenge.type}`, value);
-    });
+  challenges.forEach((challenge) => {
+    let value;
+
+    switch (challenge.type) {
+      case 'translate':
+        // value = challenge.compactTranslations.map(makeRegex);
+        value = challenge.grader.vertices;
+        // challenge.grader.vertices.forEach(index => {
+        //     value.push(index);
+        // })
+        value.forEach((x) => console.log(x[0].to));
+        break;
+    }
+    answerKey.set(`${challenge.prompt}: ${challenge.type}`, value);
+  });
 }
 
 function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
-    const answerList = answerKey.get(`${challengePrompt}: ${challengeType}`);
-    return answer === answerList[0];
+  const answerList = answerKey.get(`${challengePrompt}: ${challengeType}`);
+  console.log(`Answer list: ${answerList}`);
+  return answerList.some((key) => key.test(answer));
 }
 
-(function() {
-  let answerkey_JSON;
-  const answerKey = new TSMap_1();  
+(function loadAnswerKey() {
+  let answerkeyJSON;
+  const answerKey = new TSMap_1();
 
-  browser.webRequest.onHeadersReceived.addListener(
-    getAnswerKey,
-    {urls: [CHALLENGE_URL_PATTERN]},
-    ["blocking"]
-  );
-  
-  browser.runtime.onMessage.addListener(handlemessage);
+  function getAnswerKey(details) {
+    const filter = browser.webRequest.filterResponseData(details.requestId);
 
-  function getAnswerKey(details) {   
-    let filter = browser.webRequest.filterResponseData(details.requestId);
-    
-    filter.onstart = event => {
-      answerkey_JSON = "";
+    filter.onstart = () => {
+      answerkeyJSON = '';
       answerKey.clear();
     };
-  
-    filter.ondata = event => {
-      const decoder = new TextDecoder("utf-8");
-      answerkey_JSON += decoder.decode(event.data);
+
+    filter.ondata = (event) => {
+      const decoder = new TextDecoder('utf-8');
+      answerkeyJSON += decoder.decode(event.data);
       filter.write(event.data);
     };
 
-    filter.onstop = event => {
-      const response = JSON.parse(answerkey_JSON);
+    filter.onstop = () => {
+      const response = JSON.parse(answerkeyJSON);
       addToKey(answerKey, response.challenges);
       addToKey(answerKey, response.adaptiveChallenges);
       filter.disconnect();
@@ -377,12 +374,21 @@ function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
   }
 
   function handlemessage(req, sender, sendResponse) {
-    console.log("Answer submitted: " + req.answer);
+    console.log(`Answer submitted: ${req.answer}`);
+    // eslint-disable-next-line max-len
     const isCorrect = checkAnswer(answerKey, req.answer, req.prompt, req.challengeType);
     sendResponse({ correct: isCorrect });
   }
-})();
 
-browser.webNavigation.onHistoryStateUpdated.addListener(function(details) {
-  browser.tabs.executeScript(null, {file:"../content.js"});
+  browser.webRequest.onHeadersReceived.addListener(
+    getAnswerKey,
+    { urls: [CHALLENGE_URL_PATTERN] },
+    ['blocking'],
+  );
+
+  browser.runtime.onMessage.addListener(handlemessage);
+}());
+
+browser.webNavigation.onHistoryStateUpdated.addListener(() => {
+  browser.tabs.executeScript(null, { file: '../content' });
 });
