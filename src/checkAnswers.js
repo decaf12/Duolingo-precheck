@@ -18,11 +18,9 @@ export function gradeTranslation(answer, vertices) {
   const stack = [[0, 0, 1]];
   const answerSplit = answer.split(' ');
   const destination = vertices.length - 1;
-  // let stackSize = 1;
 
   while (stack.length) {
     const [currNodeID, currTokenID, currVisited] = stack.pop();
-    // stackSize -= 1;
 
     if (currNodeID === destination) {
       return true;
@@ -30,6 +28,7 @@ export function gradeTranslation(answer, vertices) {
 
     const currToken = answerSplit[currTokenID];
 
+    // eslint-disable-next-line no-loop-func
     vertices[currNodeID].forEach((vertex) => {
       // eslint-disable-next-line no-bitwise
       if ((currVisited & (1 << vertex.to)) === 0) {
