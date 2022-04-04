@@ -337,31 +337,30 @@ function addToKey(answerKey, challenges) {
 }
 
 function gradeTranslation(answer, vertices) {
-  const stack = [[0, 0]];
+  const stack = [[0, 0, 1]];
   const answerSplit = answer.split(' ');
-  const visited = new Set();
-  visited.add(0);
   const destination = vertices.length - 1;
+  // let stackSize = 1;
 
   while (stack.length) {
-    const [currNodeID, currTokenID] = stack.pop();
-    console.log(`ID of current node: ${currNodeID}`);
+    const [currNodeID, currTokenID, currVisited] = stack.pop();
+    // stackSize -= 1;
+
     if (currNodeID === destination) {
       return true;
     }
 
     const currToken = answerSplit[currTokenID];
-    console.log(`Current token: ${currToken}`);
+
     vertices[currNodeID].forEach((vertex) => {
-      if (!visited.has(vertex.to)) {
+      // eslint-disable-next-line no-bitwise
+      if ((currVisited & (1 << vertex.to)) === 0) {
+        // eslint-disable-next-line no-bitwise
+        const nextVisited = currVisited | (1 << vertex.to);
         if (vertex.lenient === currToken) {
-          visited.add(vertex.to);
-          stack.push([vertex.to, currTokenID + 1]);
-          console.log(`ID of node pushed: ${vertex.to}`);
+          stack.push([vertex.to, currTokenID + 1, nextVisited]);
         } else if (vertex.lenient === '' || vertex.lenient === ' ') {
-          visited.add(vertex.to);
-          stack.push([vertex.to, currTokenID]);
-          console.log(`ID of node pushed: ${vertex.to}`);
+          stack.push([vertex.to, currTokenID, nextVisited]);
         }
       }
     });
