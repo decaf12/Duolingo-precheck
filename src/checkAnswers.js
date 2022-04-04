@@ -20,16 +20,15 @@ export function gradeTranslation(answer, vertices) {
   const destination = vertices.length - 1;
 
   while (stack.length) {
-    const [currNodeID, currTokenID, currVisited] = stack.pop();
+    const [currVertexID, currTokenID, currVisited] = stack.pop();
 
-    if (currNodeID === destination) {
+    if (currVertexID === destination) {
       return true;
     }
 
     const currToken = answerSplit[currTokenID];
 
-    // eslint-disable-next-line no-loop-func
-    vertices[currNodeID].forEach((vertex) => {
+    vertices[currVertexID].forEach((vertex) => {
       // eslint-disable-next-line no-bitwise
       if ((currVisited & (1 << vertex.to)) === 0) {
         // eslint-disable-next-line no-bitwise
