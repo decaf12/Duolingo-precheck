@@ -1,39 +1,10 @@
-function makeRegex(answer) {
-  const letterArray = Array.from(answer);
-  const arrayLength = letterArray.length;
-  for (let i = 0; i < arrayLength; i += 1) {
-    const rawCharacter = letterArray[i];
-
-    switch (rawCharacter) {
-      case '[':
-        letterArray[i] = '(';
-        break;
-      case ']':
-        letterArray[i] = ')';
-        break;
-      case '/':
-        letterArray[i] = '|';
-        break;
-      default:
-        letterArray[i] = rawCharacter;
-        break;
-    }
-  }
-  return new RegExp(`^${letterArray.join('')}$`);
-}
-
 export function addToKey(answerKey, challenges) {
   challenges.forEach((challenge) => {
     let value;
 
     switch (challenge.type) {
       case 'translate':
-        // value = challenge.compactTranslations.map(makeRegex);
         value = challenge.grader.vertices;
-        // challenge.grader.vertices.forEach(index => {
-        //     value.push(index);
-        // })
-        value.forEach((x) => console.log(x[0].to));
         break;
 
       default:
@@ -43,13 +14,37 @@ export function addToKey(answerKey, challenges) {
   });
 }
 
-export function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
-  const answerList = answerKey.get(`${challengePrompt}: ${challengeType}`);
-  console.log(`Answer list: ${answerList}`);
-  return answerList.some((key) => key.test(answer));
+export function gradeTranslation(answer, vertices) {
+  const stack = [[0, 0]];
+  const answerSplit = answer.split(' ');
+  const visited = new Set();
+  visited.add(0);
+  const destination = vertices.length - 1;
+
+  while (stack.length) {
+    const [currNodeID, currTokenID] = stack.pop();
+    if (currNodeID === destination) {
+      return true;
+    }
+
+    const currToken = answerSplit[currTokenID];
+    vertices[currNodeID].forEach((vertex) => {
+      if (!visited.has(vertex.to)) {
+        if (vertex.lenient === currToken) {
+          visited.add(vertex.to);
+          stack.push([vertex.to, currTokenID + 1]);
+        } else if (vertex.lenient === '' || vertex.lenient === ' ') {
+          visited.add(vertex.to);
+          stack.push([vertex.to, currTokenID]);
+        }
+      }
+    });
+  }
+
+  return false;
 }
 
-export function gradeTranslation(answer, vertices) {
-  const stack = [vertices[0]];
-  console.log(stack[0]);
+export function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
+  const vertices = answerKey.get(`${challengePrompt}: ${challengeType}`);
+  return gradeTranslation(answer, vertices);
 }

@@ -23,7 +23,9 @@ import * as checkAnswers from './checkAnswers';
     filter.onstop = () => {
       const response = JSON.parse(answerkeyJSON);
       checkAnswers.addToKey(answerKey, response.challenges);
-      checkAnswers.addToKey(answerKey, response.adaptiveChallenges);
+      if ('adaptiveChallenges' in response) {
+        checkAnswers.addToKey(answerKey, response.adaptiveChallenges);
+      }
       filter.disconnect();
     };
   }

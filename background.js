@@ -329,22 +329,50 @@ function addToKey(answerKey, challenges) {
 
     switch (challenge.type) {
       case 'translate':
-        // value = challenge.compactTranslations.map(makeRegex);
         value = challenge.grader.vertices;
-        // challenge.grader.vertices.forEach(index => {
-        //     value.push(index);
-        // })
-        value.forEach((x) => console.log(x[0].to));
         break;
     }
     answerKey.set(`${challenge.prompt}: ${challenge.type}`, value);
   });
 }
 
+function gradeTranslation(answer, vertices) {
+  const stack = [[0, 0]];
+  const answerSplit = answer.split(' ');
+  const visited = new Set();
+  visited.add(0);
+  const destination = vertices.length - 1;
+
+  while (stack.length) {
+    const [currNodeID, currTokenID] = stack.pop();
+    console.log(`ID of current node: ${currNodeID}`);
+    if (currNodeID === destination) {
+      return true;
+    }
+
+    const currToken = answerSplit[currTokenID];
+    console.log(`Current token: ${currToken}`);
+    vertices[currNodeID].forEach((vertex) => {
+      if (!visited.has(vertex.to)) {
+        if (vertex.lenient === currToken) {
+          visited.add(vertex.to);
+          stack.push([vertex.to, currTokenID + 1]);
+          console.log(`ID of node pushed: ${vertex.to}`);
+        } else if (vertex.lenient === '' || vertex.lenient === ' ') {
+          visited.add(vertex.to);
+          stack.push([vertex.to, currTokenID]);
+          console.log(`ID of node pushed: ${vertex.to}`);
+        }
+      }
+    });
+  }
+
+  return false;
+}
+
 function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
-  const answerList = answerKey.get(`${challengePrompt}: ${challengeType}`);
-  console.log(`Answer list: ${answerList}`);
-  return answerList.some((key) => key.test(answer));
+  const vertices = answerKey.get(`${challengePrompt}: ${challengeType}`);
+  return gradeTranslation(answer, vertices);
 }
 
 (function loadAnswerKey() {
@@ -368,7 +396,9 @@ function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
     filter.onstop = () => {
       const response = JSON.parse(answerkeyJSON);
       addToKey(answerKey, response.challenges);
-      addToKey(answerKey, response.adaptiveChallenges);
+      if ('adaptiveChallenges' in response) {
+        addToKey(answerKey, response.adaptiveChallenges);
+      }
       filter.disconnect();
     };
   }
