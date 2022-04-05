@@ -337,12 +337,13 @@ function addToKey(answerKey, challenges) {
 }
 
 function gradeTranslation(answer, vertices) {
-  const stack = [[0, 0, 1]];
   const answerSplit = answer.split(' ');
   const destination = vertices.length - 1;
+  const stack = [[0, 0, { 0: null }]];
 
   while (stack.length) {
     const [currVertexID, currTokenID, currVisited] = stack.pop();
+    console.log(`Current vertex ID: ${currVertexID}`);
 
     if (currVertexID === destination) {
       return true;
@@ -351,14 +352,25 @@ function gradeTranslation(answer, vertices) {
     const currToken = answerSplit[currTokenID];
 
     vertices[currVertexID].forEach((vertex) => {
-      // eslint-disable-next-line no-bitwise
-      if ((currVisited & (1 << vertex.to)) === 0) {
-        // eslint-disable-next-line no-bitwise
-        const nextVisited = currVisited | (1 << vertex.to);
-        if (vertex.lenient === currToken) {
-          stack.push([vertex.to, currTokenID + 1, nextVisited]);
-        } else if (vertex.lenient === '' || vertex.lenient === ' ') {
-          stack.push([vertex.to, currTokenID, nextVisited]);
+      console.log(`Candidate vertex ID: ${vertex.to}, vertex token: ${vertex.lenient} token length: ${vertex.lenient.length}`);
+      console.log(`Current visited object: ${JSON.stringify(currVisited)}`);
+      if (!(vertex.to in currVisited)) {
+        const nextVisited = { ...currVisited };
+        nextVisited[vertex.to] = null;
+
+        const lenient = vertex.lenient.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '');
+        if (lenient === currToken) {
+          stack.push([vertex.to, currTokenID + 1, { ...nextVisited }]);
+          console.log(`Vertex pushed: ${vertex.to}`);
+        } else if ('orig' in vertex) {
+          const orig = vertex.orig.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '');
+          if (orig === currToken) {
+            stack.push([vertex.to, currTokenID + 1, { ...nextVisited }]);
+            console.log(`Vertex pushed: ${vertex.to}`);
+          }
+        } else if (lenient === '' || lenient === ' ') {
+          stack.push([vertex.to, currTokenID, { ...nextVisited }]);
+          console.log(`Vertex pushed: ${vertex.to}`);
         }
       }
     });
@@ -401,7 +413,6 @@ function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
   }
 
   function handlemessage(req, sender, sendResponse) {
-    console.log(`Answer submitted: ${req.answer}`);
     // eslint-disable-next-line max-len
     const isCorrect = checkAnswer(answerKey, req.answer, req.prompt, req.challengeType);
     sendResponse({ correct: isCorrect });

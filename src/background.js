@@ -31,7 +31,6 @@ import * as checkAnswers from './checkAnswers';
   }
 
   function handlemessage(req, sender, sendResponse) {
-    console.log(`Answer submitted: ${req.answer}`);
     // eslint-disable-next-line max-len
     const isCorrect = checkAnswers.checkAnswer(answerKey, req.answer, req.prompt, req.challengeType);
     sendResponse({ correct: isCorrect });
