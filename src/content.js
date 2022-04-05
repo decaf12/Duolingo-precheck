@@ -14,12 +14,12 @@ document.addEventListener(
       e.stopImmediatePropagation();
 
       const [prompt, answer, challengeType] = makeSubmission();
-      const sending = await browser.runtime.sendMessage({
+      const marking = await browser.runtime.sendMessage({
         prompt,
         answer,
         challengeType,
       });
-      if (sending.correct) {
+      if (marking.correct) {
         const submit = new KeyboardEvent('keydown', { key: 'Enter' });
         document.dispatchEvent(submit);
       }
