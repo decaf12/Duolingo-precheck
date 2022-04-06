@@ -27,6 +27,7 @@ export default function makeSubmission() {
         break;
       }
     }
+    const challengeType = 'form';
     return [prompt.dataset.prompt, choiceID, challengeType];
   }
 }
