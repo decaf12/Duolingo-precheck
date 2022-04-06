@@ -6,8 +6,7 @@ export default function makeSubmission() {
     const promptCollection = Array.from(document.querySelectorAll(DOMConstants.TRANSLATE_PROMPT));
     const prompt = promptCollection.map((x) => x.innerHTML).join('');
     const answer = document.querySelectorAll(DOMConstants.ANSWER_FILTER_TEXTBOX)[0].value;
-    const challengeType = constants.TYPE_TRANSLATE;
-    return [prompt, answer, challengeType];
+    return [prompt, answer, constants.TYPE_TRANSLATE];
   }
 
   if (Array.from(document.querySelectorAll(DOMConstants.FORM)).length > 0) {
@@ -22,8 +21,7 @@ export default function makeSubmission() {
         break;
       }
     }
-    const challengeType = constants.TYPE_FORM;
-    return [prompt.dataset.prompt, choiceID, challengeType];
+    return [prompt.dataset.prompt, choiceID, constants.TYPE_FORM];
   }
 
   return 0;
