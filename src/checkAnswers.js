@@ -1,5 +1,6 @@
 export function addToKey(answerKey, challenges) {
   challenges.forEach((challenge) => {
+    let key;
     let value;
 
     if ('grader' in challenge) {
@@ -8,11 +9,17 @@ export function addToKey(answerKey, challenges) {
 
     if (challenge.type !== 'translate') {
       switch (challenge.type) {
-        default:
-          value = null;
+        case 'form': {
+          key = challenge.promptPieces.map((x) => (x === '' ? '___' : x)).join('');
+          value = challenge.correctIndex;
           break;
+        }
+        default: {
+          key = null;
+          value = null;
+        }
       }
-      answerKey.set(`${challenge.prompt}: ${challenge.type}`, value);
+      answerKey.set(`${key}: ${challenge.type}`, value);
     }
   });
 }
@@ -22,7 +29,7 @@ export function gradeTranslation(answer, vertices) {
   const lastVertexID = vertices.length - 1;
   const stack = [[0, 0, { 0: null }]];
 
-  while (stack.length) {
+  while (stack.length > 0) {
     const [currVertexID, currTokenID, currVisited] = stack.pop();
     console.log(`Current vertex: ${currVertexID}`);
 
@@ -56,7 +63,13 @@ export function gradeTranslation(answer, vertices) {
 }
 
 export function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
+  const key = `${challengePrompt}: ${challengeType}`;
   console.log(`Key: ${challengePrompt}: ${challengeType}`);
-  const vertices = answerKey.get(`${challengePrompt}: ${challengeType}`);
-  return gradeTranslation(answer, vertices);
+  if (challengeType === 'translate') {
+    const vertices = answerKey.get(key);
+    return gradeTranslation(answer, vertices);
+  }
+  const correctAnswer = answerKey.get(key);
+  console.log(`Answer key: ${JSON.stringify(answerKey)}`);
+  return answer === correctAnswer;
 }
