@@ -1,15 +1,17 @@
+import * as constants from './constants';
+
 export function addToKey(answerKey, challenges) {
   challenges.forEach((challenge) => {
     let prompt;
     let value;
 
     if ('grader' in challenge) {
-      answerKey.set(`${challenge.prompt}: translate`, challenge.grader.vertices);
+      answerKey.set(`${challenge.prompt}: ${constants.TYPE_TRANSLATE}`, challenge.grader.vertices);
     }
 
-    if (challenge.type !== 'translate') {
+    if (challenge.type !== constants.TYPE_TRANSLATE) {
       switch (challenge.type) {
-        case 'form': {
+        case constants.TYPE_FORM: {
           prompt = challenge.promptPieces.map((x) => (x === '' ? '___' : x)).join('');
           value = challenge.correctIndex;
           break;
@@ -65,7 +67,7 @@ export function gradeTranslation(answer, vertices) {
 export function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
   const key = `${challengePrompt}: ${challengeType}`;
   console.log(`Key: ${challengePrompt}: ${challengeType}`);
-  if (challengeType === 'translate') {
+  if (challengeType === constants.TYPE_TRANSLATE) {
     const vertices = answerKey.get(key);
     return gradeTranslation(answer, vertices);
   }

@@ -1,5 +1,5 @@
 import * as map from 'typescript-map';
-import CHALLENGE_URL_PATTERN from './constants';
+import { CHALLENGE_URL_PATTERN } from './constants';
 import * as checkAnswers from './checkAnswers';
 
 (function loadAnswerKey() {

@@ -1,4 +1,4 @@
-import CHALLENGE_URL_PATTERN from './constants.js';
+import { TYPE_TRANSLATE, TYPE_FORM, CHALLENGE_URL_PATTERN } from './constants.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -329,12 +329,12 @@ function addToKey(answerKey, challenges) {
     let value;
 
     if ('grader' in challenge) {
-      answerKey.set(`${challenge.prompt}: translate`, challenge.grader.vertices);
+      answerKey.set(`${challenge.prompt}: ${TYPE_TRANSLATE}`, challenge.grader.vertices);
     }
 
-    if (challenge.type !== 'translate') {
+    if (challenge.type !== TYPE_TRANSLATE) {
       switch (challenge.type) {
-        case 'form': {
+        case TYPE_FORM: {
           prompt = challenge.promptPieces.map((x) => (x === '' ? '___' : x)).join('');
           value = challenge.correctIndex;
           break;
@@ -390,7 +390,7 @@ function gradeTranslation(answer, vertices) {
 function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
   const key = `${challengePrompt}: ${challengeType}`;
   console.log(`Key: ${challengePrompt}: ${challengeType}`);
-  if (challengeType === 'translate') {
+  if (challengeType === TYPE_TRANSLATE) {
     const vertices = answerKey.get(key);
     return gradeTranslation(answer, vertices);
   }
