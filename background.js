@@ -367,9 +367,6 @@ function gradeTranslation(answer, vertices) {
 
     vertices[currVertexID].forEach((vertex) => {
       if (!(vertex.to in currVisited)) {
-        const nextVisited = { ...currVisited };
-        nextVisited[vertex.to] = null;
-
         if (!vertex.lenient.trim().length) {
           stack.push([vertex.to, currTokenID, { ...currVisited, [vertex.to]: null }]);
         } else if (vertex.lenient === currToken) {

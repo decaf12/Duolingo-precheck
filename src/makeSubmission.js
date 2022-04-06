@@ -13,14 +13,7 @@ export default function makeSubmission() {
     // eslint-disable-next-line no-unused-vars
     const [prompt, ...rest] = Array.from(document.querySelectorAll(DOMConstants.FORM_PROMPT));
     const choices = Array.from(document.querySelectorAll(DOMConstants.FORM_CHOICES));
-    let choiceID = -1;
-    // eslint-disable-next-line no-restricted-syntax
-    for (const [ID, choice] of choices.entries()) {
-      if (choice.tabIndex === 0) {
-        choiceID = ID;
-        break;
-      }
-    }
+    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     return [prompt.dataset.prompt, choiceID, constants.TYPE_FORM];
   }
 
