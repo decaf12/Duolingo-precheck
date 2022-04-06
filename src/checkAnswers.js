@@ -1,6 +1,6 @@
 export function addToKey(answerKey, challenges) {
   challenges.forEach((challenge) => {
-    let key;
+    let prompt;
     let value;
 
     if ('grader' in challenge) {
@@ -10,16 +10,16 @@ export function addToKey(answerKey, challenges) {
     if (challenge.type !== 'translate') {
       switch (challenge.type) {
         case 'form': {
-          key = challenge.promptPieces.map((x) => (x === '' ? '___' : x)).join('');
+          prompt = challenge.promptPieces.map((x) => (x === '' ? '___' : x)).join('');
           value = challenge.correctIndex;
           break;
         }
         default: {
-          key = null;
+          prompt = null;
           value = null;
         }
       }
-      answerKey.set(`${key}: ${challenge.type}`, value);
+      answerKey.set(`${prompt}: ${challenge.type}`, value);
     }
   });
 }
@@ -46,13 +46,13 @@ export function gradeTranslation(answer, vertices) {
         nextVisited[vertex.to] = null;
 
         if (!vertex.lenient.trim().length) {
-          stack.push([vertex.to, currTokenID, { ...nextVisited }]);
+          stack.push([vertex.to, currTokenID, { ...currVisited, [vertex.to]: null }]);
         } else if (vertex.lenient === currToken) {
-          stack.push([vertex.to, currTokenID + 1, { ...nextVisited }]);
+          stack.push([vertex.to, currTokenID + 1, { ...currVisited, [vertex.to]: null }]);
         } else if ('orig' in vertex) {
           const orig = vertex.orig.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '');
           if (orig === currToken) {
-            stack.push([vertex.to, currTokenID + 1, { ...nextVisited }]);
+            stack.push([vertex.to, currTokenID + 1, { ...currVisited, [vertex.to]: null }]);
           }
         }
       }
