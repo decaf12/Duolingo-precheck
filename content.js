@@ -1,17 +1,28 @@
-function makeSubmission() {
-  const TRANSLATE = '[data-test="challenge challenge-translate"]';
-  const TRANSLATE_PROMPT = '[data-test="hint-token"]';
-  const ANSWER_FILTER_TEXTBOX = '[data-test="challenge-translate-input"]';
+const TYPE_TRANSLATE = 'translate';
+const TYPE_FORM = 'form';
 
-  const FORM = '[data-test="challenge challenge-form"]';
-  const FORM_PROMPT = '[class="_2SfAl _2Hg6H"]';
-  const FORM_CHOICES = '[data-test="challenge-choice"]';
+const TRANSLATE = '[data-test="challenge challenge-translate"]';
+const TRANSLATE_PROMPT = '[data-test="hint-token"]';
+const ANSWER_FILTER_TEXTBOX = '[data-test="challenge-translate-input"]';
+
+const FORM = '[data-test="challenge challenge-form"]';
+const FORM_PROMPT = '[class="_2SfAl _2Hg6H"]';
+const FORM_CHOICES = '[data-test="challenge-choice"]';
+
+function makeSubmission() {
+  // const TRANSLATE = '[data-test="challenge challenge-translate"]';
+  // const TRANSLATE_PROMPT = '[data-test="hint-token"]';
+  // const ANSWER_FILTER_TEXTBOX = '[data-test="challenge-translate-input"]';
+
+  // const FORM = '[data-test="challenge challenge-form"]';
+  // const FORM_PROMPT = '[class="_2SfAl _2Hg6H"]';
+  // const FORM_CHOICES = '[data-test="challenge-choice"]';
 
   if (Array.from(document.querySelectorAll(TRANSLATE)).length > 0) {
     const promptCollection = Array.from(document.querySelectorAll(TRANSLATE_PROMPT));
     const prompt = promptCollection.map((x) => x.innerHTML).join('');
     const answer = document.querySelectorAll(ANSWER_FILTER_TEXTBOX)[0].value;
-    const challengeType = 'translate';
+    const challengeType = TYPE_TRANSLATE;
     return [prompt, answer, challengeType];
   }
 
@@ -27,9 +38,11 @@ function makeSubmission() {
         break;
       }
     }
-    const challengeType = 'form';
+    const challengeType = TYPE_FORM;
     return [prompt.dataset.prompt, choiceID, challengeType];
   }
+
+  return 0;
 }
 
 const script = document.createElement('script');
