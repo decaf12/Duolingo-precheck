@@ -49,7 +49,7 @@ export function gradeTranslation(answer, vertices) {
         } else if (vertex.lenient === currToken) {
           stack.push([vertex.to, currTokenID + 1, { ...currVisited, [vertex.to]: null }]);
         } else if ('orig' in vertex) {
-          const orig = vertex.orig.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, '');
+          const orig = vertex.orig.replace(/[.,!?$;:]/g, '');
           if (orig === currToken) {
             stack.push([vertex.to, currTokenID + 1, { ...currVisited, [vertex.to]: null }]);
           }
@@ -63,12 +63,10 @@ export function gradeTranslation(answer, vertices) {
 
 export function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
   const key = `${challengePrompt}: ${challengeType}`;
-  console.log(`Key: ${challengePrompt}: ${challengeType}`);
   if (challengeType === constants.TYPE_TRANSLATE) {
     const vertices = answerKey.get(key);
     return gradeTranslation(answer, vertices);
   }
   const correctAnswer = answerKey.get(key);
-  console.log(`Answer key: ${JSON.stringify(answerKey)}`);
   return answer === correctAnswer;
 }

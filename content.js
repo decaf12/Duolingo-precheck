@@ -11,8 +11,7 @@ const FORM_CHOICES = '[data-test="challenge-choice"]';
 
 function makeSubmission() {
   if (document.querySelector(TRANSLATE)) {
-    // const promptCollection = Array.from(document.querySelectorAll(DOMConstants.TRANSLATE_PROMPT));
-    const promptCollection = document.querySelectorAll(TRANSLATE_PROMPT);
+    const promptCollection = Array.from(document.querySelectorAll(TRANSLATE_PROMPT));
     const prompt = promptCollection.map((x) => x.innerHTML).join('');
     const answer = document.querySelector(ANSWER_FILTER_TEXTBOX).value;
     return [prompt, answer, TYPE_TRANSLATE];
