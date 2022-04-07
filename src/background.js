@@ -1,7 +1,6 @@
 import * as map from 'typescript-map';
 import * as constants from './constants';
 import * as checkAnswers from './checkAnswers';
-import { CHALLENGE_URL_FRONTEND_PATTERN } from '../constants';
 
 (function loadAnswerKey() {
   let answerkeyJSON;
@@ -57,7 +56,7 @@ browser.tabs.onUpdated.addListener(
     );
   },
   {
-    urls: [CHALLENGE_URL_FRONTEND_PATTERN],
+    urls: [constants.CHALLENGE_URL_FRONTEND_PATTERN],
     properties: ['url'],
   },
 );

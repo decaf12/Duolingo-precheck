@@ -11,9 +11,10 @@ export default function makeSubmission() {
 
   if (document.querySelectorAll(DOMConstants.FORM)) {
     const prompt = document.querySelector(DOMConstants.FORM_PROMPT);
+    const promptNoBlank = prompt.dataset.prompt.replace(/_/g, '');
     const choices = Array.from(document.querySelectorAll(DOMConstants.FORM_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-    return [prompt.dataset.prompt, choiceID, constants.TYPE_FORM];
+    return [promptNoBlank, choiceID, constants.TYPE_FORM];
   }
 
   return 0;

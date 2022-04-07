@@ -12,7 +12,7 @@ export function addToKey(answerKey, challenges) {
     if (challenge.type !== constants.TYPE_TRANSLATE) {
       switch (challenge.type) {
         case constants.TYPE_FORM: {
-          prompt = challenge.promptPieces.map((x) => (x === '' ? '___' : x)).join('');
+          prompt = challenge.promptPieces.join('');
           value = challenge.correctIndex;
           break;
         }
@@ -68,5 +68,6 @@ export function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
     return gradeTranslation(answer, vertices);
   }
   const correctAnswer = answerKey.get(key);
+  console.log(`Correct answer: ${correctAnswer}`);
   return answer === correctAnswer;
 }

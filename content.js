@@ -19,9 +19,10 @@ function makeSubmission() {
 
   if (document.querySelectorAll(FORM)) {
     const prompt = document.querySelector(FORM_PROMPT);
+    const promptNoBlank = prompt.dataset.prompt.replace(/_/g, '');
     const choices = Array.from(document.querySelectorAll(FORM_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-    return [prompt.dataset.prompt, choiceID, TYPE_FORM];
+    return [promptNoBlank, choiceID, TYPE_FORM];
   }
 
   return 0;

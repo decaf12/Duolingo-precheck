@@ -1,4 +1,4 @@
-import { TYPE_TRANSLATE, TYPE_FORM, CHALLENGE_URL_PATTERN } from './constants.js';
+import { TYPE_TRANSLATE, TYPE_FORM, CHALLENGE_URL_PATTERN, CHALLENGE_URL_FRONTEND_PATTERN } from './constants.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -335,7 +335,7 @@ function addToKey(answerKey, challenges) {
     if (challenge.type !== TYPE_TRANSLATE) {
       switch (challenge.type) {
         case TYPE_FORM: {
-          prompt = challenge.promptPieces.map((x) => (x === '' ? '___' : x)).join('');
+          prompt = challenge.promptPieces.join('');
           value = challenge.correctIndex;
           break;
         }
@@ -391,10 +391,9 @@ function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
     return gradeTranslation(answer, vertices);
   }
   const correctAnswer = answerKey.get(key);
+  console.log(`Correct answer: ${correctAnswer}`);
   return answer === correctAnswer;
 }
-
-const CHALLENGE_URL_FRONTEND_PATTERN = 'https://www.duolingo.com/skill/*';
 
 (function loadAnswerKey() {
   let answerkeyJSON;
