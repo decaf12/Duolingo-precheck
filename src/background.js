@@ -1,6 +1,7 @@
 import * as map from 'typescript-map';
-import { CHALLENGE_URL_PATTERN } from './constants';
+import * as constants from './constants';
 import * as checkAnswers from './checkAnswers';
+import { CHALLENGE_URL_FRONTEND_PATTERN } from '../constants';
 
 (function loadAnswerKey() {
   let answerkeyJSON;
@@ -38,13 +39,25 @@ import * as checkAnswers from './checkAnswers';
 
   browser.webRequest.onHeadersReceived.addListener(
     getAnswerKey,
-    { urls: [CHALLENGE_URL_PATTERN] },
+    { urls: [constants.CHALLENGE_URL_PATTERN] },
     ['blocking'],
   );
 
   browser.runtime.onMessage.addListener(handlemessage);
 }());
 
-browser.webNavigation.onHistoryStateUpdated.addListener(() => {
-  browser.tabs.executeScript(null, { file: '../content' });
-});
+browser.tabs.onUpdated.addListener(
+  () => {
+    browser.tabs.executeScript(
+      null,
+      {
+        file: '/content.js',
+        runAt: 'document_start',
+      },
+    );
+  },
+  {
+    urls: [CHALLENGE_URL_FRONTEND_PATTERN],
+    properties: ['url'],
+  },
+);

@@ -27,12 +27,6 @@ function makeSubmission() {
   return 0;
 }
 
-const script = document.createElement('script');
-script.setAttribute('type', 'module');
-script.setAttribute('src', browser.runtime.getURL('makeSubmission.js'));
-const head = document.head || document.getElementsByTagName('head')[0] || document.documentElement;
-head.insertBefore(script, head.lastChild);
-
 document.addEventListener(
   'keydown',
   async (e) => {

@@ -394,6 +394,8 @@ function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
   return answer === correctAnswer;
 }
 
+const CHALLENGE_URL_FRONTEND_PATTERN = 'https://www.duolingo.com/skill/*';
+
 (function loadAnswerKey() {
   let answerkeyJSON;
   const answerKey = new TSMap_1();
@@ -437,6 +439,18 @@ function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
   browser.runtime.onMessage.addListener(handlemessage);
 }());
 
-browser.webNavigation.onHistoryStateUpdated.addListener(() => {
-  browser.tabs.executeScript(null, { file: '../content' });
-});
+browser.tabs.onUpdated.addListener(
+  () => {
+    browser.tabs.executeScript(
+      null,
+      {
+        file: '/content.js',
+        runAt: 'document_start',
+      },
+    );
+  },
+  {
+    urls: [CHALLENGE_URL_FRONTEND_PATTERN],
+    properties: ['url'],
+  },
+);
