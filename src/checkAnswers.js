@@ -16,6 +16,14 @@ export function addToKey(answerKey, challenges) {
           value = challenge.correctIndex;
           break;
         }
+
+        case constants.TYPE_JUDGE: {
+          prompt = challenge.prompt;
+          // eslint-disable-next-line prefer-destructuring
+          value = challenge.correctIndices[0];
+          break;
+        }
+
         default: {
           prompt = null;
           value = null;
@@ -68,6 +76,5 @@ export function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
     return gradeTranslation(answer, vertices);
   }
   const correctAnswer = answerKey.get(key);
-  console.log(`Correct answer: ${correctAnswer}`);
   return answer === correctAnswer;
 }
