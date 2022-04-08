@@ -6,16 +6,16 @@ export default [
     input: ['src/background.js', 'src/constants.js'],
     output: {
       dir: '.',
-      format: 'es'
+      format: 'es',
     },
-    plugins: [commonjs(), nodeResolve()]
+    plugins: [commonjs(), nodeResolve()],
   },
-  
+
   {
     input: ['src/content.js'],
     output: {
       dir: '.',
-      format: 'es'
-    }
-  }
+      format: 'es',
+    },
+  },
 ];

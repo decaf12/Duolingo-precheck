@@ -1,4 +1,4 @@
-import { TYPE_TRANSLATE, TYPE_JUDGE, TYPE_FORM, CHALLENGE_URL_PATTERN, CHALLENGE_URL_FRONTEND_PATTERN } from './constants.js';
+import { CHALLENGE_URL_PATTERN, CHALLENGE_URL_FRONTEND_PATTERN } from './constants.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -322,6 +322,12 @@ var TSMap = /** @class */ (function () {
     return TSMap;
 }());
 TSMap_1 = typescriptMap.TSMap = TSMap;
+
+const TYPE_TRANSLATE = 'translate';
+
+const TYPE_FORM = 'form';
+
+const TYPE_JUDGE = 'judge';
 
 function addToKey(answerKey, challenges) {
   challenges.forEach((challenge) => {

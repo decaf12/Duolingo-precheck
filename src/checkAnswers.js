@@ -1,4 +1,4 @@
-import * as constants from './constants';
+import * as constants from './challengeTypeConstants';
 
 export function addToKey(answerKey, challenges) {
   challenges.forEach((challenge) => {
