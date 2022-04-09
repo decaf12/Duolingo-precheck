@@ -27,8 +27,6 @@
 
     "permissions": [
       "https://www.duolingo.com/*/sessions",
-      "https://excess.duolingo.com/challenge_response/batch",
-      "https://www.duolingo.com/learn",
       "https://www.duolingo.com/skill/*",
       "tabs",
       "webNavigation",

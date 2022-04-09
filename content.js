@@ -13,29 +13,39 @@ const JUDGE = '[data-test="challenge challenge-judge"]';
 const JUDGE_PROMPT = '[class="_3-JBe"]';
 const JUDGE_CHOICES = '[data-test="challenge-choice"]';
 
+const TYPE_SELECT = 'select';
+const SELECT = '[data-test="challenge challenge-select"]';
+const SELECT_PROMPT = '[data-test="challenge-header"]';
+const SELECT_CHOICES = '[data-test="challenge-choice"]';
+
 function makeSubmission() {
   if (document.querySelector(TRANSLATE)) {
     const promptCollection = Array.from(document.querySelectorAll(TRANSLATE_PROMPT));
-    const prompt = promptCollection.map((x) => x.innerHTML).join('');
+    const challengePrompt = promptCollection.map((x) => x.innerHTML).join('');
     const answer = document.querySelector(TRANSLATE_TEXTBOX).value;
-    return [prompt, answer, TYPE_TRANSLATE];
+    return [challengePrompt, answer, TYPE_TRANSLATE];
   }
 
   if (document.querySelector(FORM)) {
-    console.log('Form detected');
-    const prompt = document.querySelector(FORM_PROMPT);
-    const promptNoBlank = prompt.dataset.prompt.replace(/_/g, '');
+    const challengePrompt = document.querySelector(FORM_PROMPT);
+    const promptNoBlank = challengePrompt.dataset.prompt.replace(/_/g, '');
     const choices = Array.from(document.querySelectorAll(FORM_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     return [promptNoBlank, choiceID, TYPE_FORM];
   }
 
   if (document.querySelector(JUDGE)) {
-    console.log('Judge detected');
-    const prompt = document.querySelector(JUDGE_PROMPT).innerHTML;
+    const challengePrompt = document.querySelector(JUDGE_PROMPT).innerHTML;
     const choices = Array.from(document.querySelectorAll(JUDGE_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-    return [prompt, choiceID, TYPE_JUDGE];
+    return [challengePrompt, choiceID, TYPE_JUDGE];
+  }
+
+  if (document.querySelector(SELECT)) {
+    const challengePrompt = document.querySelector(SELECT_PROMPT).innerHTML.replace(/[\u201C\u201D]/g, '"');
+    const choices = Array.from(document.querySelectorAll(SELECT_CHOICES));
+    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    return [challengePrompt, choiceID, TYPE_SELECT];
   }
   return 0;
 }

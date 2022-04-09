@@ -329,9 +329,11 @@ const TYPE_FORM = 'form';
 
 const TYPE_JUDGE = 'judge';
 
+const TYPE_SELECT = 'select';
+
 function addToKey(answerKey, challenges) {
   challenges.forEach((challenge) => {
-    let prompt;
+    let challengePrompt;
     let value;
 
     if ('grader' in challenge) {
@@ -341,24 +343,31 @@ function addToKey(answerKey, challenges) {
     if (challenge.type !== TYPE_TRANSLATE) {
       switch (challenge.type) {
         case TYPE_FORM: {
-          prompt = challenge.promptPieces.join('');
+          challengePrompt = challenge.promptPieces.join('');
           value = challenge.correctIndex;
           break;
         }
 
         case TYPE_JUDGE: {
-          prompt = challenge.prompt;
+          challengePrompt = challenge.prompt;
           // eslint-disable-next-line prefer-destructuring
           value = challenge.correctIndices[0];
           break;
         }
 
+        case TYPE_SELECT: {
+          challengePrompt = `<span>Which one of these is "${challenge.prompt}"?</span>`;
+          console.log(`Select prompt: ${challengePrompt}`);
+          value = challenge.correctIndex;
+          break;
+        }
+
         default: {
-          prompt = null;
+          challengePrompt = null;
           value = null;
         }
       }
-      answerKey.set(`${prompt}: ${challenge.type}`, value);
+      answerKey.set(`${challengePrompt}: ${challenge.type}`, value);
     }
   });
 }

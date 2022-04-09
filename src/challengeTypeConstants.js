@@ -12,3 +12,8 @@ export const TYPE_JUDGE = 'judge';
 export const JUDGE = '[data-test="challenge challenge-judge"]';
 export const JUDGE_PROMPT = '[class="_3-JBe"]';
 export const JUDGE_CHOICES = '[data-test="challenge-choice"]';
+
+export const TYPE_SELECT = 'select';
+export const SELECT = '[data-test="challenge challenge-select"]';
+export const SELECT_PROMPT = '[data-test="challenge-header"]';
+export const SELECT_CHOICES = '[data-test="challenge-choice"]';

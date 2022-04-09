@@ -2,7 +2,7 @@ import * as constants from './challengeTypeConstants';
 
 export function addToKey(answerKey, challenges) {
   challenges.forEach((challenge) => {
-    let prompt;
+    let challengePrompt;
     let value;
 
     if ('grader' in challenge) {
@@ -12,24 +12,31 @@ export function addToKey(answerKey, challenges) {
     if (challenge.type !== constants.TYPE_TRANSLATE) {
       switch (challenge.type) {
         case constants.TYPE_FORM: {
-          prompt = challenge.promptPieces.join('');
+          challengePrompt = challenge.promptPieces.join('');
           value = challenge.correctIndex;
           break;
         }
 
         case constants.TYPE_JUDGE: {
-          prompt = challenge.prompt;
+          challengePrompt = challenge.prompt;
           // eslint-disable-next-line prefer-destructuring
           value = challenge.correctIndices[0];
           break;
         }
 
+        case constants.TYPE_SELECT: {
+          challengePrompt = `<span>Which one of these is "${challenge.prompt}"?</span>`;
+          console.log(`Select prompt: ${challengePrompt}`);
+          value = challenge.correctIndex;
+          break;
+        }
+
         default: {
-          prompt = null;
+          challengePrompt = null;
           value = null;
         }
       }
-      answerKey.set(`${prompt}: ${challenge.type}`, value);
+      answerKey.set(`${challengePrompt}: ${challenge.type}`, value);
     }
   });
 }
