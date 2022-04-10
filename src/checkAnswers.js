@@ -25,7 +25,7 @@ export function addToKey(answerKey, challenges) {
         }
 
         case constants.TYPE_SELECT: {
-          challengePrompt = `<span>Which one of these is "${challenge.prompt}"?</span>`;
+          challengePrompt = `<span>Which one of these is \u201C${challenge.prompt}\u201D?</span>`; /* u201C and u201D are curly quotes */
           console.log(`Select prompt: ${challengePrompt}`);
           value = challenge.correctIndex;
           break;
@@ -64,8 +64,8 @@ export function gradeTranslation(answer, vertices) {
         } else if (vertex.lenient === currToken) {
           stack.push([vertex.to, currTokenID + 1, { ...currVisited, [vertex.to]: null }]);
         } else if ('orig' in vertex) {
-          const orig = vertex.orig.replace(/[.,!?$;:]/g, '');
-          if (orig === currToken) {
+          const orig = vertex.orig.replace(/[.,!?$-;:]/g, '');
+          if (orig.toLowerCase() === currToken.toLowerCase()) {
             stack.push([vertex.to, currTokenID + 1, { ...currVisited, [vertex.to]: null }]);
           }
         }
@@ -78,6 +78,7 @@ export function gradeTranslation(answer, vertices) {
 
 export function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
   const key = `${challengePrompt}: ${challengeType}`;
+  console.log(`Key: ${key}`);
   if (challengeType === constants.TYPE_TRANSLATE) {
     const vertices = answerKey.get(key);
     return gradeTranslation(answer, vertices);

@@ -323,13 +323,13 @@ var TSMap = /** @class */ (function () {
 }());
 TSMap_1 = typescriptMap.TSMap = TSMap;
 
-const TYPE_TRANSLATE = 'translate';
-
 const TYPE_FORM = 'form';
 
 const TYPE_JUDGE = 'judge';
 
 const TYPE_SELECT = 'select';
+
+const TYPE_TRANSLATE = 'translate';
 
 function addToKey(answerKey, challenges) {
   challenges.forEach((challenge) => {
@@ -356,7 +356,7 @@ function addToKey(answerKey, challenges) {
         }
 
         case TYPE_SELECT: {
-          challengePrompt = `<span>Which one of these is "${challenge.prompt}"?</span>`;
+          challengePrompt = `<span>Which one of these is \u201C${challenge.prompt}\u201D?</span>`; /* u201C and u201D are curly quotes */
           console.log(`Select prompt: ${challengePrompt}`);
           value = challenge.correctIndex;
           break;
@@ -395,8 +395,8 @@ function gradeTranslation(answer, vertices) {
         } else if (vertex.lenient === currToken) {
           stack.push([vertex.to, currTokenID + 1, { ...currVisited, [vertex.to]: null }]);
         } else if ('orig' in vertex) {
-          const orig = vertex.orig.replace(/[.,!?$;:]/g, '');
-          if (orig === currToken) {
+          const orig = vertex.orig.replace(/[.,!?$-;:]/g, '');
+          if (orig.toLowerCase() === currToken.toLowerCase()) {
             stack.push([vertex.to, currTokenID + 1, { ...currVisited, [vertex.to]: null }]);
           }
         }
@@ -409,6 +409,7 @@ function gradeTranslation(answer, vertices) {
 
 function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
   const key = `${challengePrompt}: ${challengeType}`;
+  console.log(`Key: ${key}`);
   if (challengeType === TYPE_TRANSLATE) {
     const vertices = answerKey.get(key);
     return gradeTranslation(answer, vertices);
@@ -441,13 +442,16 @@ function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
       if ('adaptiveChallenges' in response) {
         addToKey(answerKey, response.adaptiveChallenges);
       }
+      if ('adaptiveInterleavedChallenges' in response) {
+        addToKey(answerKey, response.adaptiveInterleavedChallenges.challenges);
+      }
       filter.disconnect();
     };
   }
 
   function handlemessage(req, sender, sendResponse) {
     // eslint-disable-next-line max-len
-    const isCorrect = checkAnswer(answerKey, req.answer, req.prompt, req.challengeType);
+    const isCorrect = checkAnswer(answerKey, req.answer, req.challengePrompt, req.challengeType);
     sendResponse({ correct: isCorrect });
   }
 

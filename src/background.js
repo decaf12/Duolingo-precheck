@@ -26,13 +26,16 @@ import * as checkAnswers from './checkAnswers';
       if ('adaptiveChallenges' in response) {
         checkAnswers.addToKey(answerKey, response.adaptiveChallenges);
       }
+      if ('adaptiveInterleavedChallenges' in response) {
+        checkAnswers.addToKey(answerKey, response.adaptiveInterleavedChallenges.challenges);
+      }
       filter.disconnect();
     };
   }
 
   function handlemessage(req, sender, sendResponse) {
     // eslint-disable-next-line max-len
-    const isCorrect = checkAnswers.checkAnswer(answerKey, req.answer, req.prompt, req.challengeType);
+    const isCorrect = checkAnswers.checkAnswer(answerKey, req.answer, req.challengePrompt, req.challengeType);
     sendResponse({ correct: isCorrect });
   }
 

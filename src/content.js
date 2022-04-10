@@ -7,9 +7,9 @@ document.addEventListener(
       e.preventDefault();
       e.stopImmediatePropagation();
 
-      const [prompt, answer, challengeType] = makeSubmission();
+      const [challengePrompt, answer, challengeType] = makeSubmission();
       const marking = await browser.runtime.sendMessage({
-        prompt,
+        challengePrompt,
         answer,
         challengeType,
       });

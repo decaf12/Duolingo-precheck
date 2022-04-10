@@ -1,8 +1,3 @@
-const TYPE_TRANSLATE = 'translate';
-const TRANSLATE = '[data-test="challenge challenge-translate"]';
-const TRANSLATE_PROMPT = '[data-test="hint-token"]';
-const TRANSLATE_TEXTBOX = '[data-test="challenge-translate-input"]';
-
 const TYPE_FORM = 'form';
 const FORM = '[data-test="challenge challenge-form"]';
 const FORM_PROMPT = '[class="_2SfAl _2Hg6H"]';
@@ -18,8 +13,14 @@ const SELECT = '[data-test="challenge challenge-select"]';
 const SELECT_PROMPT = '[data-test="challenge-header"]';
 const SELECT_CHOICES = '[data-test="challenge-choice"]';
 
+const TYPE_TRANSLATE = 'translate';
+const TRANSLATE = '[data-test="challenge challenge-translate"]';
+const TRANSLATE_PROMPT = '[data-test="hint-token"]';
+const TRANSLATE_TEXTBOX = '[data-test="challenge-translate-input"]';
+
 function makeSubmission() {
   if (document.querySelector(TRANSLATE)) {
+    console.log('Type translate');
     const promptCollection = Array.from(document.querySelectorAll(TRANSLATE_PROMPT));
     const challengePrompt = promptCollection.map((x) => x.innerHTML).join('');
     const answer = document.querySelector(TRANSLATE_TEXTBOX).value;
@@ -42,7 +43,7 @@ function makeSubmission() {
   }
 
   if (document.querySelector(SELECT)) {
-    const challengePrompt = document.querySelector(SELECT_PROMPT).innerHTML.replace(/[\u201C\u201D]/g, '"');
+    const challengePrompt = document.querySelector(SELECT_PROMPT).innerHTML;
     const choices = Array.from(document.querySelectorAll(SELECT_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     return [challengePrompt, choiceID, TYPE_SELECT];
@@ -57,9 +58,9 @@ document.addEventListener(
       e.preventDefault();
       e.stopImmediatePropagation();
 
-      const [prompt, answer, challengeType] = makeSubmission();
+      const [challengePrompt, answer, challengeType] = makeSubmission();
       const marking = await browser.runtime.sendMessage({
-        prompt,
+        challengePrompt,
         answer,
         challengeType,
       });

@@ -24,7 +24,7 @@ export default function makeSubmission() {
   }
 
   if (document.querySelector(constants.SELECT)) {
-    const challengePrompt = document.querySelector(constants.SELECT_PROMPT).innerHTML.replace(/[\u201C\u201D]/g, '"');
+    const challengePrompt = document.querySelector(constants.SELECT_PROMPT).innerHTML;
     const choices = Array.from(document.querySelectorAll(constants.SELECT_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     return [challengePrompt, choiceID, constants.TYPE_SELECT];
