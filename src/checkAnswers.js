@@ -55,7 +55,7 @@ export function gradeTranslation(answer, vertices) {
       return true;
     }
 
-    const currToken = answerSplit[currTokenID];
+    const currToken = answerSplit[currTokenID] || '';
 
     vertices[currVertexID].forEach((vertex) => {
       if (!(vertex.to in currVisited)) {

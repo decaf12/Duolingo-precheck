@@ -1,4 +1,5 @@
-import makeSubmission from './makeSubmission';
+import * as submission from './makeSubmission';
+import * as constants from './challengeTypeConstants';
 
 document.addEventListener(
   'keydown',
@@ -7,7 +8,7 @@ document.addEventListener(
       e.preventDefault();
       e.stopImmediatePropagation();
 
-      const [challengePrompt, answer, challengeType] = makeSubmission();
+      const [challengePrompt, answer, challengeType] = submission.makeSubmission();
       const marking = await browser.runtime.sendMessage({
         challengePrompt,
         answer,
@@ -20,3 +21,9 @@ document.addEventListener(
     }
   },
 );
+
+const observer = new MutationObserver(() => {
+  console.log('buttons selected');
+});
+
+observer.observe(document.body, { childList: true, subtree: true });

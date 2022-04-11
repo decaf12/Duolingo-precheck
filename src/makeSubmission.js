@@ -1,6 +1,6 @@
 import * as constants from './challengeTypeConstants';
 
-export default function makeSubmission() {
+export function makeSubmission() {
   if (document.querySelector(constants.TRANSLATE)) {
     const promptCollection = Array.from(document.querySelectorAll(constants.TRANSLATE_PROMPT));
     const challengePrompt = promptCollection.map((x) => x.innerHTML).join('');
@@ -30,4 +30,8 @@ export default function makeSubmission() {
     return [challengePrompt, choiceID, constants.TYPE_SELECT];
   }
   return 0;
+}
+
+export function matchSubmission() {
+  console.log('Match submission');
 }

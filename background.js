@@ -386,7 +386,7 @@ function gradeTranslation(answer, vertices) {
       return true;
     }
 
-    const currToken = answerSplit[currTokenID];
+    const currToken = answerSplit[currTokenID] || '';
 
     vertices[currVertexID].forEach((vertex) => {
       if (!(vertex.to in currVisited)) {
@@ -470,7 +470,7 @@ browser.tabs.onUpdated.addListener(
       null,
       {
         file: '/content.js',
-        runAt: 'document_start',
+        runAt: 'document_end',
       },
     );
   },

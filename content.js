@@ -20,7 +20,6 @@ const TRANSLATE_TEXTBOX = '[data-test="challenge-translate-input"]';
 
 function makeSubmission() {
   if (document.querySelector(TRANSLATE)) {
-    console.log('Type translate');
     const promptCollection = Array.from(document.querySelectorAll(TRANSLATE_PROMPT));
     const challengePrompt = promptCollection.map((x) => x.innerHTML).join('');
     const answer = document.querySelector(TRANSLATE_TEXTBOX).value;
@@ -71,3 +70,9 @@ document.addEventListener(
     }
   },
 );
+
+const observer = new MutationObserver(() => {
+  console.log('buttons selected');
+});
+
+observer.observe(document.body, { childList: true, subtree: true });
