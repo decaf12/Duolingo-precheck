@@ -4,7 +4,7 @@ import * as constants from './challengeTypeConstants';
 document.addEventListener(
   'keydown',
   async (e) => {
-    if (e.ctrlKey && e.key === 'Enter') {
+    if (e.key === 'Enter') {
       e.preventDefault();
       e.stopImmediatePropagation();
 
@@ -15,8 +15,8 @@ document.addEventListener(
         challengeType,
       });
       if (marking.correct) {
-        const submit = new KeyboardEvent('keydown', { key: 'Enter' });
-        document.dispatchEvent(submit);
+        const submissionButton = document.querySelector(constants.SUBMISSION_BUTTON);
+        submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       }
     }
   },

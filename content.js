@@ -1,3 +1,5 @@
+const SUBMISSION_BUTTON = '[data-test="player-next"]';
+
 const TYPE_FORM = 'form';
 const FORM = '[data-test="challenge challenge-form"]';
 const FORM_PROMPT = '[class="_2SfAl _2Hg6H"]';
@@ -53,7 +55,7 @@ function makeSubmission() {
 document.addEventListener(
   'keydown',
   async (e) => {
-    if (e.ctrlKey && e.key === 'Enter') {
+    if (e.key === 'Enter') {
       e.preventDefault();
       e.stopImmediatePropagation();
 
@@ -64,8 +66,8 @@ document.addEventListener(
         challengeType,
       });
       if (marking.correct) {
-        const submit = new KeyboardEvent('keydown', { key: 'Enter' });
-        document.dispatchEvent(submit);
+        const submissionButton = document.querySelector(SUBMISSION_BUTTON);
+        submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       }
     }
   },

@@ -1,4 +1,5 @@
 export const CHALLENGE_AREA = '[class="_863KE"]';
+export const SUBMISSION_BUTTON = '[data-test="player-next"]';
 
 export const TYPE_FORM = 'form';
 export const FORM = '[data-test="challenge challenge-form"]';
