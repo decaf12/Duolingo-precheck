@@ -1,4 +1,5 @@
 const SUBMISSION_BUTTON = '[data-test="player-next"]';
+const SUBMISSION_BUTTON_TEXT = '[class="_13HXc"]';
 
 const TYPE_FORM = 'form';
 const FORM = '[data-test="challenge challenge-form"]';
@@ -56,9 +57,17 @@ document.addEventListener(
   'keydown',
   async (e) => {
     if (e.key === 'Enter') {
+      const submissionButton = document.querySelector(SUBMISSION_BUTTON);
+      const submissionButtonText = submissionButton.querySelector(SUBMISSION_BUTTON_TEXT);
+      console.log(`Submission button text: ${submissionButtonText.innerHTML}`);
+      if (submissionButtonText.innerHTML === 'Continue') {
+        submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        return;
+      }
+
+      console.log(`Button: ${JSON.stringify(submissionButton)}`);
       e.preventDefault();
       e.stopImmediatePropagation();
-
       const [challengePrompt, answer, challengeType] = makeSubmission();
       const marking = await browser.runtime.sendMessage({
         challengePrompt,
@@ -66,7 +75,6 @@ document.addEventListener(
         challengeType,
       });
       if (marking.correct) {
-        const submissionButton = document.querySelector(SUBMISSION_BUTTON);
         submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       }
     }

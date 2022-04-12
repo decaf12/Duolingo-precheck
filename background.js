@@ -469,7 +469,7 @@ browser.tabs.onUpdated.addListener(
       null,
       {
         file: '/content.js',
-        runAt: 'document_end',
+        runAt: 'document_start',
       },
     );
   },

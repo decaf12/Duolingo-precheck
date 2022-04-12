@@ -5,9 +5,16 @@ document.addEventListener(
   'keydown',
   async (e) => {
     if (e.key === 'Enter') {
+      const submissionButton = document.querySelector(constants.SUBMISSION_BUTTON);
+      const submissionButtonText = submissionButton.querySelector(constants.SUBMISSION_BUTTON_TEXT);
+      if (submissionButtonText.innerHTML !== 'Check') {
+        submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        return;
+      }
+
+      console.log(`Button: ${JSON.stringify(submissionButton)}`);
       e.preventDefault();
       e.stopImmediatePropagation();
-
       const [challengePrompt, answer, challengeType] = submission.makeSubmission();
       const marking = await browser.runtime.sendMessage({
         challengePrompt,
@@ -15,7 +22,6 @@ document.addEventListener(
         challengeType,
       });
       if (marking.correct) {
-        const submissionButton = document.querySelector(constants.SUBMISSION_BUTTON);
         submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       }
     }
