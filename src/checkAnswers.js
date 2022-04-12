@@ -43,13 +43,14 @@ export function addToKey(answerKey, challenges) {
 export function gradeTranslation(answer, vertices) {
   const answerSplit = answer.split(' ');
   const lastVertexID = vertices.length - 1;
+  const lastTokenID = answerSplit.length;
   const stack = [[0, 0, { 0: null }]];
 
   while (stack.length > 0) {
     const [currVertexID, currTokenID, currVisited] = stack.pop();
     console.log(`Current vertex: ${currVertexID}`);
 
-    if (currVertexID === lastVertexID) {
+    if (currVertexID === lastVertexID && currTokenID === lastTokenID) {
       console.log('Last vertex reached.');
       return true;
     }

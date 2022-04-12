@@ -6,21 +6,22 @@ document.addEventListener(
   async (e) => {
     if (e.key === 'Enter') {
       const submissionButton = document.querySelector(constants.SUBMISSION_BUTTON);
-      const submissionButtonText = submissionButton.querySelector(constants.SUBMISSION_BUTTON_TEXT);
-      if (submissionButtonText.innerHTML !== 'Check') {
+      const submissionButtonSpan = submissionButton.querySelector(constants.SUBMISSION_BUTTON_SPAN);
+      if (submissionButtonSpan.innerHTML !== 'Check') {
         submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         return;
       }
 
-      console.log(`Button: ${JSON.stringify(submissionButton)}`);
       e.preventDefault();
       e.stopImmediatePropagation();
+
       const [challengePrompt, answer, challengeType] = submission.makeSubmission();
       const marking = await browser.runtime.sendMessage({
         challengePrompt,
         answer,
         challengeType,
       });
+
       if (marking.correct) {
         submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       }
@@ -29,7 +30,11 @@ document.addEventListener(
 );
 
 const observer = new MutationObserver(() => {
-  console.log('buttons selected');
+  console.log('Mutation detected');
+  if (document.querySelector(constants.MATCH_BUTTONS)) {
+    const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
+    matchButtons.forEach(submission.addSubmissionListener);
+  }
 });
 
 observer.observe(document.body, { childList: true, subtree: true });
