@@ -1,4 +1,4 @@
-import * as submission from './makeSubmission';
+import makeSubmission from './makeSubmission';
 import * as constants from './challengeTypeConstants';
 
 document.addEventListener(
@@ -15,7 +15,7 @@ document.addEventListener(
       e.preventDefault();
       e.stopImmediatePropagation();
 
-      const [challengePrompt, answer, challengeType] = submission.makeSubmission();
+      const [challengePrompt, answer, challengeType] = makeSubmission();
       const marking = await browser.runtime.sendMessage({
         challengePrompt,
         answer,
@@ -29,11 +29,39 @@ document.addEventListener(
   },
 );
 
+function addSubmissionListener(button) {
+  button.addEventListener('click', async (e) => {
+    const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
+    if (!previouslyClicked) {
+      return;
+    }
+
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    const previousText = previouslyClicked.innerHTML.split('</span>')[1];
+    const currentButton = button.textContent;
+    const buttonNumber = currentButton.slice(0, 1);
+    const currentText = currentButton.slice(1);
+
+    const [challengePrompt, answer, challengeType] = makeSubmission({ previousText, currentText });
+    const marking = await browser.runtime.sendMessage({
+      challengePrompt,
+      answer,
+      challengeType,
+    });
+
+    if (marking.correct) {
+      document.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: buttonNumber }));
+    }
+  });
+}
+
 const observer = new MutationObserver(() => {
   console.log('Mutation detected');
   if (document.querySelector(constants.MATCH_BUTTONS)) {
     const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
-    matchButtons.forEach(submission.addSubmissionListener);
+    matchButtons.forEach(addSubmissionListener);
   }
 });
 

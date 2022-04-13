@@ -1,3 +1,4 @@
+import { TSMap } from 'typescript-map';
 import * as constants from './challengeTypeConstants';
 
 export function addToKey(answerKey, challenges) {
@@ -14,6 +15,15 @@ export function addToKey(answerKey, challenges) {
         case constants.TYPE_FORM: {
           challengePrompt = challenge.promptPieces.join('');
           value = challenge.correctIndex;
+          break;
+        }
+
+        case constants.TYPE_MATCH: {
+          challengePrompt = challenge.pairs.map((x) => x.learningToken).sort().join('');
+          value = new TSMap();
+          challenge.pairs.forEach((x) => {
+            value.set(x.learningToken, x.fromToken);
+          });
           break;
         }
 
@@ -78,11 +88,27 @@ export function gradeTranslation(answer, vertices) {
 
 export function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
   const key = `${challengePrompt}: ${challengeType}`;
-  console.log(`Key: ${key}`);
   if (challengeType === constants.TYPE_TRANSLATE) {
     const vertices = answerKey.get(key);
     return gradeTranslation(answer, vertices);
   }
+
+  if (challengeType === constants.TYPE_MATCH) {
+    const matchLookup = answerKey.get(key);
+    if (matchLookup.has(answer.previousText) && matchLookup.has(answer.currentText)) {
+      return true;
+    }
+
+    if (!matchLookup.has(answer.previousText) && !matchLookup.has(answer.currentText)) {
+      return true;
+    }
+
+    if (matchLookup.has(answer.previousText)) {
+      return answer.currentText === matchLookup.get(answer.previousText);
+    }
+    return answer.previousText === matchLookup.get(answer.currentText);
+  }
+
   const correctAnswer = answerKey.get(key);
   return answer === correctAnswer;
 }

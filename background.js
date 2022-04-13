@@ -331,6 +331,8 @@ const TYPE_SELECT = 'select';
 
 const TYPE_TRANSLATE = 'translate';
 
+const TYPE_MATCH = 'match';
+
 function addToKey(answerKey, challenges) {
   challenges.forEach((challenge) => {
     let challengePrompt;
@@ -345,6 +347,15 @@ function addToKey(answerKey, challenges) {
         case TYPE_FORM: {
           challengePrompt = challenge.promptPieces.join('');
           value = challenge.correctIndex;
+          break;
+        }
+
+        case TYPE_MATCH: {
+          challengePrompt = challenge.pairs.map((x) => x.learningToken).sort().join('');
+          value = new TSMap_1();
+          challenge.pairs.forEach((x) => {
+            value.set(x.learningToken, x.fromToken);
+          });
           break;
         }
 
@@ -409,11 +420,27 @@ function gradeTranslation(answer, vertices) {
 
 function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
   const key = `${challengePrompt}: ${challengeType}`;
-  console.log(`Key: ${key}`);
   if (challengeType === TYPE_TRANSLATE) {
     const vertices = answerKey.get(key);
     return gradeTranslation(answer, vertices);
   }
+
+  if (challengeType === TYPE_MATCH) {
+    const matchLookup = answerKey.get(key);
+    if (matchLookup.has(answer.previousText) && matchLookup.has(answer.currentText)) {
+      return true;
+    }
+
+    if (!matchLookup.has(answer.previousText) && !matchLookup.has(answer.currentText)) {
+      return true;
+    }
+
+    if (matchLookup.has(answer.previousText)) {
+      return answer.currentText === matchLookup.get(answer.previousText);
+    }
+    return answer.previousText === matchLookup.get(answer.currentText);
+  }
+
   const correctAnswer = answerKey.get(key);
   return answer === correctAnswer;
 }
