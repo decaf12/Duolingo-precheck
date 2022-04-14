@@ -58,7 +58,6 @@ function addSubmissionListener(button) {
 }
 
 const observer = new MutationObserver(() => {
-  console.log('Mutation detected');
   if (document.querySelector(constants.MATCH_BUTTONS)) {
     const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
     matchButtons.forEach(addSubmissionListener);

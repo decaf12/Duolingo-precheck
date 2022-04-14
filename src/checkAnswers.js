@@ -51,10 +51,12 @@ export function addToKey(answerKey, challenges) {
 }
 
 export function gradeTranslation(answer, vertices) {
-  const answerSplit = answer.split(' ');
+  const answerSplit = answer.replace(/[-,.?!]/g, ' ').split(' ').filter((x) => x !== '');
   const lastVertexID = vertices.length - 1;
   const lastTokenID = answerSplit.length;
-  const stack = [[0, 0, { 0: null }]];
+  const stack = [[0, 0, 1]];
+
+  console.log(`Answer array: ${answerSplit}`);
 
   while (stack.length > 0) {
     const [currVertexID, currTokenID, currVisited] = stack.pop();
@@ -67,20 +69,26 @@ export function gradeTranslation(answer, vertices) {
 
     const currToken = answerSplit[currTokenID] || '';
 
+    const nextTokenID = currTokenID + 1;
+
+    /* eslint-disable no-bitwise */
     vertices[currVertexID].forEach((vertex) => {
-      if (!(vertex.to in currVisited)) {
+      if ((currVisited & (1 << vertex.to)) === 0) {
+        const nextVisited = currVisited | (1 << vertex.to);
+
         if (!vertex.lenient.trim().length) {
-          stack.push([vertex.to, currTokenID, { ...currVisited, [vertex.to]: null }]);
+          stack.push([vertex.to, currTokenID, nextVisited]);
         } else if (vertex.lenient === currToken) {
-          stack.push([vertex.to, currTokenID + 1, { ...currVisited, [vertex.to]: null }]);
+          stack.push([vertex.to, nextTokenID, nextVisited]);
         } else if ('orig' in vertex) {
           const orig = vertex.orig.replace(/[.,!?$-;:]/g, '');
           if (orig.toLowerCase() === currToken.toLowerCase()) {
-            stack.push([vertex.to, currTokenID + 1, { ...currVisited, [vertex.to]: null }]);
+            stack.push([vertex.to, nextTokenID, nextVisited]);
           }
         }
       }
     });
+    /* eslint-enable no-bitwise */
   }
 
   return false;

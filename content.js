@@ -101,6 +101,7 @@ function addSubmissionListener(button) {
     if (!previouslyClicked) {
       return;
     }
+
     e.preventDefault();
     e.stopImmediatePropagation();
 
@@ -108,7 +109,7 @@ function addSubmissionListener(button) {
     const currentButton = button.textContent;
     const buttonNumber = currentButton.slice(0, 1);
     const currentText = currentButton.slice(1);
-    console.log(`Clicked: ${previousText}, clicked 2: ${currentText}`);
+
     const [challengePrompt, answer, challengeType] = makeSubmission({ previousText, currentText });
     const marking = await browser.runtime.sendMessage({
       challengePrompt,
@@ -123,7 +124,6 @@ function addSubmissionListener(button) {
 }
 
 const observer = new MutationObserver(() => {
-  console.log('Mutation detected');
   if (document.querySelector(MATCH_BUTTONS)) {
     const matchButtons = document.querySelectorAll(MATCH_BUTTONS);
     matchButtons.forEach(addSubmissionListener);
