@@ -51,35 +51,37 @@ export function addToKey(answerKey, challenges) {
 }
 
 export function gradeTranslation(answer, vertices) {
-  const answerSplit = answer.replace(/[-,.?!]/g, ' ').split(' ').filter((x) => x !== '');
+  const answerNoSpaces = answer.replace(/[-\s,.?!]/g, '');
   const lastVertexID = vertices.length - 1;
-  const lastTokenID = answerSplit.length;
+  const lastPos = answerNoSpaces.length;
   const stack = [[0, 0, { 0: null }]];
 
   while (stack.length > 0) {
-    const [currVertexID, currTokenID, currVisited] = stack.pop();
+    const [currVertexID, currPos, currVisited] = stack.pop();
     console.log(`Current vertex: ${currVertexID}`);
 
-    if (currVertexID === lastVertexID && currTokenID === lastTokenID) {
+    if (currVertexID === lastVertexID && currPos === lastPos) {
       console.log('Last vertex reached.');
       return true;
     }
 
-    const currToken = answerSplit[currTokenID] || '';
-
-    const nextTokenID = currTokenID + 1;
+    const remainingAnswer = answerNoSpaces.slice(currPos);
+    const remainingLength = remainingAnswer.length;
 
     vertices[currVertexID].forEach((vertex) => {
       if (!(vertex.to in currVisited)) {
+        const lenientLength = vertex.lenient.length;
         if (!vertex.lenient.trim().length) {
-          stack.push([vertex.to, currTokenID, { ...currVisited, [vertex.to]: null }]);
-        } else if (vertex.lenient === currToken) {
-          stack.push([vertex.to, nextTokenID, { ...currVisited, [vertex.to]: null }]);
+          stack.push([vertex.to, currPos, { ...currVisited, [vertex.to]: null }]);
+        } else if (remainingLength >= lenientLength
+                  && remainingAnswer.slice(0, lenientLength) === vertex.lenient) {
+          stack.push([vertex.to, currPos + lenientLength, { ...currVisited, [vertex.to]: null }]);
         } else if ('orig' in vertex) {
-          const orig = vertex.orig.replace(/[.,!?$\-;:]/g, '');
-          console.log(`Orig post-processing: ${orig}`);
-          if (orig.toLowerCase() === currToken.toLowerCase()) {
-            stack.push([vertex.to, nextTokenID, { ...currVisited, [vertex.to]: null }]);
+          if (remainingLength >= vertex.orig.length
+            // eslint-disable-next-line max-len
+            && vertex.orig.toLowerCase() === remainingAnswer.slice(0, vertex.orig.length).toLowerCase()) {
+            // eslint-disable-next-line max-len
+            stack.push([vertex.to, currPos + remainingLength, { ...currVisited, [vertex.to]: null }]);
           }
         }
       }
