@@ -74,7 +74,6 @@ document.addEventListener(
       const submissionButton = document.querySelector(SUBMISSION_BUTTON);
       const submissionButtonSpan = submissionButton.querySelector(SUBMISSION_BUTTON_SPAN);
       if (submissionButtonSpan.innerHTML !== 'Check') {
-        submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         return;
       }
 

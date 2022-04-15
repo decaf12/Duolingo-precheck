@@ -54,9 +54,7 @@ export function gradeTranslation(answer, vertices) {
   const answerSplit = answer.replace(/[-,.?!]/g, ' ').split(' ').filter((x) => x !== '');
   const lastVertexID = vertices.length - 1;
   const lastTokenID = answerSplit.length;
-  const stack = [[0, 0, 1]];
-
-  console.log(`Answer array: ${answerSplit}`);
+  const stack = [[0, 0, { 0: null }]];
 
   while (stack.length > 0) {
     const [currVertexID, currTokenID, currVisited] = stack.pop();
@@ -71,24 +69,21 @@ export function gradeTranslation(answer, vertices) {
 
     const nextTokenID = currTokenID + 1;
 
-    /* eslint-disable no-bitwise */
     vertices[currVertexID].forEach((vertex) => {
-      if ((currVisited & (1 << vertex.to)) === 0) {
-        const nextVisited = currVisited | (1 << vertex.to);
-
+      if (!(vertex.to in currVisited)) {
         if (!vertex.lenient.trim().length) {
-          stack.push([vertex.to, currTokenID, nextVisited]);
+          stack.push([vertex.to, currTokenID, { ...currVisited, [vertex.to]: null }]);
         } else if (vertex.lenient === currToken) {
-          stack.push([vertex.to, nextTokenID, nextVisited]);
+          stack.push([vertex.to, nextTokenID, { ...currVisited, [vertex.to]: null }]);
         } else if ('orig' in vertex) {
-          const orig = vertex.orig.replace(/[.,!?$-;:]/g, '');
+          const orig = vertex.orig.replace(/[.,!?$\-;:]/g, '');
+          console.log(`Orig post-processing: ${orig}`);
           if (orig.toLowerCase() === currToken.toLowerCase()) {
-            stack.push([vertex.to, nextTokenID, nextVisited]);
+            stack.push([vertex.to, nextTokenID, { ...currVisited, [vertex.to]: null }]);
           }
         }
       }
     });
-    /* eslint-enable no-bitwise */
   }
 
   return false;
