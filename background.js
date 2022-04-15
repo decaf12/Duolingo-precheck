@@ -333,6 +333,10 @@ const TYPE_TRANSLATE = 'translate';
 
 const TYPE_MATCH = 'match';
 
+function caseInsensitiveCmp(string1, string2) {
+  return string1.toLowerCase() === string2.toLowerCase();
+}
+
 function addToKey(answerKey, challenges) {
   challenges.forEach((challenge) => {
     let challengePrompt;
@@ -392,31 +396,23 @@ function gradeTranslation(answer, vertices) {
     const [currVertexID, currPos, currVisited] = stack.pop();
     console.log(`Current vertex: ${currVertexID}`);
 
-    if (currVertexID === lastVertexID && currPos === lastPos) {
+    if (currVertexID === lastVertexID && currPos >= lastPos) {
       console.log('Last vertex reached.');
       return true;
     }
 
-    const remainingLength = lastPos - currPos;
-    console.log(`Curr pos: ${currPos}`);
-    console.log(`Remaing length: ${remainingLength}`);
-
     vertices[currVertexID].forEach((vertex) => {
       if (!(vertex.to in currVisited)) {
-        const lenientLength = vertex.lenient.length;
+        const lenientLen = vertex.lenient.length;
+
         if (!vertex.lenient.trim().length) {
           stack.push([vertex.to, currPos, { ...currVisited, [vertex.to]: null }]);
-        } else if (remainingLength >= lenientLength
-                  && answerNoSpaces.slice(currPos, currPos + lenientLength) === vertex.lenient) {
-          console.log(`Lenient match. Next pos: ${currPos + lenientLength}`);
-          stack.push([vertex.to, currPos + lenientLength, { ...currVisited, [vertex.to]: null }]);
+        } else if (answerNoSpaces.slice(currPos, currPos + lenientLen) === vertex.lenient) {
+          stack.push([vertex.to, currPos + lenientLen, { ...currVisited, [vertex.to]: null }]);
         } else if ('orig' in vertex) {
-          if (remainingLength >= vertex.orig.length
-            // eslint-disable-next-line max-len
-            && vertex.orig.toLowerCase() === answerNoSpaces.slice(currPos, currPos + vertex.orig.length).toLowerCase()) {
-            console.log(`Orig match. Next pos: ${currPos + vertex.orig.length}`);
-            // eslint-disable-next-line max-len
-            stack.push([vertex.to, currPos + vertex.orig.length, { ...currVisited, [vertex.to]: null }]);
+          const origLen = vertex.orig.length;
+          if (caseInsensitiveCmp(vertex.orig, answerNoSpaces.slice(currPos, currPos + origLen))) {
+            stack.push([vertex.to, currPos + origLen, { ...currVisited, [vertex.to]: null }]);
           }
         }
       }

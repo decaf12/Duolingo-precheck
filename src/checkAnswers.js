@@ -1,6 +1,10 @@
 import { TSMap } from 'typescript-map';
 import * as constants from './challengeTypeConstants';
 
+function caseInsensitiveCmp(string1, string2) {
+  return string1.toLowerCase() === string2.toLowerCase();
+}
+
 export function addToKey(answerKey, challenges) {
   challenges.forEach((challenge) => {
     let challengePrompt;
@@ -60,27 +64,23 @@ export function gradeTranslation(answer, vertices) {
     const [currVertexID, currPos, currVisited] = stack.pop();
     console.log(`Current vertex: ${currVertexID}`);
 
-    if (currVertexID === lastVertexID && currPos === lastPos) {
+    if (currVertexID === lastVertexID && currPos >= lastPos) {
       console.log('Last vertex reached.');
       return true;
     }
 
-    const remainingLength = lastPos - currPos;
-
     vertices[currVertexID].forEach((vertex) => {
       if (!(vertex.to in currVisited)) {
-        const lenientLength = vertex.lenient.length;
+        const lenientLen = vertex.lenient.length;
+
         if (!vertex.lenient.trim().length) {
           stack.push([vertex.to, currPos, { ...currVisited, [vertex.to]: null }]);
-        } else if (remainingLength >= lenientLength
-                  && answerNoSpaces.slice(currPos, currPos + lenientLength) === vertex.lenient) {
-          stack.push([vertex.to, currPos + lenientLength, { ...currVisited, [vertex.to]: null }]);
+        } else if (answerNoSpaces.slice(currPos, currPos + lenientLen) === vertex.lenient) {
+          stack.push([vertex.to, currPos + lenientLen, { ...currVisited, [vertex.to]: null }]);
         } else if ('orig' in vertex) {
-          if (remainingLength >= vertex.orig.length
-            // eslint-disable-next-line max-len
-            && vertex.orig.toLowerCase() === answerNoSpaces.slice(currPos, currPos + vertex.orig.length).toLowerCase()) {
-            // eslint-disable-next-line max-len
-            stack.push([vertex.to, currPos + vertex.orig.length, { ...currVisited, [vertex.to]: null }]);
+          const origLen = vertex.orig.length;
+          if (caseInsensitiveCmp(vertex.orig, answerNoSpaces.slice(currPos, currPos + origLen))) {
+            stack.push([vertex.to, currPos + origLen, { ...currVisited, [vertex.to]: null }]);
           }
         }
       }
