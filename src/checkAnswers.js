@@ -65,8 +65,7 @@ export function gradeTranslation(answer, vertices) {
       return true;
     }
 
-    const remainingAnswer = answerNoSpaces.slice(currPos);
-    const remainingLength = remainingAnswer.length;
+    const remainingLength = lastPos - currPos;
 
     vertices[currVertexID].forEach((vertex) => {
       if (!(vertex.to in currVisited)) {
@@ -74,14 +73,14 @@ export function gradeTranslation(answer, vertices) {
         if (!vertex.lenient.trim().length) {
           stack.push([vertex.to, currPos, { ...currVisited, [vertex.to]: null }]);
         } else if (remainingLength >= lenientLength
-                  && remainingAnswer.slice(0, lenientLength) === vertex.lenient) {
+                  && answerNoSpaces.slice(currPos, currPos + lenientLength) === vertex.lenient) {
           stack.push([vertex.to, currPos + lenientLength, { ...currVisited, [vertex.to]: null }]);
         } else if ('orig' in vertex) {
           if (remainingLength >= vertex.orig.length
             // eslint-disable-next-line max-len
-            && vertex.orig.toLowerCase() === remainingAnswer.slice(0, vertex.orig.length).toLowerCase()) {
+            && vertex.orig.toLowerCase() === answerNoSpaces.slice(currPos, currPos + vertex.orig.length).toLowerCase()) {
             // eslint-disable-next-line max-len
-            stack.push([vertex.to, currPos + remainingLength, { ...currVisited, [vertex.to]: null }]);
+            stack.push([vertex.to, currPos + vertex.orig.length, { ...currVisited, [vertex.to]: null }]);
           }
         }
       }
