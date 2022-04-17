@@ -38,5 +38,15 @@ export default function makeSubmission(extraInfo = null) {
     const choices = extraInfo;
     return [challengePrompt, choices, constants.TYPE_MATCH];
   }
+
+  if (document.querySelector(constants.COMPLETEREVERSETRANSLATION)) {
+    // eslint-disable-next-line max-len
+    const promptCollection = Array.from(document.querySelectorAll(constants.COMPLETEREVERSETRANSLATION_PROMPT));
+    const challengePrompt = promptCollection.map((x) => x.textContent).join('');
+    // eslint-disable-next-line max-len
+    const answers = Array.from(document.querySelectorAll(constants.COMPLETEREVERSETRANSLATION_FILLED));
+    const answerList = answers.map((x) => x.value).join();
+    return [challengePrompt, answerList, constants.TYPE_COMPLETEREVERSETRANSLATION];
+  }
   return 0;
 }

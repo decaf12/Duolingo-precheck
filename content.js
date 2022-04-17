@@ -26,6 +26,11 @@ const MATCH = '[data-test="challenge challenge-match"]';
 const MATCH_BUTTONS = '[data-test="challenge-tap-token"]';
 const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
 
+const TYPE_COMPLETEREVERSETRANSLATION = 'completeReverseTranslation';
+const COMPLETEREVERSETRANSLATION = '[data-test="challenge challenge-completeReverseTranslation"]';
+const COMPLETEREVERSETRANSLATION_PROMPT = '[data-test="hint-token"]';
+const COMPLETEREVERSETRANSLATION_FILLED = '[data-test="challenge-text-input"]';
+
 function makeSubmission(extraInfo = null) {
   if (document.querySelector(FORM)) {
     const challengePrompt = document.querySelector(FORM_PROMPT);
@@ -63,6 +68,17 @@ function makeSubmission(extraInfo = null) {
     const challengePrompt = learningTokenButtons.map((x) => x.innerHTML.split('</span>')[1]).sort().join('');
     const choices = extraInfo;
     return [challengePrompt, choices, TYPE_MATCH];
+  }
+
+  if (document.querySelector(COMPLETEREVERSETRANSLATION)) {
+    // eslint-disable-next-line max-len
+    const promptCollection = Array.from(document.querySelectorAll(COMPLETEREVERSETRANSLATION_PROMPT));
+    const challengePrompt = promptCollection.map((x) => x.textContent).join('');
+    // eslint-disable-next-line max-len
+    const answers = Array.from(document.querySelectorAll(COMPLETEREVERSETRANSLATION_FILLED));
+    const answerList = answers.map((x) => x.value).join();
+    console.log(`Answer: ${answerList}`);
+    return [challengePrompt, answerList, TYPE_COMPLETEREVERSETRANSLATION];
   }
   return 0;
 }

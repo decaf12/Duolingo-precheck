@@ -71,6 +71,13 @@ export function addToKey(answerKey, challenges) {
           break;
         }
 
+        case constants.TYPE_COMPLETEREVERSETRANSLATION: {
+          challengePrompt = challenge.prompt;
+          const blanks = challenge.displayTokens.filter((x) => x.isBlank);
+          value = blanks.map((x) => x.text).join();
+          break;
+        }
+
         default: {
           challengePrompt = null;
           value = null;

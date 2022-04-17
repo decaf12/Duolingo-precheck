@@ -26,3 +26,8 @@ export const TYPE_MATCH = 'match';
 export const MATCH = '[data-test="challenge challenge-match"]';
 export const MATCH_BUTTONS = '[data-test="challenge-tap-token"]';
 export const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
+
+export const TYPE_COMPLETEREVERSETRANSLATION = 'completeReverseTranslation';
+export const COMPLETEREVERSETRANSLATION = '[data-test="challenge challenge-completeReverseTranslation"]';
+export const COMPLETEREVERSETRANSLATION_PROMPT = '[data-test="hint-token"]';
+export const COMPLETEREVERSETRANSLATION_FILLED = '[data-test="challenge-text-input"]';
