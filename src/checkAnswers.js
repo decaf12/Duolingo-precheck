@@ -130,6 +130,14 @@ export function gradeTranslation(answer, vertices) {
 }
 
 export function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
+  if (challengePrompt === constants.SKIP_CHECKING_TRUE) {
+    return true;
+  }
+
+  if (challengePrompt === constants.SKIP_CHECKING_FALSE) {
+    return false;
+  }
+
   const key = `${challengePrompt}: ${challengeType}`;
   if (challengeType === constants.TYPE_TRANSLATE) {
     const vertices = answerKey.get(key);

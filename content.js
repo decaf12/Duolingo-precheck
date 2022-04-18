@@ -1,5 +1,12 @@
 const SUBMISSION_BUTTON = '[data-test="player-next"]';
 const SUBMISSION_BUTTON_SPAN = '[class="_13HXc"]';
+const SKIP_CHECKING_TRUE = 'skip checking: true';
+const SKIP_CHECKING_FALSE = 'skip checking: false';
+
+const TYPE_COMPLETEREVERSETRANSLATION = 'completeReverseTranslation';
+const COMPLETEREVERSETRANSLATION = '[data-test="challenge challenge-completeReverseTranslation"]';
+const COMPLETEREVERSETRANSLATION_PROMPT = '[data-test="hint-token"]';
+const COMPLETEREVERSETRANSLATION_FILLED = '[data-test="challenge-text-input"]';
 
 const TYPE_FORM = 'form';
 const FORM = '[data-test="challenge challenge-form"]';
@@ -11,6 +18,11 @@ const JUDGE = '[data-test="challenge challenge-judge"]';
 const JUDGE_PROMPT = '[class="_3-JBe"]';
 const JUDGE_CHOICES = '[data-test="challenge-choice"]';
 
+const TYPE_MATCH = 'match';
+const MATCH = '[data-test="challenge challenge-match"]';
+const MATCH_BUTTONS = '[data-test="challenge-tap-token"]';
+const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
+
 const TYPE_SELECT = 'select';
 const SELECT = '[data-test="challenge challenge-select"]';
 const SELECT_PROMPT = '[data-test="challenge-header"]';
@@ -21,15 +33,10 @@ const TRANSLATE = '[data-test="challenge challenge-translate"]';
 const TRANSLATE_PROMPT = '[data-test="hint-token"]';
 const TRANSLATE_TEXTBOX = '[data-test="challenge-translate-input"]';
 
-const TYPE_MATCH = 'match';
-const MATCH = '[data-test="challenge challenge-match"]';
-const MATCH_BUTTONS = '[data-test="challenge-tap-token"]';
-const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
-
-const TYPE_COMPLETEREVERSETRANSLATION = 'completeReverseTranslation';
-const COMPLETEREVERSETRANSLATION = '[data-test="challenge challenge-completeReverseTranslation"]';
-const COMPLETEREVERSETRANSLATION_PROMPT = '[data-test="hint-token"]';
-const COMPLETEREVERSETRANSLATION_FILLED = '[data-test="challenge-text-input"]';
+const TYPECOMPLETETABLE = '[data-test="challenge challenge-typeCompleteTable"]';
+const TYPECOMPLETETABLE_BLANKS = '[class="_1Rf3h"]';
+const TYPECOMPLETETABLE_ANSWER = '[class="caPDQ"]';
+const TYPECOMPLETETABLE_SUBMISSION = '[class="Y5JxA _17nEt"]';
 
 function makeSubmission(extraInfo = null) {
   if (document.querySelector(FORM)) {
@@ -77,9 +84,21 @@ function makeSubmission(extraInfo = null) {
     // eslint-disable-next-line max-len
     const answers = Array.from(document.querySelectorAll(COMPLETEREVERSETRANSLATION_FILLED));
     const answerList = answers.map((x) => x.value).join();
-    console.log(`Answer: ${answerList}`);
     return [challengePrompt, answerList, TYPE_COMPLETEREVERSETRANSLATION];
   }
+
+  if (document.querySelector(TYPECOMPLETETABLE)) {
+    const blanks = Array.from(document.querySelectorAll(TYPECOMPLETETABLE_BLANKS));
+    console.log(`Blanks: ${JSON.stringify(blanks)}`);
+    const correct = blanks.every((blank) => {
+      const correctAnswer = blank.querySelector(TYPECOMPLETETABLE_ANSWER).textContent.replace(/_/g, '');
+      const submission = blank.querySelector(TYPECOMPLETETABLE_SUBMISSION).value;
+      return correctAnswer.toLowerCase() === submission.toLowerCase();
+    });
+    const challengePrompt = correct ? SKIP_CHECKING_TRUE : SKIP_CHECKING_FALSE;
+    return [challengePrompt, null, null];
+  }
+
   return 0;
 }
 

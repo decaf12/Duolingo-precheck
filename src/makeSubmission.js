@@ -48,5 +48,18 @@ export default function makeSubmission(extraInfo = null) {
     const answerList = answers.map((x) => x.value).join();
     return [challengePrompt, answerList, constants.TYPE_COMPLETEREVERSETRANSLATION];
   }
+
+  if (document.querySelector(constants.TYPECOMPLETETABLE)) {
+    const blanks = Array.from(document.querySelectorAll(constants.TYPECOMPLETETABLE_BLANKS));
+    console.log(`Blanks: ${JSON.stringify(blanks)}`);
+    const correct = blanks.every((blank) => {
+      const correctAnswer = blank.querySelector(constants.TYPECOMPLETETABLE_ANSWER).textContent.replace(/_/g, '');
+      const submission = blank.querySelector(constants.TYPECOMPLETETABLE_SUBMISSION).value;
+      return correctAnswer.toLowerCase() === submission.toLowerCase();
+    });
+    const challengePrompt = correct ? constants.SKIP_CHECKING_TRUE : constants.SKIP_CHECKING_FALSE;
+    return [challengePrompt, null, null];
+  }
+
   return 0;
 }
