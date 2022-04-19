@@ -71,13 +71,6 @@ export function addToKey(answerKey, challenges) {
           break;
         }
 
-        case constants.TYPE_COMPLETEREVERSETRANSLATION: {
-          challengePrompt = challenge.prompt;
-          const blanks = challenge.displayTokens.filter((x) => x.isBlank);
-          value = blanks.map((x) => x.text).join();
-          break;
-        }
-
         default: {
           challengePrompt = null;
           value = null;
@@ -89,7 +82,7 @@ export function addToKey(answerKey, challenges) {
 }
 
 export function gradeTranslation(answer, vertices) {
-  const answerNoSpaces = answer.replace(/[-\s,.?!]/g, '');
+  const answerNoSpaces = answer.replace(constants.IGNORED_CHARACTERS, '');
   const lastVertexID = vertices.length - 1;
   const lastPos = answerNoSpaces.length;
   const stack = [[0, 0, { 0: null }]];
@@ -108,11 +101,11 @@ export function gradeTranslation(answer, vertices) {
         if (!vertex.lenient.trim().length) {
           stack.push([vertex.to, currPos, { ...currVisited, [vertex.to]: null }]);
         // eslint-disable-next-line max-len
-        } else if (startsWithAt(vertex.lenient, answerNoSpaces, currPos, true)) {
+        } else if (startsWithAt(vertex.lenient, answerNoSpaces, currPos, false)) {
           stack.push([vertex.to, currPos + lenientLen, { ...currVisited, [vertex.to]: null }]);
         } else if ('orig' in vertex) {
           const origLen = vertex.orig.length;
-          const origNoPunctuation = vertex.orig.replace(/[-\s,.?!]/g, '');
+          const origNoPunctuation = vertex.orig.replace(constants.IGNORED_CHARACTERS, '');
           const origNoPunctuationLen = origNoPunctuation.length;
           if (startsWithAt(vertex.orig, answerNoSpaces, currPos, false)) {
             stack.push([vertex.to, currPos + origLen, { ...currVisited, [vertex.to]: null }]);

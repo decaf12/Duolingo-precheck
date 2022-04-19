@@ -1,4 +1,4 @@
-import { CHALLENGE_URL_PATTERN, CHALLENGE_URL_FRONTEND_PATTERN } from './constants.js';
+import { CHALLENGE_URL_PATTERN, CHECKPOINT_URL_PATTERN, CHALLENGE_URL_FRONTEND_PATTERN } from './constants.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -326,7 +326,7 @@ TSMap_1 = typescriptMap.TSMap = TSMap;
 const SKIP_CHECKING_TRUE = 'skip checking: true';
 const SKIP_CHECKING_FALSE = 'skip checking: false';
 
-const TYPE_COMPLETEREVERSETRANSLATION = 'completeReverseTranslation';
+const IGNORED_CHARACTERS = /[-\s,.?!]/g;
 
 const TYPE_FORM = 'form';
 
@@ -408,13 +408,6 @@ function addToKey(answerKey, challenges) {
           break;
         }
 
-        case TYPE_COMPLETEREVERSETRANSLATION: {
-          challengePrompt = challenge.prompt;
-          const blanks = challenge.displayTokens.filter((x) => x.isBlank);
-          value = blanks.map((x) => x.text).join();
-          break;
-        }
-
         default: {
           challengePrompt = null;
           value = null;
@@ -426,7 +419,7 @@ function addToKey(answerKey, challenges) {
 }
 
 function gradeTranslation(answer, vertices) {
-  const answerNoSpaces = answer.replace(/[-\s,.?!]/g, '');
+  const answerNoSpaces = answer.replace(IGNORED_CHARACTERS, '');
   const lastVertexID = vertices.length - 1;
   const lastPos = answerNoSpaces.length;
   const stack = [[0, 0, { 0: null }]];
@@ -445,11 +438,11 @@ function gradeTranslation(answer, vertices) {
         if (!vertex.lenient.trim().length) {
           stack.push([vertex.to, currPos, { ...currVisited, [vertex.to]: null }]);
         // eslint-disable-next-line max-len
-        } else if (startsWithAt(vertex.lenient, answerNoSpaces, currPos, true)) {
+        } else if (startsWithAt(vertex.lenient, answerNoSpaces, currPos, false)) {
           stack.push([vertex.to, currPos + lenientLen, { ...currVisited, [vertex.to]: null }]);
         } else if ('orig' in vertex) {
           const origLen = vertex.orig.length;
-          const origNoPunctuation = vertex.orig.replace(/[-\s,.?!]/g, '');
+          const origNoPunctuation = vertex.orig.replace(IGNORED_CHARACTERS, '');
           const origNoPunctuationLen = origNoPunctuation.length;
           if (startsWithAt(vertex.orig, answerNoSpaces, currPos, false)) {
             stack.push([vertex.to, currPos + origLen, { ...currVisited, [vertex.to]: null }]);
@@ -540,7 +533,7 @@ function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
 
   browser.webRequest.onHeadersReceived.addListener(
     getAnswerKey,
-    { urls: [CHALLENGE_URL_PATTERN] },
+    { urls: [CHALLENGE_URL_PATTERN, CHECKPOINT_URL_PATTERN] },
     ['blocking'],
   );
 
@@ -558,7 +551,7 @@ browser.tabs.onUpdated.addListener(
     );
   },
   {
-    urls: [CHALLENGE_URL_FRONTEND_PATTERN],
+    urls: [CHALLENGE_URL_FRONTEND_PATTERN, CHECKPOINT_URL_PATTERN],
     properties: ['url'],
   },
 );

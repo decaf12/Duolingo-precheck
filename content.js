@@ -3,10 +3,11 @@ const SUBMISSION_BUTTON_SPAN = '[class="_13HXc"]';
 const SKIP_CHECKING_TRUE = 'skip checking: true';
 const SKIP_CHECKING_FALSE = 'skip checking: false';
 
-const TYPE_COMPLETEREVERSETRANSLATION = 'completeReverseTranslation';
+const IGNORED_CHARACTERS = /[-\s,.?!]/g;
 const COMPLETEREVERSETRANSLATION = '[data-test="challenge challenge-completeReverseTranslation"]';
-const COMPLETEREVERSETRANSLATION_PROMPT = '[data-test="hint-token"]';
-const COMPLETEREVERSETRANSLATION_FILLED = '[data-test="challenge-text-input"]';
+const COMPLETEREVERSETRANSLATION_BLANKS = '[class="_33vo_"]';
+const COMPLETEREVERSETRANSLATION_ANSWER = '[class="caPDQ"]';
+const COMPLETEREVERSETRANSLATION_SUBMISSION = '[class="_2AzoZ _17nEt"]';
 
 const TYPE_FORM = 'form';
 const FORM = '[data-test="challenge challenge-form"]';
@@ -79,12 +80,14 @@ function makeSubmission(extraInfo = null) {
 
   if (document.querySelector(COMPLETEREVERSETRANSLATION)) {
     // eslint-disable-next-line max-len
-    const promptCollection = Array.from(document.querySelectorAll(COMPLETEREVERSETRANSLATION_PROMPT));
-    const challengePrompt = promptCollection.map((x) => x.textContent).join('');
-    // eslint-disable-next-line max-len
-    const answers = Array.from(document.querySelectorAll(COMPLETEREVERSETRANSLATION_FILLED));
-    const answerList = answers.map((x) => x.value).join();
-    return [challengePrompt, answerList, TYPE_COMPLETEREVERSETRANSLATION];
+    const blanks = Array.from(document.querySelectorAll(COMPLETEREVERSETRANSLATION_BLANKS));
+    const correct = blanks.every((blank) => {
+      const correctAnswer = blank.querySelector(COMPLETEREVERSETRANSLATION_ANSWER).textContent.replace(/_\s/g, '');
+      const submission = blank.querySelector(COMPLETEREVERSETRANSLATION_SUBMISSION).value.replace(IGNORED_CHARACTERS, '');
+      return correctAnswer.toLowerCase() === submission.toLowerCase();
+    });
+    const challengePrompt = correct ? SKIP_CHECKING_TRUE : SKIP_CHECKING_FALSE;
+    return [challengePrompt, null, null];
   }
 
   if (document.querySelector(TYPECOMPLETETABLE)) {
@@ -93,7 +96,7 @@ function makeSubmission(extraInfo = null) {
     const correct = blanks.every((blank) => {
       const correctAnswer = blank.querySelector(TYPECOMPLETETABLE_ANSWER).textContent.replace(/_/g, '');
       const submission = blank.querySelector(TYPECOMPLETETABLE_SUBMISSION).value;
-      return correctAnswer.toLowerCase() === submission.toLowerCase();
+      return correctAnswer.toLowerCase().trim() === submission.toLowerCase().trim();
     });
     const challengePrompt = correct ? SKIP_CHECKING_TRUE : SKIP_CHECKING_FALSE;
     return [challengePrompt, null, null];

@@ -41,12 +41,14 @@ export default function makeSubmission(extraInfo = null) {
 
   if (document.querySelector(constants.COMPLETEREVERSETRANSLATION)) {
     // eslint-disable-next-line max-len
-    const promptCollection = Array.from(document.querySelectorAll(constants.COMPLETEREVERSETRANSLATION_PROMPT));
-    const challengePrompt = promptCollection.map((x) => x.textContent).join('');
-    // eslint-disable-next-line max-len
-    const answers = Array.from(document.querySelectorAll(constants.COMPLETEREVERSETRANSLATION_FILLED));
-    const answerList = answers.map((x) => x.value).join();
-    return [challengePrompt, answerList, constants.TYPE_COMPLETEREVERSETRANSLATION];
+    const blanks = Array.from(document.querySelectorAll(constants.COMPLETEREVERSETRANSLATION_BLANKS));
+    const correct = blanks.every((blank) => {
+      const correctAnswer = blank.querySelector(constants.COMPLETEREVERSETRANSLATION_ANSWER).textContent.replace(/_\s/g, '');
+      const submission = blank.querySelector(constants.COMPLETEREVERSETRANSLATION_SUBMISSION).value.replace(constants.IGNORED_CHARACTERS, '');
+      return correctAnswer.toLowerCase() === submission.toLowerCase();
+    });
+    const challengePrompt = correct ? constants.SKIP_CHECKING_TRUE : constants.SKIP_CHECKING_FALSE;
+    return [challengePrompt, null, null];
   }
 
   if (document.querySelector(constants.TYPECOMPLETETABLE)) {
@@ -55,7 +57,7 @@ export default function makeSubmission(extraInfo = null) {
     const correct = blanks.every((blank) => {
       const correctAnswer = blank.querySelector(constants.TYPECOMPLETETABLE_ANSWER).textContent.replace(/_/g, '');
       const submission = blank.querySelector(constants.TYPECOMPLETETABLE_SUBMISSION).value;
-      return correctAnswer.toLowerCase() === submission.toLowerCase();
+      return correctAnswer.toLowerCase().trim() === submission.toLowerCase().trim();
     });
     const challengePrompt = correct ? constants.SKIP_CHECKING_TRUE : constants.SKIP_CHECKING_FALSE;
     return [challengePrompt, null, null];
