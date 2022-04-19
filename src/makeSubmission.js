@@ -43,7 +43,7 @@ export default function makeSubmission(extraInfo = null) {
     // eslint-disable-next-line max-len
     const blanks = Array.from(document.querySelectorAll(constants.COMPLETEREVERSETRANSLATION_BLANKS));
     const correct = blanks.every((blank) => {
-      const correctAnswer = blank.querySelector(constants.COMPLETEREVERSETRANSLATION_ANSWER).textContent.replace(/_\s/g, '');
+      const correctAnswer = blank.querySelector(constants.COMPLETEREVERSETRANSLATION_ANSWER).textContent.replace(constants.IGNORED_CHARACTERS, '');
       const submission = blank.querySelector(constants.COMPLETEREVERSETRANSLATION_SUBMISSION).value.replace(constants.IGNORED_CHARACTERS, '');
       return correctAnswer.toLowerCase() === submission.toLowerCase();
     });
@@ -53,11 +53,10 @@ export default function makeSubmission(extraInfo = null) {
 
   if (document.querySelector(constants.TYPECOMPLETETABLE)) {
     const blanks = Array.from(document.querySelectorAll(constants.TYPECOMPLETETABLE_BLANKS));
-    console.log(`Blanks: ${JSON.stringify(blanks)}`);
     const correct = blanks.every((blank) => {
-      const correctAnswer = blank.querySelector(constants.TYPECOMPLETETABLE_ANSWER).textContent.replace(/_/g, '');
+      const correctAnswer = blank.querySelector(constants.TYPECOMPLETETABLE_ANSWER).textContent.replace(constants.IGNORED_CHARACTERS, '');
       const submission = blank.querySelector(constants.TYPECOMPLETETABLE_SUBMISSION).value;
-      return correctAnswer.toLowerCase().trim() === submission.toLowerCase().trim();
+      return correctAnswer.toLowerCase() === submission.toLowerCase().trim();
     });
     const challengePrompt = correct ? constants.SKIP_CHECKING_TRUE : constants.SKIP_CHECKING_FALSE;
     return [challengePrompt, null, null];

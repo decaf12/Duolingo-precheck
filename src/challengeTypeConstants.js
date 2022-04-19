@@ -4,7 +4,7 @@ export const SUBMISSION_BUTTON_SPAN = '[class="_13HXc"]';
 export const SKIP_CHECKING_TRUE = 'skip checking: true';
 export const SKIP_CHECKING_FALSE = 'skip checking: false';
 
-export const IGNORED_CHARACTERS = /[-\s,.?!]/g;
+export const IGNORED_CHARACTERS = /[_\-\s,.?!]/g;
 
 export const TYPE_COMPLETEREVERSETRANSLATION = 'completeReverseTranslation';
 export const COMPLETEREVERSETRANSLATION = '[data-test="challenge challenge-completeReverseTranslation"]';
