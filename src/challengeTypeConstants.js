@@ -4,7 +4,7 @@ export const SUBMISSION_BUTTON_SPAN = '[class="_13HXc"]';
 export const SKIP_CHECKING_TRUE = 'skip checking: true';
 export const SKIP_CHECKING_FALSE = 'skip checking: false';
 
-export const IGNORED_CHARACTERS = /[_\-\s,.?!]/g;
+export const IGNORED_CHARACTERS = /[_'\-\s,.?!]/g;
 
 export const TYPE_COMPLETEREVERSETRANSLATION = 'completeReverseTranslation';
 export const COMPLETEREVERSETRANSLATION = '[data-test="challenge challenge-completeReverseTranslation"]';
@@ -16,6 +16,11 @@ export const TYPE_FORM = 'form';
 export const FORM = '[data-test="challenge challenge-form"]';
 export const FORM_PROMPT = '[class="_2SfAl _2Hg6H"]';
 export const FORM_CHOICES = '[data-test="challenge-choice"]';
+
+export const TYPE_GAPFILL = 'gapFill';
+export const GAPFILL = '[data-test="challenge challenge-gapFill"]';
+export const GAPFILL_PROMPT = '[class="_3Fi4A _2Hg6H"]';
+export const GAPFILL_CHOICES = '[data-test="challenge-choice"]';
 
 export const TYPE_JUDGE = 'judge';
 export const JUDGE = '[data-test="challenge challenge-judge"]';
@@ -31,6 +36,14 @@ export const TYPE_SELECT = 'select';
 export const SELECT = '[data-test="challenge challenge-select"]';
 export const SELECT_PROMPT = '[data-test="challenge-header"]';
 export const SELECT_CHOICES = '[data-test="challenge-choice"]';
+
+export const TYPE_TAPCOMPLETETABLE = 'typeCompleteTable';
+export const TAPCOMPLETETABLE = '[data-test="challenge challenge-tapCompleteTable"]';
+export const TAPCOMPLETETABLE_BLANKS = '[class="_1Bh_M"]';
+export const TAPCOMPLETETABLE_HINT_TOKENS = '[class="_34k_q _3Lg1h _13doy"]';
+export const TAPCOMPLETETABLE_PROMPT = '[data-test="hint-token"]';
+export const TAPCOMPLETETABLE_CHOICES = '[class="_2Z2xv"]';
+export const TAPCOMPLETETABLE_CHOICE_TEXT = '[data-test="challenge-tap-token-text"]';
 
 export const TYPE_TRANSLATE = 'translate';
 export const TRANSLATE = '[data-test="challenge challenge-translate"]';

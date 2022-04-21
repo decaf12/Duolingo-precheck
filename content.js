@@ -3,7 +3,7 @@ const SUBMISSION_BUTTON_SPAN = '[class="_13HXc"]';
 const SKIP_CHECKING_TRUE = 'skip checking: true';
 const SKIP_CHECKING_FALSE = 'skip checking: false';
 
-const IGNORED_CHARACTERS = /[-\s,.?!]/g;
+const IGNORED_CHARACTERS = /[_'\-\s,.?!]/g;
 const COMPLETEREVERSETRANSLATION = '[data-test="challenge challenge-completeReverseTranslation"]';
 const COMPLETEREVERSETRANSLATION_BLANKS = '[class="_33vo_"]';
 const COMPLETEREVERSETRANSLATION_ANSWER = '[class="caPDQ"]';
@@ -13,6 +13,11 @@ const TYPE_FORM = 'form';
 const FORM = '[data-test="challenge challenge-form"]';
 const FORM_PROMPT = '[class="_2SfAl _2Hg6H"]';
 const FORM_CHOICES = '[data-test="challenge-choice"]';
+
+const TYPE_GAPFILL = 'gapFill';
+const GAPFILL = '[data-test="challenge challenge-gapFill"]';
+const GAPFILL_PROMPT = '[class="_3Fi4A _2Hg6H"]';
+const GAPFILL_CHOICES = '[data-test="challenge-choice"]';
 
 const TYPE_JUDGE = 'judge';
 const JUDGE = '[data-test="challenge challenge-judge"]';
@@ -29,6 +34,12 @@ const SELECT = '[data-test="challenge challenge-select"]';
 const SELECT_PROMPT = '[data-test="challenge-header"]';
 const SELECT_CHOICES = '[data-test="challenge-choice"]';
 
+const TYPE_TAPCOMPLETETABLE = 'typeCompleteTable';
+const TAPCOMPLETETABLE = '[data-test="challenge challenge-tapCompleteTable"]';
+const TAPCOMPLETETABLE_HINT_TOKENS = '[class="_34k_q _3Lg1h _13doy"]';
+const TAPCOMPLETETABLE_CHOICES = '[class="_2Z2xv"]';
+const TAPCOMPLETETABLE_CHOICE_TEXT = '[data-test="challenge-tap-token-text"]';
+
 const TYPE_TRANSLATE = 'translate';
 const TRANSLATE = '[data-test="challenge challenge-translate"]';
 const TRANSLATE_PROMPT = '[data-test="hint-token"]';
@@ -40,6 +51,18 @@ const TYPECOMPLETETABLE_ANSWER = '[class="caPDQ"]';
 const TYPECOMPLETETABLE_SUBMISSION = '[class="Y5JxA _17nEt"]';
 
 function makeSubmission(extraInfo = null) {
+  if (document.querySelector(COMPLETEREVERSETRANSLATION)) {
+    // eslint-disable-next-line max-len
+    const blanks = Array.from(document.querySelectorAll(COMPLETEREVERSETRANSLATION_BLANKS));
+    const correct = blanks.every((blank) => {
+      const correctAnswer = blank.querySelector(COMPLETEREVERSETRANSLATION_ANSWER).textContent.replace(IGNORED_CHARACTERS, '');
+      const submission = blank.querySelector(COMPLETEREVERSETRANSLATION_SUBMISSION).value.replace(IGNORED_CHARACTERS, '');
+      return correctAnswer.toLowerCase() === submission.toLowerCase();
+    });
+    const challengePrompt = correct ? SKIP_CHECKING_TRUE : SKIP_CHECKING_FALSE;
+    return [challengePrompt, null, null];
+  }
+
   if (document.querySelector(FORM)) {
     const challengePrompt = document.querySelector(FORM_PROMPT);
     const promptNoBlank = challengePrompt.dataset.prompt.replace(/_/g, '');
@@ -48,27 +71,22 @@ function makeSubmission(extraInfo = null) {
     return [promptNoBlank, choiceID, TYPE_FORM];
   }
 
+  if (document.querySelector(GAPFILL)) {
+    const promptArray = Array.from(document.querySelectorAll(GAPFILL_PROMPT));
+    const challengePrompt = promptArray.map((x) => (x.textContent)).join('');
+    console.log(`Prompt received: ${challengePrompt}`);
+    const choices = Array.from(document.querySelectorAll(GAPFILL_CHOICES));
+    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    return [challengePrompt, choiceID, TYPE_GAPFILL];
+  }
+
   if (document.querySelector(JUDGE)) {
     const challengePrompt = document.querySelector(JUDGE_PROMPT).textContent;
     const choices = Array.from(document.querySelectorAll(JUDGE_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     return [challengePrompt, choiceID, TYPE_JUDGE];
   }
-
-  if (document.querySelector(TRANSLATE)) {
-    const promptCollection = Array.from(document.querySelectorAll(TRANSLATE_PROMPT));
-    const challengePrompt = promptCollection.map((x) => x.textContent).join('');
-    const answer = document.querySelector(TRANSLATE_TEXTBOX).value;
-    return [challengePrompt, answer, TYPE_TRANSLATE];
-  }
-
-  if (document.querySelector(SELECT)) {
-    const challengePrompt = document.querySelector(SELECT_PROMPT).textContent;
-    const choices = Array.from(document.querySelectorAll(SELECT_CHOICES));
-    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-    return [challengePrompt, choiceID, TYPE_SELECT];
-  }
-
+ 
   if (document.querySelector(MATCH)) {
     const buttonList = Array.from(document.querySelectorAll(MATCH_BUTTONS));
     const buttonCount = buttonList.length;
@@ -78,25 +96,48 @@ function makeSubmission(extraInfo = null) {
     return [challengePrompt, choices, TYPE_MATCH];
   }
 
-  if (document.querySelector(COMPLETEREVERSETRANSLATION)) {
+  if (document.querySelector(SELECT)) {
+    const challengePrompt = document.querySelector(SELECT_PROMPT).textContent;
+    const choices = Array.from(document.querySelectorAll(SELECT_CHOICES));
+    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    return [challengePrompt, choiceID, TYPE_SELECT];
+  }
+
+  if (document.querySelector(TAPCOMPLETETABLE)) {
     // eslint-disable-next-line max-len
-    const blanks = Array.from(document.querySelectorAll(COMPLETEREVERSETRANSLATION_BLANKS));
-    const correct = blanks.every((blank) => {
-      const correctAnswer = blank.querySelector(COMPLETEREVERSETRANSLATION_ANSWER).textContent.replace(/_\s/g, '');
-      const submission = blank.querySelector(COMPLETEREVERSETRANSLATION_SUBMISSION).value.replace(IGNORED_CHARACTERS, '');
-      return correctAnswer.toLowerCase() === submission.toLowerCase();
-    });
-    const challengePrompt = correct ? SKIP_CHECKING_TRUE : SKIP_CHECKING_FALSE;
-    return [challengePrompt, null, null];
+    const promptArray = Array.from(document.querySelectorAll(TAPCOMPLETETABLE_HINT_TOKENS)).slice(1);
+    const promptArrayText = promptArray.map((x) => x.textContent);
+    // promptArray.forEach((x) => {
+    //   const hintTokenArray = Array.from(x.querySelectorAll(constants.TAPCOMPLETETABLE_PROMPT));
+    //   hintTokenArray.pop();
+    //   hintTokenArray.forEach((token) => {
+    //     console.log(`Token text: ${token.textContent}`);
+    //     promptArrayText.push(token.textContent);
+    //   });
+    // });
+    const challengePrompt = promptArrayText.sort().join();
+    const choiceArray = Array.from(document.querySelectorAll(TAPCOMPLETETABLE_CHOICES));
+    // eslint-disable-next-line max-len
+    const choices = choiceArray.map((x) => x.querySelector(TAPCOMPLETETABLE_CHOICE_TEXT).textContent).join();
+    const challengePromptUnique = `${challengePrompt},${choices}`;
+    console.log(`Prompt encountered: ${challengePromptUnique}`);
+    console.log(`Selected: ${choices}`);
+    return [challengePromptUnique, choices, TYPE_TAPCOMPLETETABLE];
+  }
+
+  if (document.querySelector(TRANSLATE)) {
+    const promptCollection = Array.from(document.querySelectorAll(TRANSLATE_PROMPT));
+    const challengePrompt = promptCollection.map((x) => x.textContent).join('');
+    const answer = document.querySelector(TRANSLATE_TEXTBOX).value;
+    return [challengePrompt, answer, TYPE_TRANSLATE];
   }
 
   if (document.querySelector(TYPECOMPLETETABLE)) {
     const blanks = Array.from(document.querySelectorAll(TYPECOMPLETETABLE_BLANKS));
-    console.log(`Blanks: ${JSON.stringify(blanks)}`);
     const correct = blanks.every((blank) => {
-      const correctAnswer = blank.querySelector(TYPECOMPLETETABLE_ANSWER).textContent.replace(/_/g, '');
+      const correctAnswer = blank.querySelector(TYPECOMPLETETABLE_ANSWER).textContent.replace(IGNORED_CHARACTERS, '');
       const submission = blank.querySelector(TYPECOMPLETETABLE_SUBMISSION).value;
-      return correctAnswer.toLowerCase().trim() === submission.toLowerCase().trim();
+      return correctAnswer.toLowerCase() === submission.toLowerCase().trim();
     });
     const challengePrompt = correct ? SKIP_CHECKING_TRUE : SKIP_CHECKING_FALSE;
     return [challengePrompt, null, null];

@@ -49,6 +49,13 @@ export function addToKey(answerKey, challenges) {
           break;
         }
 
+        case constants.TYPE_GAPFILL: {
+          challengePrompt = challenge.displayTokens.map((x) => (x.isBlank ? '' : x.text)).join('');
+          console.log(`Prompt loaded: ${challengePrompt}`);
+          value = challenge.correctIndex;
+          break;
+        }
+
         case constants.TYPE_MATCH: {
           challengePrompt = challenge.pairs.map((x) => x.learningToken).sort().join('');
           value = new TSMap();
@@ -71,6 +78,33 @@ export function addToKey(answerKey, challenges) {
           break;
         }
 
+        case constants.TYPE_TAPCOMPLETETABLE: {
+          const tokens = challenge.displayTokens.slice(1);
+          const promptArray = [];
+          const valueArray = [];
+          tokens.forEach((token) => {
+            const [orig, translation] = token;
+
+            orig.forEach((x) => {
+              if (/^[A-Za-z]+$/.test(x.text)) {
+                promptArray.push(x.text);
+              }
+            });
+
+            translation.forEach((x) => {
+              if (x.isBlank) {
+                valueArray.push(x.text);
+              } else {
+                promptArray.push(x.text);
+              }
+            });
+          });
+          challengePrompt = promptArray.sort().join();
+          value = valueArray.join();
+          console.log(`Prompt loaded: ${challengePrompt}`);
+          console.log(`Value loaded: ${value}`);
+          break;
+        }
         default: {
           challengePrompt = null;
           value = null;
@@ -132,6 +166,7 @@ export function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
   }
 
   const key = `${challengePrompt}: ${challengeType}`;
+
   if (challengeType === constants.TYPE_TRANSLATE) {
     const vertices = answerKey.get(key);
     return gradeTranslation(answer, vertices);
