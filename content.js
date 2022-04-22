@@ -26,7 +26,7 @@ const JUDGE_CHOICES = '[data-test="challenge-choice"]';
 
 const TYPE_MATCH = 'match';
 const MATCH = '[data-test="challenge challenge-match"]';
-const MATCH_BUTTONS = '[data-test="challenge-tap-token"]';
+const MATCH_BUTTONS = '[data-test="challenge-tap-token-text"]';
 const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
 
 const TYPE_SELECT = 'select';
@@ -74,7 +74,6 @@ function makeSubmission(extraInfo = null) {
   if (document.querySelector(GAPFILL)) {
     const promptArray = Array.from(document.querySelectorAll(GAPFILL_PROMPT));
     const challengePrompt = promptArray.map((x) => (x.textContent)).join('');
-    console.log(`Prompt received: ${challengePrompt}`);
     const choices = Array.from(document.querySelectorAll(GAPFILL_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     return [challengePrompt, choiceID, TYPE_GAPFILL];
@@ -86,13 +85,15 @@ function makeSubmission(extraInfo = null) {
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     return [challengePrompt, choiceID, TYPE_JUDGE];
   }
- 
+
   if (document.querySelector(MATCH)) {
     const buttonList = Array.from(document.querySelectorAll(MATCH_BUTTONS));
     const buttonCount = buttonList.length;
     const learningTokenButtons = buttonList.slice(buttonCount / 2);
-    const challengePrompt = learningTokenButtons.map((x) => x.innerHTML.split('</span>')[1]).sort().join('');
+    const challengePrompt = learningTokenButtons.map((x) => x.textContent).sort().join(' ');
     const choices = extraInfo;
+    console.log(`Match prompt: ${challengePrompt}`);
+    console.log(`Match choices: ${JSON.stringify(choices)}`);
     return [challengePrompt, choices, TYPE_MATCH];
   }
 

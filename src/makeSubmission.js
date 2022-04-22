@@ -24,7 +24,6 @@ export default function makeSubmission(extraInfo = null) {
   if (document.querySelector(constants.GAPFILL)) {
     const promptArray = Array.from(document.querySelectorAll(constants.GAPFILL_PROMPT));
     const challengePrompt = promptArray.map((x) => (x.textContent)).join('');
-    console.log(`Prompt received: ${challengePrompt}`);
     const choices = Array.from(document.querySelectorAll(constants.GAPFILL_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     return [challengePrompt, choiceID, constants.TYPE_GAPFILL];
@@ -36,12 +35,12 @@ export default function makeSubmission(extraInfo = null) {
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     return [challengePrompt, choiceID, constants.TYPE_JUDGE];
   }
- 
+
   if (document.querySelector(constants.MATCH)) {
     const buttonList = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
     const buttonCount = buttonList.length;
     const learningTokenButtons = buttonList.slice(buttonCount / 2);
-    const challengePrompt = learningTokenButtons.map((x) => x.innerHTML.split('</span>')[1]).sort().join('');
+    const challengePrompt = learningTokenButtons.map((x) => x.textContent).sort().join(' ');
     const choices = extraInfo;
     return [challengePrompt, choices, constants.TYPE_MATCH];
   }

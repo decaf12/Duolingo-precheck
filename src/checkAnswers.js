@@ -51,13 +51,12 @@ export function addToKey(answerKey, challenges) {
 
         case constants.TYPE_GAPFILL: {
           challengePrompt = challenge.displayTokens.map((x) => (x.isBlank ? '' : x.text)).join('');
-          console.log(`Prompt loaded: ${challengePrompt}`);
           value = challenge.correctIndex;
           break;
         }
 
         case constants.TYPE_MATCH: {
-          challengePrompt = challenge.pairs.map((x) => x.learningToken).sort().join('');
+          challengePrompt = challenge.pairs.map((x) => x.learningToken).sort().join(' ');
           value = new TSMap();
           challenge.pairs.forEach((x) => {
             value.set(x.learningToken, x.fromToken);
