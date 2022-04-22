@@ -52,6 +52,17 @@ export default function makeSubmission(extraInfo = null) {
     return [challengePrompt, choiceID, constants.TYPE_SELECT];
   }
 
+  if (document.querySelector(constants.TAPCLOZE)) {
+    const promptArray = Array.from(document.querySelectorAll(constants.TAPCLOZE_PROMPT));
+    const challengePrompt = promptArray.map((x) => x.textContent).join('');
+    const chosenButton = document.querySelector(constants.TAPCLOZE_SELECTED);
+    const chosenButtonText = chosenButton.querySelector(constants.TAPCLOZE_BUTTON_TEXT).textContent;
+
+    console.log(`Submitted prompt: ${challengePrompt}`);
+    console.log(`Submitted answer: ${chosenButtonText}`);
+    return [challengePrompt, chosenButtonText, constants.TYPE_TAPCLOZE];
+  }
+
   if (document.querySelector(constants.TAPCOMPLETETABLE)) {
     // eslint-disable-next-line max-len
     const promptArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETETABLE_HINT_TOKENS)).slice(1);

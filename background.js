@@ -338,6 +338,8 @@ const TYPE_MATCH = 'match';
 
 const TYPE_SELECT = 'select';
 
+const TYPE_TAPCLOZE = 'tapCloze';
+
 const TYPE_TAPCOMPLETETABLE = 'typeCompleteTable';
 
 const TYPE_TRANSLATE = 'translate';
@@ -398,7 +400,6 @@ function addToKey(answerKey, challenges) {
 
         case TYPE_MATCH: {
           challengePrompt = challenge.pairs.map((x) => x.learningToken).sort().join(' ');
-          console.log(`Match prompt loaded: ${challengePrompt}`);
           value = new TSMap_1();
           challenge.pairs.forEach((x) => {
             value.set(x.learningToken, x.fromToken);
@@ -416,6 +417,17 @@ function addToKey(answerKey, challenges) {
         case TYPE_SELECT: {
           challengePrompt = `<span>Which one of these is \u201C${challenge.prompt}\u201D?</span>`; /* u201C and u201D are curly quotes */
           value = challenge.correctIndex;
+          break;
+        }
+
+        case TYPE_TAPCLOZE: {
+          const displayTokens = Array.from(challenge.displayTokens);
+          const promptArray = displayTokens.filter((x) => !('damageStart' in x));
+          challengePrompt = promptArray.map((x) => x.text).join('');
+          const correctChoice = challenge.correctIndices[0];
+          value = challenge.choices[correctChoice];
+          console.log(`Prompt loaded: ${challengePrompt}`);
+          console.log(`Answer loaded: ${value}`);
           break;
         }
 
@@ -442,8 +454,8 @@ function addToKey(answerKey, challenges) {
           });
           challengePrompt = promptArray.sort().join();
           value = valueArray.join();
-          console.log(`Prompt loaded: ${challengePrompt}`);
-          console.log(`Value loaded: ${value}`);
+          // console.log(`Prompt loaded: ${challengePrompt}`);
+          // console.log(`Value loaded: ${value}`);
           break;
         }
         default: {

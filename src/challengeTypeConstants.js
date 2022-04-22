@@ -37,6 +37,12 @@ export const SELECT = '[data-test="challenge challenge-select"]';
 export const SELECT_PROMPT = '[data-test="challenge-header"]';
 export const SELECT_CHOICES = '[data-test="challenge-choice"]';
 
+export const TYPE_TAPCLOZE = 'tapCloze';
+export const TAPCLOZE = '[data-test="challenge challenge-tapCloze"]';
+export const TAPCLOZE_PROMPT = '[data-test="hint-token"]';
+export const TAPCLOZE_SELECTED = '[class="_1LQx7"]';
+export const TAPCLOZE_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
+
 export const TYPE_TAPCOMPLETETABLE = 'typeCompleteTable';
 export const TAPCOMPLETETABLE = '[data-test="challenge challenge-tapCompleteTable"]';
 export const TAPCOMPLETETABLE_BLANKS = '[class="_1Bh_M"]';

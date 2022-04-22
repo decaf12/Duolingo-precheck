@@ -34,6 +34,12 @@ const SELECT = '[data-test="challenge challenge-select"]';
 const SELECT_PROMPT = '[data-test="challenge-header"]';
 const SELECT_CHOICES = '[data-test="challenge-choice"]';
 
+const TYPE_TAPCLOZE = 'tapCloze';
+const TAPCLOZE = '[data-test="challenge challenge-tapCloze"]';
+const TAPCLOZE_PROMPT = '[data-test="hint-token"]';
+const TAPCLOZE_SELECTED = '[class="_1LQx7"]';
+const TAPCLOZE_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
+
 const TYPE_TAPCOMPLETETABLE = 'typeCompleteTable';
 const TAPCOMPLETETABLE = '[data-test="challenge challenge-tapCompleteTable"]';
 const TAPCOMPLETETABLE_HINT_TOKENS = '[class="_34k_q _3Lg1h _13doy"]';
@@ -92,8 +98,6 @@ function makeSubmission(extraInfo = null) {
     const learningTokenButtons = buttonList.slice(buttonCount / 2);
     const challengePrompt = learningTokenButtons.map((x) => x.textContent).sort().join(' ');
     const choices = extraInfo;
-    console.log(`Match prompt: ${challengePrompt}`);
-    console.log(`Match choices: ${JSON.stringify(choices)}`);
     return [challengePrompt, choices, TYPE_MATCH];
   }
 
@@ -102,6 +106,17 @@ function makeSubmission(extraInfo = null) {
     const choices = Array.from(document.querySelectorAll(SELECT_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     return [challengePrompt, choiceID, TYPE_SELECT];
+  }
+
+  if (document.querySelector(TAPCLOZE)) {
+    const promptArray = Array.from(document.querySelectorAll(TAPCLOZE_PROMPT));
+    const challengePrompt = promptArray.map((x) => x.textContent).join('');
+    const chosenButton = document.querySelector(TAPCLOZE_SELECTED);
+    const chosenButtonText = chosenButton.querySelector(TAPCLOZE_BUTTON_TEXT).textContent;
+
+    console.log(`Submitted prompt: ${challengePrompt}`);
+    console.log(`Submitted answer: ${chosenButtonText}`);
+    return [challengePrompt, chosenButtonText, TYPE_TAPCLOZE];
   }
 
   if (document.querySelector(TAPCOMPLETETABLE)) {
