@@ -37,7 +37,7 @@ export default function makeSubmission(extraInfo = null) {
   }
 
   if (document.querySelector(constants.MATCH)) {
-    const buttonList = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
+    const buttonList = Array.from(document.querySelectorAll(constants.MATCH_BUTTON_TEXT));
     const buttonCount = buttonList.length;
     const learningTokenButtons = buttonList.slice(buttonCount / 2);
     const challengePrompt = learningTokenButtons.map((x) => x.textContent).sort().join(' ');
@@ -57,9 +57,6 @@ export default function makeSubmission(extraInfo = null) {
     const challengePrompt = promptArray.map((x) => x.textContent).join('');
     const chosenButton = document.querySelector(constants.TAPCLOZE_SELECTED);
     const chosenButtonText = chosenButton.querySelector(constants.TAPCLOZE_BUTTON_TEXT).textContent;
-
-    console.log(`Submitted prompt: ${challengePrompt}`);
-    console.log(`Submitted answer: ${chosenButtonText}`);
     return [challengePrompt, chosenButtonText, constants.TYPE_TAPCLOZE];
   }
 

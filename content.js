@@ -26,7 +26,8 @@ const JUDGE_CHOICES = '[data-test="challenge-choice"]';
 
 const TYPE_MATCH = 'match';
 const MATCH = '[data-test="challenge challenge-match"]';
-const MATCH_BUTTONS = '[data-test="challenge-tap-token-text"]';
+const MATCH_BUTTONS = '[class="_35eLX"]';
+const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
 
 const TYPE_SELECT = 'select';
@@ -93,11 +94,12 @@ function makeSubmission(extraInfo = null) {
   }
 
   if (document.querySelector(MATCH)) {
-    const buttonList = Array.from(document.querySelectorAll(MATCH_BUTTONS));
+    const buttonList = Array.from(document.querySelectorAll(MATCH_BUTTON_TEXT));
     const buttonCount = buttonList.length;
     const learningTokenButtons = buttonList.slice(buttonCount / 2);
     const challengePrompt = learningTokenButtons.map((x) => x.textContent).sort().join(' ');
     const choices = extraInfo;
+    console.log(`Choices submitted: ${JSON.stringify(choices)}`);
     return [challengePrompt, choices, TYPE_MATCH];
   }
 
@@ -113,9 +115,6 @@ function makeSubmission(extraInfo = null) {
     const challengePrompt = promptArray.map((x) => x.textContent).join('');
     const chosenButton = document.querySelector(TAPCLOZE_SELECTED);
     const chosenButtonText = chosenButton.querySelector(TAPCLOZE_BUTTON_TEXT).textContent;
-
-    console.log(`Submitted prompt: ${challengePrompt}`);
-    console.log(`Submitted answer: ${chosenButtonText}`);
     return [challengePrompt, chosenButtonText, TYPE_TAPCLOZE];
   }
 
@@ -199,10 +198,13 @@ function addSubmissionListener(button) {
     e.preventDefault();
     e.stopImmediatePropagation();
 
-    const previousText = previouslyClicked.innerHTML.split('</span>')[1];
+    const previousText = previouslyClicked.querySelector(MATCH_BUTTON_TEXT).textContent;
     const currentButton = button.textContent;
     const buttonNumber = currentButton.slice(0, 1);
     const currentText = currentButton.slice(1);
+    console.log(`Previous text: ${previousText}`);
+    console.log(`Current button: ${JSON.stringify(currentButton)}`);
+    console.log(`Current text: ${currentText}`);
 
     const [challengePrompt, answer, challengeType] = makeSubmission({ previousText, currentText });
     const marking = await browser.runtime.sendMessage({

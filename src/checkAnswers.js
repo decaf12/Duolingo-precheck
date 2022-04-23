@@ -83,8 +83,6 @@ export function addToKey(answerKey, challenges) {
           challengePrompt = promptArray.map((x) => x.text).join('');
           const correctChoice = challenge.correctIndices[0];
           value = challenge.choices[correctChoice];
-          console.log(`Prompt loaded: ${challengePrompt}`);
-          console.log(`Answer loaded: ${value}`);
           break;
         }
 
@@ -111,8 +109,8 @@ export function addToKey(answerKey, challenges) {
           });
           challengePrompt = promptArray.sort().join();
           value = valueArray.join();
-          // console.log(`Prompt loaded: ${challengePrompt}`);
-          // console.log(`Value loaded: ${value}`);
+          console.log(`Prompt loaded: ${challengePrompt}`);
+          console.log(`Value loaded: ${value}`);
           break;
         }
         default: {

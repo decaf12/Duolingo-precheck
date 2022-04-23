@@ -426,8 +426,6 @@ function addToKey(answerKey, challenges) {
           challengePrompt = promptArray.map((x) => x.text).join('');
           const correctChoice = challenge.correctIndices[0];
           value = challenge.choices[correctChoice];
-          console.log(`Prompt loaded: ${challengePrompt}`);
-          console.log(`Answer loaded: ${value}`);
           break;
         }
 
@@ -454,8 +452,8 @@ function addToKey(answerKey, challenges) {
           });
           challengePrompt = promptArray.sort().join();
           value = valueArray.join();
-          // console.log(`Prompt loaded: ${challengePrompt}`);
-          // console.log(`Value loaded: ${value}`);
+          console.log(`Prompt loaded: ${challengePrompt}`);
+          console.log(`Value loaded: ${value}`);
           break;
         }
         default: {
@@ -527,6 +525,7 @@ function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
 
   if (challengeType === TYPE_MATCH) {
     const matchLookup = answerKey.get(key);
+    console.log(`Match lookup: ${JSON.stringify(matchLookup)}`);
     if (matchLookup.has(answer.previousText) && matchLookup.has(answer.currentText)) {
       return true;
     }
