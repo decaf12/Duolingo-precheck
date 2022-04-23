@@ -7,10 +7,9 @@ export default function makeSubmission(extraInfo = null) {
     const challengePrompt = promptArray.map((x) => x.textContent).join('');
     // eslint-disable-next-line max-len
     const textbox = Array.from(document.querySelector(constants.COMPLETEREVERSETRANSLATION_TEXTBOX).children);
-    const answerArray = [];
-    textbox.forEach((element) => {
+    const answerArray = textbox.map((element) => {
       const blank = element.querySelector(constants.COMPLETEREVERSETRANSLATION_BLANK);
-      answerArray.push(blank ? blank.value : element.textContent);
+      return blank?.value || element.textContent;
     });
     const answer = answerArray.join('');
     return [challengePrompt, answer, constants.TYPE_TRANSLATE];
@@ -86,8 +85,8 @@ export default function makeSubmission(extraInfo = null) {
   }
 
   if (document.querySelector(constants.TRANSLATE)) {
-    const promptCollection = Array.from(document.querySelectorAll(constants.TRANSLATE_PROMPT));
-    const challengePrompt = promptCollection.map((x) => x.textContent).join('');
+    const promptArray = Array.from(document.querySelectorAll(constants.TRANSLATE_PROMPT));
+    const challengePrompt = promptArray.map((x) => x.textContent).join('');
     const answer = document.querySelector(constants.TRANSLATE_TEXTBOX).value;
     return [challengePrompt, answer, constants.TYPE_TRANSLATE];
   }

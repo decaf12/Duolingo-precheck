@@ -62,16 +62,13 @@ function makeSubmission(extraInfo = null) {
     // eslint-disable-next-line max-len
     const promptArray = Array.from(document.querySelectorAll(COMPLETEREVERSETRANSLATION_PROMPT));
     const challengePrompt = promptArray.map((x) => x.textContent).join('');
-    console.log(`Prompt submitted: ${challengePrompt}`);
     // eslint-disable-next-line max-len
     const textbox = Array.from(document.querySelector(COMPLETEREVERSETRANSLATION_TEXTBOX).children);
-    const answerArray = [];
-    textbox.forEach((element) => {
+    const answerArray = textbox.map((element) => {
       const blank = element.querySelector(COMPLETEREVERSETRANSLATION_BLANK);
-      answerArray.push(blank ? blank.value : element.textContent);
+      return blank?.value || element.textContent;
     });
     const answer = answerArray.join('');
-    console.log(`Answer submitted: ${answer}`);
     return [challengePrompt, answer, TYPE_TRANSLATE];
   }
 
@@ -145,8 +142,8 @@ function makeSubmission(extraInfo = null) {
   }
 
   if (document.querySelector(TRANSLATE)) {
-    const promptCollection = Array.from(document.querySelectorAll(TRANSLATE_PROMPT));
-    const challengePrompt = promptCollection.map((x) => x.textContent).join('');
+    const promptArray = Array.from(document.querySelectorAll(TRANSLATE_PROMPT));
+    const challengePrompt = promptArray.map((x) => x.textContent).join('');
     const answer = document.querySelector(TRANSLATE_TEXTBOX).value;
     return [challengePrompt, answer, TYPE_TRANSLATE];
   }
