@@ -525,7 +525,6 @@ function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
 
   if (challengeType === TYPE_MATCH) {
     const matchLookup = answerKey.get(key);
-    console.log(`Match lookup: ${JSON.stringify(matchLookup)}`);
     if (matchLookup.has(answer.previousText) && matchLookup.has(answer.currentText)) {
       return true;
     }

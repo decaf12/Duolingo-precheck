@@ -3,14 +3,17 @@ import * as constants from './challengeTypeConstants';
 export default function makeSubmission(extraInfo = null) {
   if (document.querySelector(constants.COMPLETEREVERSETRANSLATION)) {
     // eslint-disable-next-line max-len
-    const blanks = Array.from(document.querySelectorAll(constants.COMPLETEREVERSETRANSLATION_BLANKS));
-    const correct = blanks.every((blank) => {
-      const correctAnswer = blank.querySelector(constants.COMPLETEREVERSETRANSLATION_ANSWER).textContent.replace(constants.IGNORED_CHARACTERS, '');
-      const submission = blank.querySelector(constants.COMPLETEREVERSETRANSLATION_SUBMISSION).value.replace(constants.IGNORED_CHARACTERS, '');
-      return correctAnswer.toLowerCase() === submission.toLowerCase();
+    const promptArray = Array.from(document.querySelectorAll(constants.COMPLETEREVERSETRANSLATION_PROMPT));
+    const challengePrompt = promptArray.map((x) => x.textContent).join('');
+    // eslint-disable-next-line max-len
+    const textbox = Array.from(document.querySelector(constants.COMPLETEREVERSETRANSLATION_TEXTBOX).children);
+    const answerArray = [];
+    textbox.forEach((element) => {
+      const blank = element.querySelector(constants.COMPLETEREVERSETRANSLATION_BLANK);
+      answerArray.push(blank ? blank.value : element.textContent);
     });
-    const challengePrompt = correct ? constants.SKIP_CHECKING_TRUE : constants.SKIP_CHECKING_FALSE;
-    return [challengePrompt, null, null];
+    const answer = answerArray.join('');
+    return [challengePrompt, answer, constants.TYPE_TRANSLATE];
   }
 
   if (document.querySelector(constants.FORM)) {

@@ -5,9 +5,9 @@ const SKIP_CHECKING_FALSE = 'skip checking: false';
 
 const IGNORED_CHARACTERS = /[_'\-\s,.?!]/g;
 const COMPLETEREVERSETRANSLATION = '[data-test="challenge challenge-completeReverseTranslation"]';
-const COMPLETEREVERSETRANSLATION_BLANKS = '[class="_33vo_"]';
-const COMPLETEREVERSETRANSLATION_ANSWER = '[class="caPDQ"]';
-const COMPLETEREVERSETRANSLATION_SUBMISSION = '[class="_2AzoZ _17nEt"]';
+const COMPLETEREVERSETRANSLATION_PROMPT = '[data-test="hint-token"]';
+const COMPLETEREVERSETRANSLATION_TEXTBOX = '[class="_3f_Q3 _2FKqf _2ti2i"]';
+const COMPLETEREVERSETRANSLATION_BLANK = '[data-test="challenge-text-input"]';
 
 const TYPE_FORM = 'form';
 const FORM = '[data-test="challenge challenge-form"]';
@@ -60,14 +60,19 @@ const TYPECOMPLETETABLE_SUBMISSION = '[class="Y5JxA _17nEt"]';
 function makeSubmission(extraInfo = null) {
   if (document.querySelector(COMPLETEREVERSETRANSLATION)) {
     // eslint-disable-next-line max-len
-    const blanks = Array.from(document.querySelectorAll(COMPLETEREVERSETRANSLATION_BLANKS));
-    const correct = blanks.every((blank) => {
-      const correctAnswer = blank.querySelector(COMPLETEREVERSETRANSLATION_ANSWER).textContent.replace(IGNORED_CHARACTERS, '');
-      const submission = blank.querySelector(COMPLETEREVERSETRANSLATION_SUBMISSION).value.replace(IGNORED_CHARACTERS, '');
-      return correctAnswer.toLowerCase() === submission.toLowerCase();
+    const promptArray = Array.from(document.querySelectorAll(COMPLETEREVERSETRANSLATION_PROMPT));
+    const challengePrompt = promptArray.map((x) => x.textContent).join('');
+    console.log(`Prompt submitted: ${challengePrompt}`);
+    // eslint-disable-next-line max-len
+    const textbox = Array.from(document.querySelector(COMPLETEREVERSETRANSLATION_TEXTBOX).children);
+    const answerArray = [];
+    textbox.forEach((element) => {
+      const blank = element.querySelector(COMPLETEREVERSETRANSLATION_BLANK);
+      answerArray.push(blank ? blank.value : element.textContent);
     });
-    const challengePrompt = correct ? SKIP_CHECKING_TRUE : SKIP_CHECKING_FALSE;
-    return [challengePrompt, null, null];
+    const answer = answerArray.join('');
+    console.log(`Answer submitted: ${answer}`);
+    return [challengePrompt, answer, TYPE_TRANSLATE];
   }
 
   if (document.querySelector(FORM)) {
@@ -99,7 +104,6 @@ function makeSubmission(extraInfo = null) {
     const learningTokenButtons = buttonList.slice(buttonCount / 2);
     const challengePrompt = learningTokenButtons.map((x) => x.textContent).sort().join(' ');
     const choices = extraInfo;
-    console.log(`Choices submitted: ${JSON.stringify(choices)}`);
     return [challengePrompt, choices, TYPE_MATCH];
   }
 
@@ -202,9 +206,6 @@ function addSubmissionListener(button) {
     const currentButton = button.textContent;
     const buttonNumber = currentButton.slice(0, 1);
     const currentText = currentButton.slice(1);
-    console.log(`Previous text: ${previousText}`);
-    console.log(`Current button: ${JSON.stringify(currentButton)}`);
-    console.log(`Current text: ${currentText}`);
 
     const [challengePrompt, answer, challengeType] = makeSubmission({ previousText, currentText });
     const marking = await browser.runtime.sendMessage({
