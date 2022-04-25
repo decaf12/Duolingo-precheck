@@ -52,6 +52,11 @@ const TRANSLATE = '[data-test="challenge challenge-translate"]';
 const TRANSLATE_PROMPT = '[data-test="hint-token"]';
 const TRANSLATE_TEXTBOX = '[data-test="challenge-translate-input"]';
 
+const TYPECLOZE = '[data-test="challenge challenge-typeCloze"]';
+const TYPECLOZE_BLANK = '[class="_3bKcr"]';
+const TYPECLOZE_CORRECT = '[class="caPDQ"]';
+const TYPECLOZE_SUBMISSION = '[class="Y5JxA _17nEt"]';
+
 const TYPECOMPLETETABLE = '[data-test="challenge challenge-typeCompleteTable"]';
 const TYPECOMPLETETABLE_BLANKS = '[class="_1Rf3h"]';
 const TYPECOMPLETETABLE_ANSWER = '[class="caPDQ"]';
@@ -96,9 +101,9 @@ function makeSubmission(extraInfo = null) {
   }
 
   if (document.querySelector(MATCH)) {
-    const buttonList = Array.from(document.querySelectorAll(MATCH_BUTTON_TEXT));
-    const buttonCount = buttonList.length;
-    const learningTokenButtons = buttonList.slice(buttonCount / 2);
+    const buttonArray = Array.from(document.querySelectorAll(MATCH_BUTTON_TEXT));
+    const buttonCount = buttonArray.length;
+    const learningTokenButtons = buttonArray.slice(buttonCount / 2);
     const challengePrompt = learningTokenButtons.map((x) => x.textContent).sort().join(' ');
     const choices = extraInfo;
     return [challengePrompt, choices, TYPE_MATCH];
@@ -146,6 +151,17 @@ function makeSubmission(extraInfo = null) {
     const challengePrompt = promptArray.map((x) => x.textContent).join('');
     const answer = document.querySelector(TRANSLATE_TEXTBOX).value;
     return [challengePrompt, answer, TYPE_TRANSLATE];
+  }
+
+  if (document.querySelector(TYPECLOZE)) {
+    const blank = document.querySelector(TYPECLOZE_BLANK);
+    const correctAnswer = blank.querySelector(TYPECLOZE_CORRECT).textContent.replace(/_/g, '');
+    const submission = blank.querySelector(TYPECLOZE_SUBMISSION).value.replace(IGNORED_CHARACTERS, '');
+    console.log(`Correct: ${correctAnswer}`);
+    console.log(`Submitted: ${submission}`);
+    return correctAnswer.toLowerCase() === submission.toLowerCase()
+      ? [SKIP_CHECKING_TRUE, null, null]
+      : [SKIP_CHECKING_FALSE, null, null];
   }
 
   if (document.querySelector(TYPECOMPLETETABLE)) {

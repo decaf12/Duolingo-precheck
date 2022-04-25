@@ -59,6 +59,11 @@ export const TRANSLATE = '[data-test="challenge challenge-translate"]';
 export const TRANSLATE_PROMPT = '[data-test="hint-token"]';
 export const TRANSLATE_TEXTBOX = '[data-test="challenge-translate-input"]';
 
+export const TYPECLOZE = '[data-test="challenge challenge-typeCloze"]';
+export const TYPECLOZE_BLANK = '[class="_3bKcr"]';
+export const TYPECLOZE_CORRECT = '[class="caPDQ"]';
+export const TYPECLOZE_SUBMISSION = '[class="Y5JxA _17nEt"]';
+
 export const TYPECOMPLETETABLE = '[data-test="challenge challenge-typeCompleteTable"]';
 export const TYPECOMPLETETABLE_BLANKS = '[class="_1Rf3h"]';
 export const TYPECOMPLETETABLE_ANSWER = '[class="caPDQ"]';

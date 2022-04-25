@@ -39,9 +39,9 @@ export default function makeSubmission(extraInfo = null) {
   }
 
   if (document.querySelector(constants.MATCH)) {
-    const buttonList = Array.from(document.querySelectorAll(constants.MATCH_BUTTON_TEXT));
-    const buttonCount = buttonList.length;
-    const learningTokenButtons = buttonList.slice(buttonCount / 2);
+    const buttonArray = Array.from(document.querySelectorAll(constants.MATCH_BUTTON_TEXT));
+    const buttonCount = buttonArray.length;
+    const learningTokenButtons = buttonArray.slice(buttonCount / 2);
     const challengePrompt = learningTokenButtons.map((x) => x.textContent).sort().join(' ');
     const choices = extraInfo;
     return [challengePrompt, choices, constants.TYPE_MATCH];
@@ -89,6 +89,15 @@ export default function makeSubmission(extraInfo = null) {
     const challengePrompt = promptArray.map((x) => x.textContent).join('');
     const answer = document.querySelector(constants.TRANSLATE_TEXTBOX).value;
     return [challengePrompt, answer, constants.TYPE_TRANSLATE];
+  }
+
+  if (document.querySelector(constants.TYPECLOZE)) {
+    const blank = document.querySelector(constants.TYPECLOZE_BLANK);
+    const correctAnswer = blank.querySelector(constants.TYPECLOZE_CORRECT).textContent.replace(/_/g, '');
+    const submission = blank.querySelector(constants.TYPECLOZE_SUBMISSION).value.replace(constants.IGNORED_CHARACTERS, '');
+    return correctAnswer.toLowerCase() === submission.toLowerCase()
+      ? [constants.SKIP_CHECKING_TRUE, null, null]
+      : [constants.SKIP_CHECKING_FALSE, null, null];
   }
 
   if (document.querySelector(constants.TYPECOMPLETETABLE)) {
