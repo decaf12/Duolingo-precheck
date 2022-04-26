@@ -41,7 +41,7 @@ const TAPCLOZE_PROMPT = '[data-test="hint-token"]';
 const TAPCLOZE_SELECTED = '[class="_1LQx7"]';
 const TAPCLOZE_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 
-const TYPE_TAPCOMPLETETABLE = 'typeCompleteTable';
+const TYPE_TAPCOMPLETETABLE = 'tapCompleteTable';
 const TAPCOMPLETETABLE = '[data-test="challenge challenge-tapCompleteTable"]';
 const TAPCOMPLETETABLE_HINT_TOKENS = '[class="_34k_q _3Lg1h _13doy"]';
 const TAPCOMPLETETABLE_CHOICES = '[class="_2Z2xv"]';
@@ -127,23 +127,13 @@ function makeSubmission(extraInfo = null) {
   if (document.querySelector(TAPCOMPLETETABLE)) {
     // eslint-disable-next-line max-len
     const promptArray = Array.from(document.querySelectorAll(TAPCOMPLETETABLE_HINT_TOKENS)).slice(1);
-    const promptArrayText = promptArray.map((x) => x.textContent);
-    // promptArray.forEach((x) => {
-    //   const hintTokenArray = Array.from(x.querySelectorAll(constants.TAPCOMPLETETABLE_PROMPT));
-    //   hintTokenArray.pop();
-    //   hintTokenArray.forEach((token) => {
-    //     console.log(`Token text: ${token.textContent}`);
-    //     promptArrayText.push(token.textContent);
-    //   });
-    // });
-    const challengePrompt = promptArrayText.sort().join();
+    const challengePrompt = promptArray.map((x) => x.textContent).sort();
+
     const choiceArray = Array.from(document.querySelectorAll(TAPCOMPLETETABLE_CHOICES));
     // eslint-disable-next-line max-len
     const choices = choiceArray.map((x) => x.querySelector(TAPCOMPLETETABLE_CHOICE_TEXT).textContent).join();
-    const challengePromptUnique = `${challengePrompt},${choices}`;
-    console.log(`Prompt encountered: ${challengePromptUnique}`);
-    console.log(`Selected: ${choices}`);
-    return [challengePromptUnique, choices, TYPE_TAPCOMPLETETABLE];
+
+    return [challengePrompt, choices, TYPE_TAPCOMPLETETABLE];
   }
 
   if (document.querySelector(TRANSLATE)) {
@@ -157,8 +147,6 @@ function makeSubmission(extraInfo = null) {
     const blank = document.querySelector(TYPECLOZE_BLANK);
     const correctAnswer = blank.querySelector(TYPECLOZE_CORRECT).textContent.replace(/_/g, '');
     const submission = blank.querySelector(TYPECLOZE_SUBMISSION).value.replace(IGNORED_CHARACTERS, '');
-    console.log(`Correct: ${correctAnswer}`);
-    console.log(`Submitted: ${submission}`);
     return correctAnswer.toLowerCase() === submission.toLowerCase()
       ? [SKIP_CHECKING_TRUE, null, null]
       : [SKIP_CHECKING_FALSE, null, null];

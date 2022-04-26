@@ -340,7 +340,7 @@ const TYPE_SELECT = 'select';
 
 const TYPE_TAPCLOZE = 'tapCloze';
 
-const TYPE_TAPCOMPLETETABLE = 'typeCompleteTable';
+const TYPE_TAPCOMPLETETABLE = 'tapCompleteTable';
 
 const TYPE_TRANSLATE = 'translate';
 
@@ -452,10 +452,9 @@ function addToKey(answerKey, challenges) {
           });
           challengePrompt = promptArray.sort().join();
           value = valueArray.join();
-          console.log(`Prompt loaded: ${challengePrompt}`);
-          console.log(`Value loaded: ${value}`);
           break;
         }
+
         default: {
           challengePrompt = null;
           value = null;

@@ -109,10 +109,9 @@ export function addToKey(answerKey, challenges) {
           });
           challengePrompt = promptArray.sort().join();
           value = valueArray.join();
-          console.log(`Prompt loaded: ${challengePrompt}`);
-          console.log(`Value loaded: ${value}`);
           break;
         }
+
         default: {
           challengePrompt = null;
           value = null;

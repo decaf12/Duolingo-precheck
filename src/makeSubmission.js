@@ -65,23 +65,13 @@ export default function makeSubmission(extraInfo = null) {
   if (document.querySelector(constants.TAPCOMPLETETABLE)) {
     // eslint-disable-next-line max-len
     const promptArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETETABLE_HINT_TOKENS)).slice(1);
-    const promptArrayText = promptArray.map((x) => x.textContent);
-    // promptArray.forEach((x) => {
-    //   const hintTokenArray = Array.from(x.querySelectorAll(constants.TAPCOMPLETETABLE_PROMPT));
-    //   hintTokenArray.pop();
-    //   hintTokenArray.forEach((token) => {
-    //     console.log(`Token text: ${token.textContent}`);
-    //     promptArrayText.push(token.textContent);
-    //   });
-    // });
-    const challengePrompt = promptArrayText.sort().join();
+    const challengePrompt = promptArray.map((x) => x.textContent).sort();
+
     const choiceArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETETABLE_CHOICES));
     // eslint-disable-next-line max-len
     const choices = choiceArray.map((x) => x.querySelector(constants.TAPCOMPLETETABLE_CHOICE_TEXT).textContent).join();
-    const challengePromptUnique = `${challengePrompt},${choices}`;
-    console.log(`Prompt encountered: ${challengePromptUnique}`);
-    console.log(`Selected: ${choices}`);
-    return [challengePromptUnique, choices, constants.TYPE_TAPCOMPLETETABLE];
+
+    return [challengePrompt, choices, constants.TYPE_TAPCOMPLETETABLE];
   }
 
   if (document.querySelector(constants.TRANSLATE)) {
