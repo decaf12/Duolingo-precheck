@@ -5,6 +5,7 @@ export const SKIP_CHECKING_TRUE = 'skip checking: true';
 export const SKIP_CHECKING_FALSE = 'skip checking: false';
 
 export const IGNORED_CHARACTERS = /[_'\-\s,.?!]/g;
+export const IGNORED_CHARACTERS_STR = "_'-,.?!";
 
 export const TYPE_COMPLETEREVERSETRANSLATION = 'completeReverseTranslation';
 export const COMPLETEREVERSETRANSLATION = '[data-test="challenge challenge-completeReverseTranslation"]';
