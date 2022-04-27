@@ -11,6 +11,11 @@ const JUDGE = '[data-test="challenge challenge-judge"]';
 const JUDGE_PROMPT = '[class="_3-JBe"]';
 const JUDGE_CHOICES = '[data-test="challenge-choice"]';
 
+const TYPE_MATCH = 'match';
+const MATCH = '[data-test="challenge challenge-match"]';
+const MATCH_BUTTONS = '[class="_35eLX"]';
+const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
+
 const TYPE_SELECT = 'select';
 const SELECT = '[data-test="challenge challenge-select"]';
 const SELECT_PROMPT = '[data-test="challenge-header"]';
@@ -20,11 +25,6 @@ const TYPE_TRANSLATE = 'translate';
 const TRANSLATE = '[data-test="challenge challenge-translate"]';
 const TRANSLATE_PROMPT = '[data-test="hint-token"]';
 const TRANSLATE_TEXTBOX = '[data-test="challenge-translate-input"]';
-
-const TYPE_MATCH = 'match';
-const MATCH = '[data-test="challenge challenge-match"]';
-const MATCH_BUTTONS = '[data-test="challenge-tap-token"]';
-const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
 
 function makeSubmission(extraInfo = null) {
   if (document.querySelector(FORM)) {
