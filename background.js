@@ -327,7 +327,7 @@ const SKIP_CHECKING_TRUE = 'skip checking: true';
 const SKIP_CHECKING_FALSE = 'skip checking: false';
 
 const IGNORED_CHARACTERS = /[_'\-\s,.?!]/g;
-const IGNORED_CHARACTERS_TRIM = "_'-,.?!";
+const IGNORED_CHARACTERS_STR = "_'-,.?!";
 
 const TYPE_FORM = 'form';
 
@@ -352,7 +352,7 @@ function trimIgnored(word) {
 
   for (let i = length - 1; i >= 0; i--) {
     const letter = word[i];
-    if (IGNORED_CHARACTERS_TRIM.indexOf(letter) === -1) {
+    if (IGNORED_CHARACTERS_STR.indexOf(letter) === -1) {
       return word.slice(0, i + 1);
     }
   }

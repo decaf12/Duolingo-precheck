@@ -8,7 +8,7 @@ function trimIgnored(word) {
 
   for (let i = length - 1; i >= 0; i--) {
     const letter = word[i];
-    if (constants.IGNORED_CHARACTERS_TRIM.indexOf(letter) === -1) {
+    if (constants.IGNORED_CHARACTERS_STR.indexOf(letter) === -1) {
       return word.slice(0, i + 1);
     }
   }
