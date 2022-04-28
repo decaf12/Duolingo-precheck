@@ -41,7 +41,7 @@ import * as checkAnswers from './checkAnswers';
 
   browser.webRequest.onHeadersReceived.addListener(
     getAnswerKey,
-    { urls: [constants.CHALLENGE_URL_PATTERN] },
+    { urls: [constants.CHALLENGE_URL_PATTERN, constants.CHECKPOINT_URL_PATTERN] },
     ['blocking'],
   );
 
@@ -59,7 +59,7 @@ browser.tabs.onUpdated.addListener(
     );
   },
   {
-    urls: [constants.CHALLENGE_URL_FRONTEND_PATTERN],
+    urls: [constants.CHALLENGE_URL_FRONTEND_PATTERN, constants.CHECKPOINT_URL_PATTERN],
     properties: ['url'],
   },
 );

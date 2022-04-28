@@ -38,7 +38,7 @@ function addSubmissionListener(button) {
     e.preventDefault();
     e.stopImmediatePropagation();
 
-    const previousText = previouslyClicked.innerHTML.split('</span>')[1];
+    const previousText = previouslyClicked.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
     const currentButton = button.textContent;
     const buttonNumber = currentButton.slice(0, 1);
     const currentText = currentButton.slice(1);
