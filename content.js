@@ -64,6 +64,7 @@ const TYPECOMPLETETABLE_SUBMISSION = '[class="Y5JxA _17nEt"]';
 
 function makeSubmission(extraInfo = null) {
   if (document.querySelector(COMPLETEREVERSETRANSLATION)) {
+    console.log('Reverse translation');
     // eslint-disable-next-line max-len
     const promptArray = Array.from(document.querySelectorAll(COMPLETEREVERSETRANSLATION_PROMPT));
     const challengePrompt = promptArray.map((x) => x.textContent).join('');
