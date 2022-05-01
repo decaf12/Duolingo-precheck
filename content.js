@@ -4,6 +4,11 @@ const SKIP_CHECKING_TRUE = 'skip checking: true';
 const SKIP_CHECKING_FALSE = 'skip checking: false';
 
 const IGNORED_CHARACTERS = /[_'\-\s,.?!]/g;
+
+const TYPE_ASSIST = 'assist';
+const ASSIST = '[data-test="challenge challenge-assist"]';
+const ASSIST_PROMPT = '[data-test="challenge-header"]';
+const ASSIST_CHOICES = '[data-test="challenge-choice"]';
 const COMPLETEREVERSETRANSLATION = '[data-test="challenge challenge-completeReverseTranslation"]';
 const COMPLETEREVERSETRANSLATION_PROMPT = '[data-test="hint-token"]';
 const COMPLETEREVERSETRANSLATION_TEXTBOX = '[class="_3f_Q3 _2FKqf _2ti2i"]';
@@ -64,7 +69,6 @@ const TYPECOMPLETETABLE_SUBMISSION = '[class="Y5JxA _17nEt"]';
 
 function makeSubmission(extraInfo = null) {
   if (document.querySelector(COMPLETEREVERSETRANSLATION)) {
-    console.log('Reverse translation');
     // eslint-disable-next-line max-len
     const promptArray = Array.from(document.querySelectorAll(COMPLETEREVERSETRANSLATION_PROMPT));
     const challengePrompt = promptArray.map((x) => x.textContent).join('');
@@ -76,6 +80,14 @@ function makeSubmission(extraInfo = null) {
     });
     const answer = answerArray.join('');
     return [challengePrompt, answer, TYPE_TRANSLATE];
+  }
+
+  if (document.querySelector(ASSIST)) {
+    const challengePrompt = document.querySelector(ASSIST_PROMPT).textContent;
+    const choices = Array.from(document.querySelectorAll(ASSIST_CHOICES));
+    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    console.log(`Prompt submitted: ${challengePrompt}`);
+    return [challengePrompt, choiceID, TYPE_ASSIST];
   }
 
   if (document.querySelector(FORM)) {
