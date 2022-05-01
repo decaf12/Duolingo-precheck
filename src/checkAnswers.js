@@ -76,6 +76,13 @@ export function addToKey(answerKey, challenges) {
 
     if (challenge.type !== constants.TYPE_TRANSLATE) {
       switch (challenge.type) {
+        case constants.TYPE_ASSIST: {
+          challengePrompt = `How do you say "${challenge.prompt}"?`;
+          value = challenge.correctIndex;
+          console.log(`Prompt loaded: ${challengePrompt}`);
+          break;
+        }
+
         case constants.TYPE_FORM: {
           challengePrompt = challenge.promptPieces.join('');
           value = challenge.correctIndex;

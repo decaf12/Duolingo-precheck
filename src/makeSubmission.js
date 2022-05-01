@@ -15,6 +15,14 @@ export default function makeSubmission(extraInfo = null) {
     return [challengePrompt, answer, constants.TYPE_TRANSLATE];
   }
 
+  if (document.querySelector(constants.ASSIST)) {
+    const challengePrompt = document.querySelector(constants.ASSIST_PROMPT).textContent;
+    const choices = Array.from(document.querySelectorAll(constants.ASSIST_CHOICES));
+    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    console.log(`Prompt submitted: ${challengePrompt}`);
+    return [challengePrompt, choiceID, constants.TYPE_ASSIST];
+  }
+
   if (document.querySelector(constants.FORM)) {
     const challengePrompt = document.querySelector(constants.FORM_PROMPT);
     const promptNoBlank = challengePrompt.dataset.prompt.replace(/_/g, '');

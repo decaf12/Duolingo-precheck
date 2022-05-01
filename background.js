@@ -327,6 +327,8 @@ const SKIP_CHECKING_TRUE = 'skip checking: true';
 const SKIP_CHECKING_FALSE = 'skip checking: false';
 const IGNORED_CHARACTERS_STR = "_' -,.?!";
 
+const TYPE_ASSIST = 'assist';
+
 const TYPE_FORM = 'form';
 
 const TYPE_GAPFILL = 'gapFill';
@@ -391,6 +393,13 @@ function addToKey(answerKey, challenges) {
 
     if (challenge.type !== TYPE_TRANSLATE) {
       switch (challenge.type) {
+        case TYPE_ASSIST: {
+          challengePrompt = `How do you say "${challenge.prompt}"?`;
+          value = challenge.correctIndex;
+          console.log(`Prompt loaded: ${challengePrompt}`);
+          break;
+        }
+
         case TYPE_FORM: {
           challengePrompt = challenge.promptPieces.join('');
           value = challenge.correctIndex;
