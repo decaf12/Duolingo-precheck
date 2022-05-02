@@ -404,7 +404,6 @@ function addToKey(answerKey, challenges) {
         case TYPE_ASSIST: {
           challengePrompt = `How do you say "${challenge.prompt}"?`;
           value = challenge.correctIndex;
-          console.log(`Prompt loaded: ${challengePrompt}`);
           break;
         }
 
@@ -437,7 +436,8 @@ function addToKey(answerKey, challenges) {
         }
 
         case TYPE_SELECT: {
-          challengePrompt = `<span>Which one of these is \u201C${challenge.prompt}\u201D?</span>`; /* u201C and u201D are curly quotes */
+          challengePrompt = `Which one of these is \u201C${challenge.prompt}\u201D?`; /* u201C and u201D are curly quotes */
+          console.log(`Prompt loaded: ${challengePrompt}`);
           value = challenge.correctIndex;
           break;
         }

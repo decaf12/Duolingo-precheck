@@ -59,6 +59,7 @@ export default function makeSubmission(extraInfo = null) {
     const challengePrompt = document.querySelector(constants.SELECT_PROMPT).textContent;
     const choices = Array.from(document.querySelectorAll(constants.SELECT_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    console.log(`Prompt submitted: ${challengePrompt}, choice submitted: ${choiceID}`);
     return [challengePrompt, choiceID, constants.TYPE_SELECT];
   }
 
