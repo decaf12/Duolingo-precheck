@@ -91,7 +91,6 @@ export function addToKey(answerKey, challenges) {
 
         case constants.TYPE_SELECT: {
           challengePrompt = `Which one of these is \u201C${challenge.prompt}\u201D?`; /* u201C and u201D are curly quotes */
-          console.log(`Prompt loaded: ${challengePrompt}`);
           value = challenge.correctIndex;
           break;
         }
@@ -102,6 +101,16 @@ export function addToKey(answerKey, challenges) {
           challengePrompt = promptArray.map((x) => x.text).join('');
           const correctChoice = challenge.correctIndices[0];
           value = challenge.choices[correctChoice];
+          break;
+        }
+
+        case constants.TYPE_TAPCOMPLETE: {
+          const displayTokens = Array.from(challenge.displayTokens);
+          const promptArray = displayTokens.filter((x) => !x.isBlank && x.text !== ' ');
+          challengePrompt = promptArray.map((x) => x.text).join(' ');
+          value = displayTokens.filter((x) => x.isBlank).map((x) => x.text).join(' ');
+          console.log(`Challenge loaded: ${challengePrompt}`);
+          console.log(`Value loaded: ${value}`);
           break;
         }
 

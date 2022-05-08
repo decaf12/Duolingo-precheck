@@ -52,6 +52,12 @@ export const TAPCLOZE_PROMPT = '[data-test="hint-token"]';
 export const TAPCLOZE_SELECTED = '[class="_1LQx7"]';
 export const TAPCLOZE_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 
+export const TYPE_TAPCOMPLETE = 'tapComplete';
+export const TAPCOMPLETE = '[data-test="challenge challenge-tapComplete"]';
+export const TAPCOMPLETE_PROMPT = '[data-test="hint-token"]';
+export const TAPCOMPLETE_SELECTED = '[class="_2Z2xv"]';
+export const TAPCOMPLETE_SELECTED_TEXT = '[data-test="challenge-tap-token-text"]';
+
 export const TYPE_TAPCOMPLETETABLE = 'tapCompleteTable';
 export const TAPCOMPLETETABLE = '[data-test="challenge challenge-tapCompleteTable"]';
 export const TAPCOMPLETETABLE_BLANKS = '[class="_1Bh_M"]';
