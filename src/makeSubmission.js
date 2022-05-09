@@ -19,7 +19,6 @@ export default function makeSubmission(extraInfo = null) {
     const challengePrompt = document.querySelector(constants.ASSIST_PROMPT).textContent;
     const choices = Array.from(document.querySelectorAll(constants.ASSIST_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-    console.log(`Prompt submitted: ${challengePrompt}`);
     return [challengePrompt, choiceID, constants.TYPE_ASSIST];
   }
 
@@ -70,6 +69,16 @@ export default function makeSubmission(extraInfo = null) {
     return [challengePrompt, chosenButtonText, constants.TYPE_TAPCLOZE];
   }
 
+  if (document.querySelector(constants.TAPCOMPLETE)) {
+    const promptArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETE_PROMPT));
+    const challengePrompt = promptArray.map((x) => x.textContent).filter((x) => x !== ' ').join(' ');
+    const selectionArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETE_SELECTED));
+    const selectionText = selectionArray.map((button) => button.querySelector(constants.TAPCOMPLETE_SELECTED_TEXT).textContent).join(' ');
+    console.log(`Prompt submitted: ${challengePrompt}`);
+    console.log(`Answer submitted: ${selectionText}`);
+    return [challengePrompt, selectionText, constants.TYPE_TAPCOMPLETE];
+  }
+
   if (document.querySelector(constants.TAPCOMPLETETABLE)) {
     // eslint-disable-next-line max-len
     const promptArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETETABLE_HINT_TOKENS)).slice(1);
@@ -86,6 +95,7 @@ export default function makeSubmission(extraInfo = null) {
     const promptArray = Array.from(document.querySelectorAll(constants.TRANSLATE_PROMPT));
     const challengePrompt = promptArray.map((x) => x.textContent).join('');
     const answer = document.querySelector(constants.TRANSLATE_TEXTBOX).value;
+    console.log(`Translate prompt submitted: ${challengePrompt}`);
     return [challengePrompt, answer, constants.TYPE_TRANSLATE];
   }
 

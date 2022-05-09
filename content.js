@@ -46,6 +46,12 @@ const TAPCLOZE_PROMPT = '[data-test="hint-token"]';
 const TAPCLOZE_SELECTED = '[class="_1LQx7"]';
 const TAPCLOZE_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 
+const TYPE_TAPCOMPLETE = 'tapComplete';
+const TAPCOMPLETE = '[data-test="challenge challenge-tapComplete"]';
+const TAPCOMPLETE_PROMPT = '[data-test="hint-token"]';
+const TAPCOMPLETE_SELECTED = '[class="_2Z2xv"]';
+const TAPCOMPLETE_SELECTED_TEXT = '[data-test="challenge-tap-token-text"]';
+
 const TYPE_TAPCOMPLETETABLE = 'tapCompleteTable';
 const TAPCOMPLETETABLE = '[data-test="challenge challenge-tapCompleteTable"]';
 const TAPCOMPLETETABLE_HINT_TOKENS = '[class="_34k_q _3Lg1h _13doy"]';
@@ -86,7 +92,6 @@ function makeSubmission(extraInfo = null) {
     const challengePrompt = document.querySelector(ASSIST_PROMPT).textContent;
     const choices = Array.from(document.querySelectorAll(ASSIST_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-    console.log(`Prompt submitted: ${challengePrompt}`);
     return [challengePrompt, choiceID, TYPE_ASSIST];
   }
 
@@ -135,6 +140,16 @@ function makeSubmission(extraInfo = null) {
     const chosenButton = document.querySelector(TAPCLOZE_SELECTED);
     const chosenButtonText = chosenButton.querySelector(TAPCLOZE_BUTTON_TEXT).textContent;
     return [challengePrompt, chosenButtonText, TYPE_TAPCLOZE];
+  }
+
+  if (document.querySelector(TAPCOMPLETE)) {
+    const promptArray = Array.from(document.querySelectorAll(TAPCOMPLETE_PROMPT));
+    const challengePrompt = promptArray.map((x) => x.textContent).filter((x) => x !== ' ').join(' ');
+    const selectionArray = Array.from(document.querySelectorAll(TAPCOMPLETE_SELECTED));
+    const selectionText = selectionArray.map((button) => button.querySelector(TAPCOMPLETE_SELECTED_TEXT).textContent).join(' ');
+    console.log(`Prompt submitted: ${challengePrompt}`);
+    console.log(`Answer submitted: ${selectionText}`);
+    return [challengePrompt, selectionText, TYPE_TAPCOMPLETE];
   }
 
   if (document.querySelector(TAPCOMPLETETABLE)) {

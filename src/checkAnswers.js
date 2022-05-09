@@ -72,6 +72,7 @@ export function addToKey(answerKey, challenges) {
 
     if ('grader' in challenge) {
       answerKey.set(`${challenge.prompt}: ${constants.TYPE_TRANSLATE}`, challenge.grader.vertices);
+      console.log(`Translate prompt loaded: ${challenge.prompt}`);
     }
 
     if (challenge.type !== constants.TYPE_TRANSLATE) {
@@ -79,7 +80,6 @@ export function addToKey(answerKey, challenges) {
         case constants.TYPE_ASSIST: {
           challengePrompt = `How do you say "${challenge.prompt}"?`;
           value = challenge.correctIndex;
-          console.log(`Prompt loaded: ${challengePrompt}`);
           break;
         }
 
@@ -112,7 +112,7 @@ export function addToKey(answerKey, challenges) {
         }
 
         case constants.TYPE_SELECT: {
-          challengePrompt = `<span>Which one of these is \u201C${challenge.prompt}\u201D?</span>`; /* u201C and u201D are curly quotes */
+          challengePrompt = `Which one of these is \u201C${challenge.prompt}\u201D?`; /* u201C and u201D are curly quotes */
           value = challenge.correctIndex;
           break;
         }
@@ -123,6 +123,16 @@ export function addToKey(answerKey, challenges) {
           challengePrompt = promptArray.map((x) => x.text).join('');
           const correctChoice = challenge.correctIndices[0];
           value = challenge.choices[correctChoice];
+          break;
+        }
+
+        case constants.TYPE_TAPCOMPLETE: {
+          const displayTokens = Array.from(challenge.displayTokens);
+          const promptArray = displayTokens.filter((x) => !x.isBlank && x.text !== ' ');
+          challengePrompt = promptArray.map((x) => x.text).join(' ');
+          value = displayTokens.filter((x) => x.isBlank).map((x) => x.text).join(' ');
+          console.log(`Challenge loaded: ${challengePrompt}`);
+          console.log(`Value loaded: ${value}`);
           break;
         }
 

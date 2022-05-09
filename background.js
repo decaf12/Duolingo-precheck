@@ -341,6 +341,8 @@ const TYPE_SELECT = 'select';
 
 const TYPE_TAPCLOZE = 'tapCloze';
 
+const TYPE_TAPCOMPLETE = 'tapComplete';
+
 const TYPE_TAPCOMPLETETABLE = 'tapCompleteTable';
 
 const TYPE_TRANSLATE = 'translate';
@@ -396,7 +398,6 @@ function addToKey(answerKey, challenges) {
         case TYPE_ASSIST: {
           challengePrompt = `How do you say "${challenge.prompt}"?`;
           value = challenge.correctIndex;
-          console.log(`Prompt loaded: ${challengePrompt}`);
           break;
         }
 
@@ -429,7 +430,7 @@ function addToKey(answerKey, challenges) {
         }
 
         case TYPE_SELECT: {
-          challengePrompt = `<span>Which one of these is \u201C${challenge.prompt}\u201D?</span>`; /* u201C and u201D are curly quotes */
+          challengePrompt = `Which one of these is \u201C${challenge.prompt}\u201D?`; /* u201C and u201D are curly quotes */
           value = challenge.correctIndex;
           break;
         }
@@ -440,6 +441,16 @@ function addToKey(answerKey, challenges) {
           challengePrompt = promptArray.map((x) => x.text).join('');
           const correctChoice = challenge.correctIndices[0];
           value = challenge.choices[correctChoice];
+          break;
+        }
+
+        case TYPE_TAPCOMPLETE: {
+          const displayTokens = Array.from(challenge.displayTokens);
+          const promptArray = displayTokens.filter((x) => !x.isBlank && x.text !== ' ');
+          challengePrompt = promptArray.map((x) => x.text).join(' ');
+          value = displayTokens.filter((x) => x.isBlank).map((x) => x.text).join(' ');
+          console.log(`Challenge loaded: ${challengePrompt}`);
+          console.log(`Value loaded: ${value}`);
           break;
         }
 
