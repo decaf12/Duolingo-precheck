@@ -51,6 +51,7 @@ export function addToKey(answerKey, challenges) {
 
     if ('grader' in challenge) {
       answerKey.set(`${challenge.prompt}: ${constants.TYPE_TRANSLATE}`, challenge.grader.vertices);
+      console.log(`Translate prompt loaded: ${challenge.prompt}`);
     }
 
     if (challenge.type !== constants.TYPE_TRANSLATE) {

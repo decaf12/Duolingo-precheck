@@ -95,6 +95,7 @@ export default function makeSubmission(extraInfo = null) {
     const promptArray = Array.from(document.querySelectorAll(constants.TRANSLATE_PROMPT));
     const challengePrompt = promptArray.map((x) => x.textContent).join('');
     const answer = document.querySelector(constants.TRANSLATE_TEXTBOX).value;
+    console.log(`Translate prompt submitted: ${challengePrompt}`);
     return [challengePrompt, answer, constants.TYPE_TRANSLATE];
   }
 
