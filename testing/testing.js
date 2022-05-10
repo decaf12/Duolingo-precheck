@@ -183,6 +183,137 @@ class marking {
     }
   }
 
+  const T = ({
+    accentedCharacterMap: e,
+    allowTypoBlame: t,
+    compiledNormalizationData: n,
+    gradingData: i,
+    isTypingInLearningLanguage: s,
+    submittedValue: a
+  }) =>{
+    let l = b(n, a);
+    const {
+      language: d,
+      version: p,
+      vertices: m
+    }
+    = i;
+    if (0 !== p) throw Error('Client-side grading version incompatible');
+    let g = i.whitespaceDelimited;
+    void 0 === g && (g = !0);
+    const h = /\s+/;
+    !g && h.exec(l) && 'experiment' === (0, u.j6) ('learning_fix_whitespace_grading', void 0) && (l = l.replace(h, ''));
+    const _ = new w({
+      accentedCharacterMap: e,
+      allowTypoBlame: t,
+      isTypingInLearningLanguage: s,
+      isWhitespaceDelimited: g,
+      language: d,
+      submittedValue: l,
+      vertices: m
+    }),
+    [
+      v,
+      f
+    ] = ((e, t, n, i, s) =>{
+      const a = new (o()) (((e, t) =>e.weight - t.weight || e.tieBreaker - t.tieBreaker));
+      a.push({
+        path: [
+        ],
+        state: e,
+        tieBreaker: 0,
+        weight: 0
+      });
+      const l = {
+      };
+      for (; a.size(); ) {
+        const e = r.Fp(a.toArray().map((({
+          tieBreaker: e
+        }) =>e))) + 1,
+        {
+          path: o,
+          state: s,
+          weight: c
+        }
+        = a.pop();
+        if (!l[`${ s }`]) {
+          if (l[`${ s }`] = !0, c > 1) return [null,
+          null];
+          if (t(s)) return [o,
+          c];
+          n(s).forEach((([t,
+          n], r) =>{
+            const l = i(t);
+            if (l < 0) throw Error('Negative weight edge in solution DAG');
+            a.push({
+              path: [
+                ...o,
+                [
+                  s,
+                  t
+                ]
+              ],
+              state: n,
+              tieBreaker: e + r,
+              weight: c + l
+            })
+          }))
+        }
+      }
+      return [null,
+      null]
+    }) (_.startState(), _.isEndState, _.iterEdges, _.edgeWeight);
+    if (null === v || null === f) return {
+      correct: !1
+    };
+    const E = I(v);
+    if (void 0 !== E) return {
+      correct: !1,
+      gradingMetadata: E
+    };
+    const S = f <= 0.5,
+    T = {
+    };
+    let k = '';
+    v.forEach((([{
+    },
+    e]) =>{
+      var t;
+      let n = e.type;
+      n = void 0 === n ? 'correct' : n;
+      let i = e.orig;
+      if (i = void 0 === i ? e.lenient : i, 'correct' !== n) {
+        const e = k.length;
+        let o = e + i.length;
+        n === c.Oj.MissingWord && i.endsWith(' ') && (o -= 1);
+        const r = null !== (t = T[n]) && void 0 !== t ? t : [
+        ];
+        r.push([e,
+        o]),
+        T[n] = r
+      }
+      k += i
+    }));
+    const R = r.xb(T) ? void 0 : r.Fp(r.XP(T), (e=>y[e])),
+    C = R ? T[R] : void 0;
+    return {
+      blameType: R,
+      closestSolution: k,
+      correct: S,
+      highlights: C
+    }
+  };
+
+  I = e=>{
+    const t = e.filter((([{
+    },
+    e]) =>e.lenient.trim().length > 0)).map((([{
+    },
+    e]) =>e.metadata)),
+    n = t.filter((e=>void 0 !== e));
+    if (0 !== n.length && n.length === t.length) return n[0].filter((e=>n.every((t=>t.some((t=>r.Xy(e, t)))))))
+  };
+
   const accentcharactermap = {};
   const allowTypoBlame = false;
   const isTypingInLearningLanguage = true;
@@ -195,4 +326,6 @@ class marking {
 
   const testGrader = new marking(accentcharactermap, allowTypoBlame, isTypingInLearningLanguage, isWhitespaceDelimited, language, submittedValue, vertices)
   console.log(`Test grader: ${JSON.stringify(testGrader)}`);
-  console.log(`End state: ${testGrader.iterEdges}`);
+  // console.log(`End state: ${testGrader.iterEdges}`);
+
+  const testT = new T(accentcharactermap, allowTypoBlame, {}, {}, isTypingInLearningLanguage, submittedValue);
