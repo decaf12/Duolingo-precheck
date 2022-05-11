@@ -322,10 +322,10 @@ class marking {
   const submittedValue = 'danke';
 
   const testChallenge = {"grader":{"version":0,"vertices":[[{"to":1,"lenient":""}],[{"to":4,"lenient":"cheers","orig":"Cheers!"},{"to":4,"lenient":"ta","orig":"Ta!"},{"to":2,"lenient":"thank","orig":"Thank"},{"to":4,"lenient":"thanks","orig":"Thanks!"}],[{"to":3,"lenient":" "}],[{"to":4,"lenient":"you","orig":"you!"}],[]]}};
-  const vertices = testChallenge.challenges[0].grader.vertices;
+  const vertices = testChallenge.grader.vertices;
 
   const testGrader = new marking(accentcharactermap, allowTypoBlame, isTypingInLearningLanguage, isWhitespaceDelimited, language, submittedValue, vertices)
   console.log(`Test grader: ${JSON.stringify(testGrader)}`);
   // console.log(`End state: ${testGrader.iterEdges}`);
 
-  const testT = new T(accentcharactermap, allowTypoBlame, {}, {}, isTypingInLearningLanguage, submittedValue);
+  // const testT = new T(accentcharactermap, allowTypoBlame, {}, {}, isTypingInLearningLanguage, submittedValue);
