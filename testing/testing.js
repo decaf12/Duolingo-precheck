@@ -181,7 +181,7 @@ class marking {
       this.vertices = verticesInput,
       this.allowTypoBlame = t
     }
-  }
+  };
 
   const T = ({
     accentedCharacterMap: e,
@@ -190,8 +190,9 @@ class marking {
     gradingData: i,
     isTypingInLearningLanguage: s,
     submittedValue: a
-  }) =>{
-    let l = b(n, a);
+  }) => {
+    // let l = b(n, a);
+    let l = submittedValue;
     const {
       language: d,
       version: p,
@@ -203,7 +204,7 @@ class marking {
     void 0 === g && (g = !0);
     const h = /\s+/;
     !g && h.exec(l) && 'experiment' === (0, u.j6) ('learning_fix_whitespace_grading', void 0) && (l = l.replace(h, ''));
-    const _ = new w({
+    const grader = new w({
       accentedCharacterMap: e,
       allowTypoBlame: t,
       isTypingInLearningLanguage: s,
@@ -212,15 +213,12 @@ class marking {
       submittedValue: l,
       vertices: m
     }),
-    [
-      v,
-      f
-    ] = ((e, t, n, i, s) =>{
+    [v, f] = ((currState, endStateDetector, iterEdgesFunction, edgeWeightFunction, s) =>{
       const a = new (o()) (((e, t) =>e.weight - t.weight || e.tieBreaker - t.tieBreaker));
       a.push({
         path: [
         ],
-        state: e,
+        state: currState,
         tieBreaker: 0,
         weight: 0
       });
@@ -239,11 +237,11 @@ class marking {
         if (!l[`${ s }`]) {
           if (l[`${ s }`] = !0, c > 1) return [null,
           null];
-          if (t(s)) return [o,
+          if (endStateDetector(s)) return [o,
           c];
-          n(s).forEach((([t,
+          iterEdgesFunction(s).forEach((([t,
           n], r) =>{
-            const l = i(t);
+            const l = edgeWeightFunction(t);
             if (l < 0) throw Error('Negative weight edge in solution DAG');
             a.push({
               path: [
@@ -262,7 +260,7 @@ class marking {
       }
       return [null,
       null]
-    }) (_.startState(), _.isEndState, _.iterEdges, _.edgeWeight);
+    }) (grader.startState(), grader.isEndState, grader.iterEdges, grader.edgeWeight);
     if (null === v || null === f) return {
       correct: !1
     };
@@ -319,13 +317,13 @@ class marking {
   const isTypingInLearningLanguage = true;
   const isWhitespaceDelimited = true;
   const language = 'de';
-  const submittedValue = 'danke';
+  const submittedValue = 'thanks';
 
   const testChallenge = {"grader":{"version":0,"vertices":[[{"to":1,"lenient":""}],[{"to":4,"lenient":"cheers","orig":"Cheers!"},{"to":4,"lenient":"ta","orig":"Ta!"},{"to":2,"lenient":"thank","orig":"Thank"},{"to":4,"lenient":"thanks","orig":"Thanks!"}],[{"to":3,"lenient":" "}],[{"to":4,"lenient":"you","orig":"you!"}],[]]}};
   const vertices = testChallenge.grader.vertices;
+  const vertexCount = vertices.length;
+  const submissionLength = submittedValue.length;
 
-  const testGrader = new marking(accentcharactermap, allowTypoBlame, isTypingInLearningLanguage, isWhitespaceDelimited, language, submittedValue, vertices)
-  console.log(`Test grader: ${JSON.stringify(testGrader)}`);
-  // console.log(`End state: ${testGrader.iterEdges}`);
-
-  // const testT = new T(accentcharactermap, allowTypoBlame, {}, {}, isTypingInLearningLanguage, submittedValue);
+  const testGrader = new marking({accentcharactermap, allowTypoBlame, isTypingInLearningLanguage, isWhitespaceDelimited, language, submittedValue, vertices});
+  let coords = [0, 0]
+  console.log(`Test grader: ${JSON.stringify(testGrader.iterEdges(coords))}`);
