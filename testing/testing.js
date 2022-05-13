@@ -1,11 +1,30 @@
 /* eslint-disable */
 const f = {
-  MissingSpace: ['missing_space', 0.001],
-  Accent: ['accent', 0.002],
-  WrongWord: ['wrong_word', 0.6],
-  MissingWord: ['missing_word', 0.004],
-  Typo: ['typo', 0.0001],
-}
+  Accent: [
+    'accent',
+    1e-12
+  ],
+  ExtraSpace: [
+    'extra_space',
+    0.002
+  ],
+  MissingSpace: [
+    'missing_space',
+    0.001
+  ],
+  MissingWord: [
+    'missing_word',
+    0.6
+  ],
+  Typo: [
+    'typo',
+    0.000001
+  ],
+  WrongWord: [
+    'wrong_word',
+    0.6
+  ]
+};
 
 class marking {
     constructor({
@@ -342,10 +361,9 @@ class marking {
   const isTypingInLearningLanguage = true;
   const isWhitespaceDelimited = true;
   const language = 'de';
-  const submittedValue = 'th  ank s   ';
+  const submittedValue = 'thanks';
 
   const testChallenge = {"grader":{"version":0,"vertices":[[{"to":1,"lenient":""}],[{"to":4,"lenient":"cheers","orig":"Cheers!"},{"to":4,"lenient":"ta","orig":"Ta!"},{"to":2,"lenient":"thank","orig":"Thank"},{"to":4,"lenient":"thanks","orig":"Thanks!"}],[{"to":3,"lenient":" "}],[{"to":4,"lenient":"you","orig":"you!"}],[]]}};
-  // const testChallenge = {"grader":{"version":0,"vertices":[[{"to":1,"lenient":""}],[{"to":2,"lenient":"thank","orig":"Thank"},{"to":4,"lenient":"thanks","orig":"Thanks!"}],[{"to":3,"lenient":" "}],[{"to":4,"lenient":"you","orig":"you!"}],[]]}};
   
   const vertices = testChallenge.grader.vertices;
   const vertexCount = vertices.length;
