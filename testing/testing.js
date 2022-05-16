@@ -604,7 +604,7 @@ class marking {
         stack
       },
 
-      this.edgeWeight = e =>void 0 === e.weight ? 0 : e.weight, 
+      this.edgeWeight = vertex =>void 0 === vertex.weight ? 0 : vertex.weight, 
       
       this.isValidToken = e=>this.languageTokens.includes(e), 
 
@@ -671,7 +671,7 @@ class marking {
         tieBreaker: 0,
         weight: 0
       });
-      const l = {};
+      const visited = {};
 
       // Dijkstra?
       for (; heap.size(); ) {
@@ -683,8 +683,8 @@ class marking {
         }
         = heap.pop();
 
-        if (!l[`${ currState }`]) {
-          if (l[`${ currState }`] = true, currWeight > 1) {
+        if (!visited[`${ currState }`]) {
+          if (visited[`${ currState }`] = true, currWeight > 1) {
             return [null, null];
           }
           
@@ -717,60 +717,66 @@ class marking {
       correct: false,
     };
     
-    const E = I(finalPath);
+    const E = getMetadata(finalPath);
     if (void false !== E) return {
       correct: false,
       gradingMetadata: E
     };
 
-    const weightUnderThreshold = finalWeight <= 0.5,
-    T = {};
-    let k = '';
+    const weightUnderThreshold = finalWeight <= 0.5;
+    const mistakeLookup = {};
+    let closestSolution = '';
 
-    finalPath.forEach((([{
-    },
-    e]) =>{
+    finalPath.forEach((([{}, vertex]) =>{
       var t;
-      let n = e.type;
-      n = void 0 === n ? 'correct' : n;
-      let i = e.orig;
-      if (i = void 0 === i ? e.lenient : i, 'correct' !== n) {
-        const e = k.length;
-        let o = e + i.length;
-        n === c.Oj.MissingWord && i.endsWith(' ') && (o -= 1);
-        const r = null !== (t = T[n]) && void 0 !== t ? t : [
-        ];
-        r.push([e,
-        o]),
-        T[n] = r
+      let mistakeType = vertex.type;
+      mistakeType = void 0 === mistakeType ? 'correct' : mistakeType;
+      let orig = vertex.orig;
+
+      // If there's a mistake:
+      if (orig = void 0 === orig ? vertex.lenient : orig, 'correct' !== mistakeType) {
+        const e = closestSolution.length;
+        let o = e + orig.length;
+        
+        if (mistakeType === weightLookup.MissingWord[0]) {
+          if (orig.endsWith(' ')) {
+            o -= 1;
+          }
+         }
+        
+        // Set up mistakeLookup as a defaultdict
+        const r = null !== (t = mistakeLookup[mistakeType]) && void 0 !== t ? t : [];
+        r.push([e, o]),
+        mistakeLookup[mistakeType] = r;
       }
-      k += i
+      closestSolution += orig;
     }));
     
-    const R = r.xb(T) ? void 0 : r.Fp(r.XP(T), (e=>y[e])),
-    C = R ? T[R] : void 0;
+    const blameType = r.xb(mistakeLookup) ? void 0 : r.Fp(r.XP(mistakeLookup), (e=>y[e])),
+    highlight = blameType ? mistakeLookup[blameType] : void 0;
     return {
-      blameType: R,
-      closestSolution: k,
+      blameType: blameType,
+      closestSolution: closestSolution,
       correct: weightUnderThreshold,
-      highlights: C
+      highlights: highlight
     }
   };
 
-  I = e => {
-    const t = e.filter((([{},e]) => e.lenient.trim().length > 0)).map((([{},e]) =>e.metadata)),
-    n = t.filter((e=>void 0 !== e));
-    if (0 !== n.length && n.length === t.length) {
+  getMetadata = path => {
+    // Get metadata of all vertices with non-trivial lenient values.
+    const pathMetadata = path.filter((([{},vertex]) => vertex.lenient.trim().length > 0)).map((([{},vertex]) =>vertex.metadata));
+    const n = pathMetadata.filter((e=>void 0 !== e));
+    if (0 !== n.length && n.length === pathMetadata.length) {
       return n[0].filter((e => n.every((t=>t.some((t=>r.Xy(e, t)))))))
     }
   };
 
   const accentcharactermap = JSON.parse('{"À":"A","Á":"A","Â":"A","Ã":"A","Ä":"A","Å":"A","Ç":"C","È":"E","É":"E","Ê":"E","Ë":"E","Ì":"I","Í":"I","Î":"I","Ï":"I","Ð":"D","Ñ":"N","Ò":"O","Ó":"O","Ô":"O","Õ":"O","Ö":"O","×":"x","Ø":"O","Ù":"U","Ú":"U","Û":"U","Ü":"U","Ý":"Y","à":"a","á":"a","â":"a","ã":"a","ä":"a","å":"a","ç":"c","è":"e","é":"e","ê":"e","ë":"e","ì":"i","í":"i","î":"i","ï":"i","ð":"d","ñ":"n","ò":"o","ó":"o","ô":"o","õ":"o","ö":"o","÷":"/","ø":"o","ù":"u","ú":"u","û":"u","ü":"u","ý":"y","ÿ":"y","Ā":"A","ā":"a","Ă":"A","ă":"a","Ą":"A","ą":"a","Ć":"C","ć":"c","Ĉ":"C","ĉ":"c","Ċ":"C","ċ":"c","Č":"C","č":"c","Ď":"D","ď":"d","Đ":"D","đ":"d","Ē":"E","ē":"e","Ĕ":"E","ĕ":"e","Ė":"E","ė":"e","Ę":"E","ę":"e","Ě":"E","ě":"e","Ĝ":"G","ĝ":"g","Ğ":"G","ğ":"g","Ġ":"G","ġ":"g","Ģ":"G","ģ":"g","Ĥ":"H","ĥ":"h","Ħ":"H","ħ":"h","Ĩ":"I","ĩ":"i","Ī":"I","ī":"i","Ĭ":"I","ĭ":"i","Į":"I","į":"i","İ":"I","ı":"i","Ĵ":"J","ĵ":"j","Ķ":"K","ķ":"k","ĸ":"k","Ĺ":"L","ĺ":"l","Ļ":"L","ļ":"l","Ľ":"L","ľ":"l","Ŀ":"L","ŀ":"l","Ł":"L","ł":"l","Ń":"N","ń":"n","Ņ":"N","ņ":"n","Ň":"N","ň":"n","Ō":"O","ō":"o","Ŏ":"O","ŏ":"o","Ő":"O","ő":"o","Ŕ":"R","ŕ":"r","Ŗ":"R","ŗ":"r","Ř":"R","ř":"r","Ś":"S","ś":"s","Ŝ":"S","ŝ":"s","Ş":"S","ş":"s","Š":"S","š":"s","Ţ":"T","ţ":"t","Ť":"T","ť":"t","Ŧ":"T","ŧ":"t","Ũ":"U","ũ":"u","Ū":"U","ū":"u","Ŭ":"U","ŭ":"u","Ů":"U","ů":"u","Ű":"U","ű":"u","Ų":"U","ų":"u","Ŵ":"W","ŵ":"w","Ŷ":"Y","ŷ":"y","Ÿ":"Y","Ź":"Z","ź":"z","Ż":"Z","ż":"z","Ž":"Z","ž":"z","Ơ":"O","ơ":"o","Ư":"U","ư":"u","Ș":"S","ș":"s","Ț":"T","ț":"t","Ά":"Α","Έ":"Ε","Ή":"Η","Ί":"Ι","Ό":"Ο","Ύ":"Υ","Ώ":"Ω","ΐ":"ι","Ϊ":"Ι","Ϋ":"Υ","ά":"α","έ":"ε","ή":"η","ί":"ι","ΰ":"υ","ϊ":"ι","ϋ":"υ","ό":"ο","ύ":"υ","ώ":"ω","Ạ":"A","ạ":"a","Ả":"A","ả":"a","Ấ":"A","ấ":"a","Ầ":"A","ầ":"a","Ẩ":"A","ẩ":"a","Ẫ":"A","ẫ":"a","Ậ":"A","ậ":"a","Ắ":"A","ắ":"a","Ằ":"A","ằ":"a","Ẳ":"A","ẳ":"a","Ẵ":"A","ẵ":"a","Ặ":"A","ặ":"a","Ẹ":"E","ẹ":"e","Ẻ":"E","ẻ":"e","Ẽ":"E","ẽ":"e","Ế":"E","ế":"e","Ề":"E","ề":"e","Ể":"E","ể":"e","Ễ":"E","ễ":"e","Ệ":"E","ệ":"e","Ỉ":"I","ỉ":"i","Ị":"I","ị":"i","Ọ":"O","ọ":"o","Ỏ":"O","ỏ":"o","Ố":"O","ố":"o","Ồ":"O","ồ":"o","Ổ":"O","ổ":"o","Ỗ":"O","ỗ":"o","Ộ":"O","ộ":"o","Ớ":"O","ớ":"o","Ờ":"O","ờ":"o","Ở":"O","ở":"o","Ỡ":"O","ỡ":"o","Ợ":"O","ợ":"o","Ụ":"U","ụ":"u","Ủ":"U","ủ":"u","Ứ":"U","ứ":"u","Ừ":"U","ừ":"u","Ử":"U","ử":"u","Ữ":"U","ữ":"u","Ự":"U","ự":"u","Ỳ":"Y","ỳ":"y","Ỵ":"Y","ỵ":"y","Ỷ":"Y","ỷ":"y","Ỹ":"Y","ỹ":"y"}');;
-  const allowTypoBlame = false;
+  const allowTypoBlame = true;
   const isTypingInLearningLanguage = true;
   const isWhitespaceDelimited = true;
   const language = 'de';
-  const submittedValue = 'than,,ks';
+  const submittedValue = "tha''nks";
   
   const testChallenge = {"grader":{"version":0,"vertices":[[{"to":1,"lenient":""}],[{"to":4,"lenient":"cheers","orig":"Cheers!"},{"to":4,"lenient":"ta","orig":"Ta!"},{"to":2,"lenient":"thank","orig":"Thank"},{"to":4,"lenient":"thanks","orig":"Thanks!"}],[{"to":3,"lenient":" "}],[{"to":4,"lenient":"you","orig":"you!"}],[]]}};
   const vertices = testChallenge.grader.vertices;
