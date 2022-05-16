@@ -776,7 +776,7 @@ class marking {
   const isTypingInLearningLanguage = true;
   const isWhitespaceDelimited = true;
   const language = 'de';
-  const submittedValue = "tha''nks";
+  const submittedValue = "tha  nks";
   
   const testChallenge = {"grader":{"version":0,"vertices":[[{"to":1,"lenient":""}],[{"to":4,"lenient":"cheers","orig":"Cheers!"},{"to":4,"lenient":"ta","orig":"Ta!"},{"to":2,"lenient":"thank","orig":"Thank"},{"to":4,"lenient":"thanks","orig":"Thanks!"}],[{"to":3,"lenient":" "}],[{"to":4,"lenient":"you","orig":"you!"}],[]]}};
   const vertices = testChallenge.grader.vertices;
