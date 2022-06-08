@@ -61,6 +61,15 @@ export default function makeSubmission(extraInfo = null) {
     return [challengePrompt, choiceID, constants.TYPE_SELECT];
   }
 
+  if (document.querySelector(constants.READCOMPREHENSION)) {
+    const promptArray = Array.from(document.querySelectorAll(constants.READCOMPREHENSION_PROMPT));
+    const challengePrompt = promptArray.map((x) => x.textContent).join('');
+    console.log(`Prompt submitted: ${challengePrompt}`);
+    const choices = Array.from(document.querySelectorAll(constants.READCOMPREHENSION_BUTTONS));
+    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    return [challengePrompt, choiceID, constants.TYPE_READCOMPREHENSION];
+  }
+
   if (document.querySelector(constants.TAPCLOZE)) {
     const promptArray = Array.from(document.querySelectorAll(constants.TAPCLOZE_PROMPT));
     const challengePrompt = promptArray.map((x) => x.textContent).join('');

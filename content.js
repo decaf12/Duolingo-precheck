@@ -35,6 +35,11 @@ const MATCH_BUTTONS = '[class="_35eLX"]';
 const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
 
+const TYPE_READCOMPREHENSION = 'readComprehension';
+const READCOMPREHENSION_PROMPT = '[data-test="hint-token"]';
+const READCOMPREHENSION = '[data-test="challenge challenge-readComprehension"]';
+const READCOMPREHENSION_BUTTONS = '[data-test="challenge-choice"]';
+
 const TYPE_SELECT = 'select';
 const SELECT = '[data-test="challenge challenge-select"]';
 const SELECT_PROMPT = '[data-test="challenge-header"]';
@@ -134,6 +139,15 @@ function makeSubmission(extraInfo = null) {
     return [challengePrompt, choiceID, TYPE_SELECT];
   }
 
+  if (document.querySelector(READCOMPREHENSION)) {
+    const promptArray = Array.from(document.querySelectorAll(READCOMPREHENSION_PROMPT));
+    const challengePrompt = promptArray.map((x) => x.textContent).join('');
+    console.log(`Prompt submitted: ${challengePrompt}`);
+    const choices = Array.from(document.querySelectorAll(READCOMPREHENSION_BUTTONS));
+    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    return [challengePrompt, choiceID, TYPE_READCOMPREHENSION];
+  }
+
   if (document.querySelector(TAPCLOZE)) {
     const promptArray = Array.from(document.querySelectorAll(TAPCLOZE_PROMPT));
     const challengePrompt = promptArray.map((x) => x.textContent).join('');
@@ -168,6 +182,7 @@ function makeSubmission(extraInfo = null) {
     const promptArray = Array.from(document.querySelectorAll(TRANSLATE_PROMPT));
     const challengePrompt = promptArray.map((x) => x.textContent).join('');
     const answer = document.querySelector(TRANSLATE_TEXTBOX).value;
+    console.log(`Translate prompt submitted: ${challengePrompt}`);
     return [challengePrompt, answer, TYPE_TRANSLATE];
   }
 
