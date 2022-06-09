@@ -115,9 +115,7 @@ export function addToKey(answerKey, challenges) {
           const displayTokens = Array.from(challenge.displayTokens);
           const promptArray = displayTokens.filter((x) => !x.isBlank && x.text !== ' ');
           challengePrompt = promptArray.map((x) => x.text).join(' ');
-          value = displayTokens.filter((x) => x.isBlank).map((x) => x.text).join(' ');
-          console.log(`Challenge loaded: ${challengePrompt}`);
-          console.log(`Value loaded: ${value}`);
+          value = displayTokens.filter((x) => x.isBlank).map((x) => x.text).join(' ');;
           break;
         }
 
@@ -159,6 +157,7 @@ export function addToKey(answerKey, challenges) {
 
 export function gradeTranslation(answer, vertices) {
   const answerNoSpaces = answer.replace(constants.IGNORED_CHARACTERS, '');
+  console.log(`answerNoSpaces: ${answerNoSpaces}`);
   const lastVertexID = vertices.length - 1;
   const lastPos = answerNoSpaces.length;
   const stack = [[0, 0, { 0: null }]];
@@ -184,8 +183,9 @@ export function gradeTranslation(answer, vertices) {
         } else if ('orig' in vertex) {
           const origLen = vertex.orig.length;
           // const origNoPunctuation = vertex.orig.replace(constants.IGNORED_CHARACTERS, '');
-          const origNoPunctuation = trimIgnored(vertex.orig);
+          const origNoPunctuation = vertex.orig.replace(constants.IGNORED_CHARACTERS, '');
           const origNoPunctuationLen = origNoPunctuation.length;
+          console.log(`Orig no punctuation: ${origNoPunctuation}`);
           if (startsWithAt(vertex.orig, answerNoSpaces, currPos, false)) {
             stack.push([vertex.to, currPos + origLen, { ...currVisited, [vertex.to]: null }]);
           // eslint-disable-next-line max-len

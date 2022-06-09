@@ -197,9 +197,12 @@ function makeSubmission(extraInfo = null) {
 
   if (document.querySelector(TYPECOMPLETETABLE)) {
     const blanks = Array.from(document.querySelectorAll(TYPECOMPLETETABLE_BLANKS));
+    console.log(`blanks: ${blanks}`);
     const correct = blanks.every((blank) => {
       const correctAnswer = blank.querySelector(TYPECOMPLETETABLE_ANSWER).textContent.replace(IGNORED_CHARACTERS, '');
+      console.log(`Corect answer: ${correctAnswer}`);
       const submission = blank.querySelector(TYPECOMPLETETABLE_SUBMISSION).value;
+      console.log(`Submitted answer: ${submission}`);
       return correctAnswer.toLowerCase() === submission.toLowerCase().trim();
     });
     const challengePrompt = correct ? SKIP_CHECKING_TRUE : SKIP_CHECKING_FALSE;
