@@ -54,6 +54,14 @@ export default function makeSubmission(extraInfo = null) {
     return [challengePrompt, choices, constants.TYPE_MATCH];
   }
 
+  if (document.querySelector(constants.NAME)) {
+    const challengePromptVerbose = document.querySelector(constants.NAME_PROMPT).textContent;
+    const challengePrompt = challengePromptVerbose.match(/“(.*?)”/)[1];
+    const textBox = document.querySelector(constants.NAME_TEXTBOX);
+    const answer = textBox.value;
+    return [challengePrompt, answer, constants.TYPE_TRANSLATE];
+  }
+
   if (document.querySelector(constants.SELECT)) {
     const challengePrompt = document.querySelector(constants.SELECT_PROMPT).textContent;
     const choices = Array.from(document.querySelectorAll(constants.SELECT_CHOICES));

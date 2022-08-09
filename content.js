@@ -34,6 +34,9 @@ const MATCH = '[data-test="challenge challenge-match"]';
 const MATCH_BUTTONS = '[class="_35eLX"]';
 const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
+const NAME = '[data-test="challenge challenge-name"]';
+const NAME_PROMPT = '[data-test="challenge-header"]';
+const NAME_TEXTBOX = '[data-test="challenge-text-input"]';
 
 const TYPE_READCOMPREHENSION = 'readComprehension';
 const READCOMPREHENSION_PROMPT = '[data-test="hint-token"]';
@@ -130,6 +133,14 @@ function makeSubmission(extraInfo = null) {
     const challengePrompt = learningTokenButtons.map((x) => x.textContent).sort().join(' ');
     const choices = extraInfo;
     return [challengePrompt, choices, TYPE_MATCH];
+  }
+
+  if (document.querySelector(NAME)) {
+    const challengePromptVerbose = document.querySelector(NAME_PROMPT).textContent;
+    const challengePrompt = challengePromptVerbose.match(/“(.*?)”/)[1];
+    const textBox = document.querySelector(NAME_TEXTBOX);
+    const answer = textBox.value;
+    return [challengePrompt, answer, TYPE_TRANSLATE];
   }
 
   if (document.querySelector(SELECT)) {

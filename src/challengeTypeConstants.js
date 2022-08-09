@@ -41,6 +41,11 @@ export const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 export const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
 export const MATCH_BUTTON_NUMBER = '[class="Z7UoT _2S0Zh _2TrnF"]';
 
+export const TYPE_NAME = 'name';
+export const NAME = '[data-test="challenge challenge-name"]';
+export const NAME_PROMPT = '[data-test="challenge-header"]';
+export const NAME_TEXTBOX = '[data-test="challenge-text-input"]';
+
 export const TYPE_READCOMPREHENSION = 'readComprehension';
 export const READCOMPREHENSION_PROMPT = '[data-test="hint-token"]';
 export const READCOMPREHENSION = '[data-test="challenge challenge-readComprehension"]';
