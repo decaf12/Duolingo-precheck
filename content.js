@@ -14,6 +14,11 @@ const COMPLETEREVERSETRANSLATION_PROMPT = '[data-test="hint-token"]';
 const COMPLETEREVERSETRANSLATION_TEXTBOX = '[class="_3f_Q3 _2FKqf _2ti2i"]';
 const COMPLETEREVERSETRANSLATION_BLANK = '[data-test="challenge-text-input"]';
 
+const TYPE_DEFINITION = 'definition';
+const DEFINITION = '[data-test="challenge challenge-definition"]';
+const DEFINITION_PROMPT = '[class="_38Get _2Hg6H _1dBSx _3slGi"]';
+const DEFINITION_CHOICES = '[data-test="challenge-choice"]';
+
 const TYPE_FORM = 'form';
 const FORM = '[data-test="challenge challenge-form"]';
 const FORM_PROMPT = '[class="_2SfAl _2Hg6H"]';
@@ -101,6 +106,16 @@ function makeSubmission(extraInfo = null) {
     const choices = Array.from(document.querySelectorAll(ASSIST_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     return [challengePrompt, choiceID, TYPE_ASSIST];
+  }
+
+  if (document.querySelector(DEFINITION)) {
+    const challengePrompt = document.querySelectorAll(DEFINITION_PROMPT).textContent;
+    const choices = Array.from(document.querySelectorAll(DEFINITION_CHOICES));
+    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    console.log(`challenge prompt: ${challengePrompt}`);
+    console.log(`choices: ${choices}`);
+    console.log(`choice ID: ${choiceID}`);
+    return [challengePrompt, choiceID, TYPE_DEFINITION];
   }
 
   if (document.querySelector(FORM)) {

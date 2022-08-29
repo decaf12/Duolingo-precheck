@@ -62,6 +62,14 @@ export function addToKey(answerKey, challenges) {
           break;
         }
 
+        case constants.TYPE_DEFINITION: {
+          challengePrompt = `What does "${challenge.phraseToDefine}" mean?`;
+          value = challenge.correctIndex;
+          console.log(`Definition prompt loaded: ${challengePrompt}`);
+          console.log(`Definition choice loaded: ${value}`);
+          break;
+        }
+
         case constants.TYPE_FORM: {
           challengePrompt = challenge.promptPieces.join('');
           value = challenge.correctIndex;

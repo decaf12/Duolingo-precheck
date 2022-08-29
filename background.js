@@ -330,6 +330,8 @@ const IGNORED_CHARACTERS = /[_'\-\s,.?!]/g;
 
 const TYPE_ASSIST = 'assist';
 
+const TYPE_DEFINITION = 'definition';
+
 const TYPE_FORM = 'form';
 
 const TYPE_GAPFILL = 'gapFill';
@@ -395,6 +397,14 @@ function addToKey(answerKey, challenges) {
         case TYPE_ASSIST: {
           challengePrompt = `How do you say "${challenge.prompt}"?`;
           value = challenge.correctIndex;
+          break;
+        }
+
+        case TYPE_DEFINITION: {
+          challengePrompt = `What does "${challenge.phraseToDefine}" mean?`;
+          value = challenge.correctIndex;
+          console.log(`Definition prompt loaded: ${challengePrompt}`);
+          console.log(`Definition choice loaded: ${value}`);
           break;
         }
 

@@ -19,6 +19,11 @@ export const COMPLETEREVERSETRANSLATION_TEXTBOX = '[class="_3f_Q3 _2FKqf _2ti2i"
 export const COMPLETEREVERSETRANSLATION_BLANK = '[data-test="challenge-text-input"]';
 export const COMPLETEREVERSETRANSLATION_PLACEHOLDER = '[class="caPDQ"]';
 
+export const TYPE_DEFINITION = 'definition';
+export const DEFINITION = '[data-test="challenge challenge-definition"]';
+export const DEFINITION_PROMPT = '[class="_38Get _2Hg6H _1dBSx _3slGi"]';
+export const DEFINITION_CHOICES = '[data-test="challenge-choice"]';
+
 export const TYPE_FORM = 'form';
 export const FORM = '[data-test="challenge challenge-form"]';
 export const FORM_PROMPT = '[class="_2SfAl _2Hg6H"]';
