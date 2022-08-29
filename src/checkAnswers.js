@@ -63,10 +63,18 @@ export function addToKey(answerKey, challenges) {
         }
 
         case constants.TYPE_DEFINITION: {
-          challengePrompt = `What does "${challenge.phraseToDefine}" mean?`;
+          challengePrompt = `What does \u0022${challenge.phraseToDefine}\u0022 mean?`; /* u0022 is the stright quotation mark */
           value = challenge.correctIndex;
           console.log(`Definition prompt loaded: ${challengePrompt}`);
           console.log(`Definition choice loaded: ${value}`);
+          break;
+        }
+
+        case constants.TYPE_DIALOGUE: {
+          challengePrompt = challenge.choices;
+          value = challenge.correctIndex;
+          console.log(`Dialogue prompt loaded: ${challengePrompt}`);
+          console.log(`Dialogue choice loaded: ${value}`);
           break;
         }
 

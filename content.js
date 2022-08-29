@@ -3,7 +3,7 @@ const SUBMISSION_BUTTON_SPAN = '[class="_13HXc"]';
 const SKIP_CHECKING_TRUE = 'skip checking: true';
 const SKIP_CHECKING_FALSE = 'skip checking: false';
 
-const IGNORED_CHARACTERS = /[_'\-\s,.?!]/g;
+const IGNORED_CHARACTERS = /[_'\-\s,.?!;]/g;
 
 const TYPE_ASSIST = 'assist';
 const ASSIST = '[data-test="challenge challenge-assist"]';
@@ -18,6 +18,11 @@ const TYPE_DEFINITION = 'definition';
 const DEFINITION = '[data-test="challenge challenge-definition"]';
 const DEFINITION_PROMPT = '[class="_38Get _2Hg6H _1dBSx _3slGi"]';
 const DEFINITION_CHOICES = '[data-test="challenge-choice"]';
+
+const TYPE_DIALOGUE = 'dialogue';
+const DIALOGUE = '[data-test="challenge challenge-dialogue"]';
+const DIALOGUE_CHOICES = '[data-test="challenge-choice"]';
+const DIALOGUE_CHOICE_TEXT = '[data-test="challenge-judge-text"]';
 
 const TYPE_FORM = 'form';
 const FORM = '[data-test="challenge challenge-form"]';
@@ -109,13 +114,23 @@ function makeSubmission(extraInfo = null) {
   }
 
   if (document.querySelector(DEFINITION)) {
-    const challengePrompt = document.querySelectorAll(DEFINITION_PROMPT).textContent;
+    const challengePrompt = document.querySelector(DEFINITION_PROMPT).textContent;
     const choices = Array.from(document.querySelectorAll(DEFINITION_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     console.log(`challenge prompt: ${challengePrompt}`);
     console.log(`choices: ${choices}`);
     console.log(`choice ID: ${choiceID}`);
     return [challengePrompt, choiceID, TYPE_DEFINITION];
+  }
+
+  if (document.querySelector(DIALOGUE)) {
+    const challengePrompt = Array.from(document.querySelectorAll(DIALOGUE_CHOICE_TEXT));
+    const choices = Array.from(document.querySelectorAll(DIALOGUE_CHOICES));
+    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    console.log(`challenge prompt: ${challengePrompt}`);
+    console.log(`choices: ${choices}`);
+    console.log(`choice ID: ${choiceID}`);
+    return [challengePrompt, choiceID, TYPE_DIALOGUE];
   }
 
   if (document.querySelector(FORM)) {

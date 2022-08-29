@@ -4,8 +4,9 @@ export const SUBMISSION_BUTTON_SPAN = '[class="_13HXc"]';
 export const SKIP_CHECKING_TRUE = 'skip checking: true';
 export const SKIP_CHECKING_FALSE = 'skip checking: false';
 
-export const IGNORED_CHARACTERS = /[_'\-\s,.?!]/g;
-export const IGNORED_CHARACTERS_STR = "_'-,.?!";
+export const IGNORED_CHARACTERS = /[_'\-\s,.?!;]/g;
+export const IGNORED_CHARACTERS_STR = "_'-,.?!;";
+export const STRAIGHT_QUOTE = String.fromCharCode(34);
 
 export const TYPE_ASSIST = 'assist';
 export const ASSIST = '[data-test="challenge challenge-assist"]';
@@ -23,6 +24,11 @@ export const TYPE_DEFINITION = 'definition';
 export const DEFINITION = '[data-test="challenge challenge-definition"]';
 export const DEFINITION_PROMPT = '[class="_38Get _2Hg6H _1dBSx _3slGi"]';
 export const DEFINITION_CHOICES = '[data-test="challenge-choice"]';
+
+export const TYPE_DIALOGUE = 'dialogue';
+export const DIALOGUE = '[data-test="challenge challenge-dialogue"]';
+export const DIALOGUE_CHOICES = '[data-test="challenge-choice"]';
+export const DIALOGUE_CHOICE_TEXT = '[data-test="challenge-judge-text"]';
 
 export const TYPE_FORM = 'form';
 export const FORM = '[data-test="challenge challenge-form"]';

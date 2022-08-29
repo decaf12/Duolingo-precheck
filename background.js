@@ -326,11 +326,13 @@ TSMap_1 = typescriptMap.TSMap = TSMap;
 const SKIP_CHECKING_TRUE = 'skip checking: true';
 const SKIP_CHECKING_FALSE = 'skip checking: false';
 
-const IGNORED_CHARACTERS = /[_'\-\s,.?!]/g;
+const IGNORED_CHARACTERS = /[_'\-\s,.?!;]/g;
 
 const TYPE_ASSIST = 'assist';
 
 const TYPE_DEFINITION = 'definition';
+
+const TYPE_DIALOGUE = 'dialogue';
 
 const TYPE_FORM = 'form';
 
@@ -401,10 +403,18 @@ function addToKey(answerKey, challenges) {
         }
 
         case TYPE_DEFINITION: {
-          challengePrompt = `What does "${challenge.phraseToDefine}" mean?`;
+          challengePrompt = `What does \u0022${challenge.phraseToDefine}\u0022 mean?`; /* u0022 is the stright quotation mark */
           value = challenge.correctIndex;
           console.log(`Definition prompt loaded: ${challengePrompt}`);
           console.log(`Definition choice loaded: ${value}`);
+          break;
+        }
+
+        case TYPE_DIALOGUE: {
+          challengePrompt = challenge.choices;
+          value = challenge.correctIndex;
+          console.log(`Dialogue prompt loaded: ${challengePrompt}`);
+          console.log(`Dialogue choice loaded: ${value}`);
           break;
         }
 

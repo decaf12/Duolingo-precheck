@@ -23,13 +23,23 @@ export default function makeSubmission(extraInfo = null) {
   }
 
   if (document.querySelector(constants.DEFINITION)) {
-    const challengePrompt = document.querySelectorAll(constants.DEFINITION_PROMPT).textContent;
+    const challengePrompt = document.querySelector(constants.DEFINITION_PROMPT).textContent;
     const choices = Array.from(document.querySelectorAll(constants.DEFINITION_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-    console.log(`challenge prompt: ${challengePrompt}`)
+    console.log(`challenge prompt: ${challengePrompt}`);
     console.log(`choices: ${choices}`);
     console.log(`choice ID: ${choiceID}`);
     return [challengePrompt, choiceID, constants.TYPE_DEFINITION];
+  }
+
+  if (document.querySelector(constants.DIALOGUE)) {
+    const challengePrompt = Array.from(document.querySelectorAll(constants.DIALOGUE_CHOICE_TEXT));
+    const choices = Array.from(document.querySelectorAll(constants.DIALOGUE_CHOICES));
+    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    console.log(`challenge prompt: ${challengePrompt}`);
+    console.log(`choices: ${choices}`);
+    console.log(`choice ID: ${choiceID}`);
+    return [challengePrompt, choiceID, constants.TYPE_DIALOGUE];
   }
 
   if (document.querySelector(constants.FORM)) {
