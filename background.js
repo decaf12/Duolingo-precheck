@@ -1,4 +1,4 @@
-import { CHALLENGE_URL_PATTERN, CHECKPOINT_URL_PATTERN, CHALLENGE_URL_FRONTEND_PATTERN } from './constants.js';
+import { CHALLENGE_URL_PATTERN, CHECKPOINT_URL_PATTERN, CHALLENGE_URL_LESSON_PATTERN, CHALLENGE_URL_REVIEW_PATTERN, CHALLENGE_URL_FRONTEND_PATTERN } from './constants.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -631,7 +631,12 @@ function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
 
   browser.webRequest.onHeadersReceived.addListener(
     getAnswerKey,
-    { urls: [CHALLENGE_URL_PATTERN, CHECKPOINT_URL_PATTERN] },
+    {
+      urls: [CHALLENGE_URL_PATTERN,
+        CHECKPOINT_URL_PATTERN,
+        CHALLENGE_URL_LESSON_PATTERN,
+        CHALLENGE_URL_REVIEW_PATTERN],
+    },
     ['blocking'],
   );
 
@@ -649,7 +654,10 @@ browser.tabs.onUpdated.addListener(
     );
   },
   {
-    urls: [CHALLENGE_URL_FRONTEND_PATTERN, CHECKPOINT_URL_PATTERN],
+    urls: [CHALLENGE_URL_FRONTEND_PATTERN,
+      CHECKPOINT_URL_PATTERN,
+      CHALLENGE_URL_LESSON_PATTERN,
+      CHALLENGE_URL_REVIEW_PATTERN],
     properties: ['url'],
   },
 );

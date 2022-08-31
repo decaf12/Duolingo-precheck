@@ -1,6 +1,13 @@
 import * as constants from './challengeTypeConstants';
 
 export default function makeSubmission(extraInfo = null) {
+  if (document.querySelector(constants.ASSIST)) {
+    const challengePrompt = document.querySelector(constants.ASSIST_PROMPT).textContent;
+    const choices = Array.from(document.querySelectorAll(constants.ASSIST_CHOICES));
+    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    return [challengePrompt, choiceID, constants.TYPE_ASSIST];
+  }
+
   if (document.querySelector(constants.COMPLETEREVERSETRANSLATION)) {
     // eslint-disable-next-line max-len
     const promptArray = Array.from(document.querySelectorAll(constants.COMPLETEREVERSETRANSLATION_PROMPT));
@@ -12,14 +19,9 @@ export default function makeSubmission(extraInfo = null) {
       return blank?.value || element.textContent;
     });
     const answer = answerArray.join('');
+    console.log(`completeReverseTranslation prompt: ${challengePrompt}`);
+    console.log(`completeReverseTranslation answer: ${answer}`);
     return [challengePrompt, answer, constants.TYPE_TRANSLATE];
-  }
-
-  if (document.querySelector(constants.ASSIST)) {
-    const challengePrompt = document.querySelector(constants.ASSIST_PROMPT).textContent;
-    const choices = Array.from(document.querySelectorAll(constants.ASSIST_CHOICES));
-    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-    return [challengePrompt, choiceID, constants.TYPE_ASSIST];
   }
 
   if (document.querySelector(constants.DEFINITION)) {

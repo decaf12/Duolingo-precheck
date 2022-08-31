@@ -92,6 +92,13 @@ const TYPECOMPLETETABLE_ANSWER = '[class="caPDQ"]';
 const TYPECOMPLETETABLE_SUBMISSION = '[class="Y5JxA _17nEt"]';
 
 function makeSubmission(extraInfo = null) {
+  if (document.querySelector(ASSIST)) {
+    const challengePrompt = document.querySelector(ASSIST_PROMPT).textContent;
+    const choices = Array.from(document.querySelectorAll(ASSIST_CHOICES));
+    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    return [challengePrompt, choiceID, TYPE_ASSIST];
+  }
+
   if (document.querySelector(COMPLETEREVERSETRANSLATION)) {
     // eslint-disable-next-line max-len
     const promptArray = Array.from(document.querySelectorAll(COMPLETEREVERSETRANSLATION_PROMPT));
@@ -103,14 +110,9 @@ function makeSubmission(extraInfo = null) {
       return blank?.value || element.textContent;
     });
     const answer = answerArray.join('');
+    console.log(`completeReverseTranslation prompt: ${challengePrompt}`);
+    console.log(`completeReverseTranslation answer: ${answer}`);
     return [challengePrompt, answer, TYPE_TRANSLATE];
-  }
-
-  if (document.querySelector(ASSIST)) {
-    const challengePrompt = document.querySelector(ASSIST_PROMPT).textContent;
-    const choices = Array.from(document.querySelectorAll(ASSIST_CHOICES));
-    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-    return [challengePrompt, choiceID, TYPE_ASSIST];
   }
 
   if (document.querySelector(DEFINITION)) {
