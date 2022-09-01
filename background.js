@@ -404,6 +404,7 @@ function addToKey(answerKey, challenges) {
 
         case TYPE_DEFINITION: {
           challengePrompt = `What does ${challenge.phraseToDefine} mean?`;
+          value = challenge.correctIndex;
           console.log(`Definition prompt loaded: ${challengePrompt}`);
           console.log(`Definition choice loaded: ${value}`);
           break;
