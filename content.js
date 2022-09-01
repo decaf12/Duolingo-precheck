@@ -116,7 +116,7 @@ function makeSubmission(extraInfo = null) {
   }
 
   if (document.querySelector(DEFINITION)) {
-    const challengePrompt = document.querySelector(DEFINITION_PROMPT).textContent;
+    const challengePrompt = document.querySelector(DEFINITION_PROMPT).textContent.replace(/[“”]+/g, '');
     const choices = Array.from(document.querySelectorAll(DEFINITION_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     console.log(`challenge prompt: ${challengePrompt}`);
@@ -126,7 +126,8 @@ function makeSubmission(extraInfo = null) {
   }
 
   if (document.querySelector(DIALOGUE)) {
-    const challengePrompt = Array.from(document.querySelectorAll(DIALOGUE_CHOICE_TEXT));
+    const promptArray = Array.from(document.querySelectorAll(DIALOGUE_CHOICE_TEXT));
+    const challengePrompt = promptArray.map((x) => (x.textContent)).join(',');
     const choices = Array.from(document.querySelectorAll(DIALOGUE_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     console.log(`challenge prompt: ${challengePrompt}`);

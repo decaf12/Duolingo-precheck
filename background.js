@@ -403,8 +403,7 @@ function addToKey(answerKey, challenges) {
         }
 
         case TYPE_DEFINITION: {
-          challengePrompt = `What does \u0022${challenge.phraseToDefine}\u0022 mean?`; /* u0022 is the stright quotation mark */
-          value = challenge.correctIndex;
+          challengePrompt = `What does ${challenge.phraseToDefine} mean?`;
           console.log(`Definition prompt loaded: ${challengePrompt}`);
           console.log(`Definition choice loaded: ${value}`);
           break;
