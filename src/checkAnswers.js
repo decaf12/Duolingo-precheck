@@ -44,24 +44,45 @@ function startsWithAt(target, candidate, startPos, strictCmp) {
   return true;
 }
 
+/**
+ * @param {TSMap} answerKey: hashmap with exercise prompt and type as the key,
+ *                           and the answer/possible answers as the value.
+ * @param {object} challenges: the "challenges" object within a DL lesson.
+ */
 export function addToKey(answerKey, challenges) {
+  // Load each challenge individually
   challenges.forEach((challenge) => {
     let challengePrompt;
     let value;
 
+    /* The key in each answerKey entry is "<challengePrompt>: <challenge type>"
+       The value in each entry is dependent on the challenge type. */
+
     if ('grader' in challenge) {
+      /* If the challenge object has the 'grader' property, then it can be marked
+        as a "translate" exercise, regardless of its actual type.
+        "Translate" exercises are graded with a graph representing acceptable answers. */
       answerKey.set(`${challenge.prompt}: ${constants.TYPE_TRANSLATE}`, challenge.grader.vertices);
       console.log(`Translate prompt loaded: ${challenge.prompt}`);
     }
 
+    /* "Translate" exercises are only graded with graphs. Other types of exercises may be
+        graded by graphs and/or another method. */
     if (challenge.type !== constants.TYPE_TRANSLATE) {
+      // The exercise type is found in the "type" property of each challenge object.
       switch (challenge.type) {
+        /* assist: multiple choice
+            challengePrompt: the prompt displayed to the user
+            value: the correct choice */
         case constants.TYPE_ASSIST: {
           challengePrompt = `How do you say "${challenge.prompt}"?`;
           value = challenge.correctIndex;
           break;
         }
 
+        /* definition: multiple choice
+            challengePrompt: the prompt displayed to the user
+            value: the correct choice */
         case constants.TYPE_DEFINITION: {
           challengePrompt = `What does ${challenge.phraseToDefine} mean?`;
           value = challenge.correctIndex;
@@ -70,6 +91,9 @@ export function addToKey(answerKey, challenges) {
           break;
         }
 
+        /* dialogue: multiple choice
+            challengePrompt: the prompt displayed to the user
+            value: the correct choice */
         case constants.TYPE_DIALOGUE: {
           challengePrompt = challenge.choices;
           value = challenge.correctIndex;
@@ -78,18 +102,28 @@ export function addToKey(answerKey, challenges) {
           break;
         }
 
+        /* form: multiple choice
+            challengePrompt: the prompt displayed to the user
+            value: the correct choice */
         case constants.TYPE_FORM: {
           challengePrompt = challenge.promptPieces.join('');
           value = challenge.correctIndex;
           break;
         }
 
+        /* gapFill: multiple choice
+            challengePrompt: the prompt displayed to the user
+            value: the correct choice */
         case constants.TYPE_GAPFILL: {
           challengePrompt = challenge.displayTokens.map((x) => (x.isBlank ? '' : x.text)).join('');
           value = challenge.correctIndex;
           break;
         }
 
+        /* match: matching native language phrases in one column
+                  with target language phrases in a second column.
+            challengePrompt: the native language phrases in sorted order
+            value: a hashmap mapping native language phrases to target language phrases */
         case constants.TYPE_MATCH: {
           challengePrompt = challenge.pairs.map((x) => x.learningToken).sort().join(' ');
           value = new TSMap();
@@ -99,6 +133,9 @@ export function addToKey(answerKey, challenges) {
           break;
         }
 
+        /* judge: multiple choice
+            challengePrompt: the prompt displayed to the user
+            value: the correct choice */
         case constants.TYPE_JUDGE: {
           challengePrompt = challenge.prompt;
           // eslint-disable-next-line prefer-destructuring
@@ -106,6 +143,9 @@ export function addToKey(answerKey, challenges) {
           break;
         }
 
+        /* readComprehension: multiple choice
+            challengePrompt: the prompt displayed to the user
+            value: the correct choice */
         case constants.TYPE_READCOMPREHENSION: {
           challengePrompt = `${challenge.passage}${challenge.question}`;
           console.log(`Prompt loaded: ${challengePrompt}`);

@@ -596,7 +596,12 @@ function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
   let answerkeyJSON;
   const answerKey = new TSMap_1();
 
+  /**
+   * 
+   * @param {object} details:
+   */
   function getAnswerKey(details) {
+    console.log(`Details : ${JSON.stringify(details)}`);
     const filter = browser.webRequest.filterResponseData(details.requestId);
 
     filter.onstart = () => {
