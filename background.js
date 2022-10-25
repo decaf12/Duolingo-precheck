@@ -384,24 +384,45 @@ function startsWithAt(target, candidate, startPos, strictCmp) {
   return true;
 }
 
+/**
+ * @param {TSMap} answerKey: hashmap with exercise prompt and type as the key,
+ *                           and the answer/possible answers as the value.
+ * @param {object} challenges: the "challenges" object within a DL lesson.
+ */
 function addToKey(answerKey, challenges) {
+  // Load each challenge individually
   challenges.forEach((challenge) => {
     let challengePrompt;
     let value;
 
+    /* The key in each answerKey entry is "<challengePrompt>: <challenge type>"
+       The value in each entry is dependent on the challenge type. */
+
     if ('grader' in challenge) {
+      /* If the challenge object has the 'grader' property, then it can be marked
+        as a "translate" exercise, regardless of its actual type.
+        "Translate" exercises are graded with a graph representing acceptable answers. */
       answerKey.set(`${challenge.prompt}: ${TYPE_TRANSLATE}`, challenge.grader.vertices);
       console.log(`Translate prompt loaded: ${challenge.prompt}`);
     }
 
+    /* "Translate" exercises are only graded with graphs. Other types of exercises may be
+        graded by graphs and/or another method. */
     if (challenge.type !== TYPE_TRANSLATE) {
+      // The exercise type is found in the "type" property of each challenge object.
       switch (challenge.type) {
+        /* assist: multiple choice
+            challengePrompt: the prompt displayed to the user
+            value: the correct choice */
         case TYPE_ASSIST: {
           challengePrompt = `How do you say "${challenge.prompt}"?`;
           value = challenge.correctIndex;
           break;
         }
 
+        /* definition: multiple choice
+            challengePrompt: the prompt displayed to the user
+            value: the correct choice */
         case TYPE_DEFINITION: {
           challengePrompt = `What does ${challenge.phraseToDefine} mean?`;
           value = challenge.correctIndex;
@@ -410,6 +431,9 @@ function addToKey(answerKey, challenges) {
           break;
         }
 
+        /* dialogue: multiple choice
+            challengePrompt: the prompt displayed to the user
+            value: the correct choice */
         case TYPE_DIALOGUE: {
           challengePrompt = challenge.choices;
           value = challenge.correctIndex;
@@ -418,18 +442,28 @@ function addToKey(answerKey, challenges) {
           break;
         }
 
+        /* form: multiple choice
+            challengePrompt: the prompt displayed to the user
+            value: the correct choice */
         case TYPE_FORM: {
           challengePrompt = challenge.promptPieces.join('');
           value = challenge.correctIndex;
           break;
         }
 
+        /* gapFill: multiple choice
+            challengePrompt: the prompt displayed to the user
+            value: the correct choice */
         case TYPE_GAPFILL: {
           challengePrompt = challenge.displayTokens.map((x) => (x.isBlank ? '' : x.text)).join('');
           value = challenge.correctIndex;
           break;
         }
 
+        /* match: matching native language phrases in one column
+                  with target language phrases in a second column.
+            challengePrompt: the native language phrases in sorted order
+            value: a hashmap mapping native language phrases to target language phrases */
         case TYPE_MATCH: {
           challengePrompt = challenge.pairs.map((x) => x.learningToken).sort().join(' ');
           value = new TSMap_1();
@@ -439,6 +473,9 @@ function addToKey(answerKey, challenges) {
           break;
         }
 
+        /* judge: multiple choice
+            challengePrompt: the prompt displayed to the user
+            value: the correct choice */
         case TYPE_JUDGE: {
           challengePrompt = challenge.prompt;
           // eslint-disable-next-line prefer-destructuring
@@ -446,6 +483,9 @@ function addToKey(answerKey, challenges) {
           break;
         }
 
+        /* readComprehension: multiple choice
+            challengePrompt: the prompt displayed to the user
+            value: the correct choice */
         case TYPE_READCOMPREHENSION: {
           challengePrompt = `${challenge.passage}${challenge.question}`;
           console.log(`Prompt loaded: ${challengePrompt}`);
@@ -597,57 +637,102 @@ function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
   const answerKey = new TSMap_1();
 
   /**
-   * 
-   * @param {object} details:
+   * Captures lesson info from Duolingo and builds the answer key hashmap.
+   * @param {object} details: Details of the request to Duolingo for the new lesson.}
    */
   function getAnswerKey(details) {
-    console.log(`Details : ${JSON.stringify(details)}`);
     const filter = browser.webRequest.filterResponseData(details.requestId);
 
+    // Wipe the slate clean when a new lesson starts.
     filter.onstart = () => {
       answerkeyJSON = '';
       answerKey.clear();
     };
 
+    /* DL sends the answer key as a JSON. Keep appending to answerkeyJSON as
+       we receive chunks of the answer key. */
     filter.ondata = (event) => {
       const decoder = new TextDecoder('utf-8');
       answerkeyJSON += decoder.decode(event.data);
       filter.write(event.data);
     };
 
+    /* Once we have the entire answer key we can build the hashmap.
+
+       To view the answer key in the browser, bring up the console,
+       go to the "Network" tab, and search for the word "sessions".
+
+       In the latest "sessions" entry, click on the "Response" tab.
+
+       The answer key is in the "challenges" property, as well as
+       the "adaptiveChallenges" and "adaptiveInterleavedChallenged"
+       properties if they exist. */
     filter.onstop = () => {
+      // First turn the answer key JSON into an object.
       const response = JSON.parse(answerkeyJSON);
+
+      // We are only interested in the "challenges" property...
       addToKey(answerKey, response.challenges);
+
+      /* ... and the "adaptiveChallenges" and
+        "adaptiveInterleavedChallenged" properties */
       if ('adaptiveChallenges' in response) {
         addToKey(answerKey, response.adaptiveChallenges);
       }
       if ('adaptiveInterleavedChallenges' in response) {
         addToKey(answerKey, response.adaptiveInterleavedChallenges.challenges);
       }
+
+      // Disconnect the filter once we are done.
       filter.disconnect();
     };
   }
 
+  /**
+   * @param {object} req: object sent as a message from the content script. This is sent after each
+   *                      exercise, and represents the question and answer submitted by the user.
+   *                      The object has three properties:
+   *                        0) challengePrompt: prompt text for the exercise.
+   *                        1) challengeType: type of exercise. challengeType and challengePrompt
+   *                                          together form the key in the answer key hashmap.
+   *                        2) answer: user's answer
+   * @param {object} sender: unused
+   * @param {function} sendResponse: the function to pass a message back to the content script. Here
+   *                                 it returns an object with a single property "correct", which
+   *                                 is a boolean indicating whether the user's answer can be marked
+   *                                 as correct.
+   */
   function handlemessage(req, sender, sendResponse) {
+    // Call checkAnswers.checkAnswer() to mark the user's submission.
     // eslint-disable-next-line max-len
     const isCorrect = checkAnswer(answerKey, req.answer, req.challengePrompt, req.challengeType);
+
+    /* Send grading result back to the content script. The content script will send the user's
+       submission on to DL (or not) depending on the result. */
     sendResponse({ correct: isCorrect });
   }
 
+  // Build the answer key as soon as we receive the header from DL's lesson.
   browser.webRequest.onHeadersReceived.addListener(
     getAnswerKey,
+
+    /* Some DL updates break the code by changing the lessons' URL patterns.
+       Look here first if the plugin suddenly stops working. */
     {
       urls: [CHALLENGE_URL_PATTERN,
         CHECKPOINT_URL_PATTERN,
         CHALLENGE_URL_LESSON_PATTERN,
         CHALLENGE_URL_REVIEW_PATTERN],
     },
+
     ['blocking'],
   );
 
+  // Call handlemessage() every time the content script sends a message.
   browser.runtime.onMessage.addListener(handlemessage);
 }());
 
+// Inject the content script every time we start a lesson.
 browser.tabs.onUpdated.addListener(
   () => {
     browser.tabs.executeScript(
@@ -658,6 +743,7 @@ browser.tabs.onUpdated.addListener(
       },
     );
   },
+
   {
     urls: [CHALLENGE_URL_FRONTEND_PATTERN,
       CHECKPOINT_URL_PATTERN,

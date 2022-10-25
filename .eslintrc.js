@@ -21,4 +21,5 @@ module.exports = {
   rules: {
     'linebreak-style': 0,
   },
+  ignorePatterns: ['DL*.js'],
 };
