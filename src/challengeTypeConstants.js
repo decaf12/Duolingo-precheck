@@ -67,6 +67,13 @@ export const SELECT = '[data-test="challenge challenge-select"]';
 export const SELECT_PROMPT = '[data-test="challenge-header"]';
 export const SELECT_CHOICES = '[data-test="challenge-choice"]';
 
+export const TYPE_SPEAK = 'speak';
+export const SPEAK = '[data-test="challenge challenge-translate"]';
+export const SPEAK_PROMPT = '[data-test="hint-token"]';
+export const SPEAK_ANSWER_AREA = '[class="PcKtj"]';
+export const SPEAK_BUTTON = '[class="_13HXc"]';
+export const SPEAK_SELECTED_TEXT = '[data-test="challenge-tap-token-text"]';
+
 export const TYPE_TAPCLOZE = 'tapCloze';
 export const TAPCLOZE = '[data-test="challenge challenge-tapCloze"]';
 export const TAPCLOZE_PROMPT = '[data-test="hint-token"]';

@@ -492,6 +492,7 @@ function addToKey(answerKey, challenges) {
           value = challenge.correctIndex;
           break;
         }
+
         case TYPE_SELECT: {
           challengePrompt = `Which one of these is \u201C${challenge.prompt}\u201D?`; /* u201C and u201D are curly quotes */
           value = challenge.correctIndex;
