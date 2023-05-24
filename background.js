@@ -735,6 +735,7 @@ function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
 // Inject the content script every time we start a lesson.
 browser.tabs.onUpdated.addListener(
   () => {
+    console.log('Injecting content script');
     browser.tabs.executeScript(
       null,
       {
@@ -742,6 +743,7 @@ browser.tabs.onUpdated.addListener(
         runAt: 'document_end',
       },
     );
+    console.log('Content script injected');
   },
 
   {

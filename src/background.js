@@ -105,6 +105,7 @@ import * as checkAnswers from './checkAnswers';
 // Inject the content script every time we start a lesson.
 browser.tabs.onUpdated.addListener(
   () => {
+    console.log('Injecting content script');
     browser.tabs.executeScript(
       null,
       {
@@ -112,6 +113,7 @@ browser.tabs.onUpdated.addListener(
         runAt: 'document_end',
       },
     );
+    console.log('Content script injected');
   },
 
   {

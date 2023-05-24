@@ -6,21 +6,23 @@ document.addEventListener(
   'keydown',
   async (e) => {
     if (e.key === 'Enter') {
-      const queryResult = document.querySelector('.mQ0GW');
-      console.log('Query result:');
-      console.log(queryResult);
-
       const submissionButton = document.querySelector(constants.SUBMISSION_BUTTON);
       const submissionButtonSpan = submissionButton.querySelector(constants.SUBMISSION_BUTTON_SPAN);
       if (submissionButtonSpan.innerHTML !== 'Check') {
         /* The submission button can be either "Check" or "Continue".
-           If it is "continue" then just propagate the "Enter key pressed" event. */
+        If it is "continue" then just propagate the "Enter key pressed" event. */
         return;
       }
 
       // If the button is "Check" then do not propagate the keypress.
       e.preventDefault();
       e.stopImmediatePropagation();
+
+      console.log('Submission button: ');
+      console.log(submissionButton);
+      console.log(JSON.parse(JSON.stringify(submissionButton)))
+      console.log(submissionButton.onclick);
+      submissionButton.onclick();
 
       const [challengePrompt, answer, challengeType] = makeSubmission();
       const marking = await browser.runtime.sendMessage({
