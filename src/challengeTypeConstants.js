@@ -71,7 +71,9 @@ export const TYPE_SPEAK = 'speak';
 export const SPEAK = '[data-test="challenge challenge-translate"]';
 export const SPEAK_PROMPT = '[data-test="hint-token"]';
 export const SPEAK_ANSWER_AREA = '[class="PcKtj"]';
-export const SPEAK_BUTTON = '[class="_13HXc"]';
+export const SPEAK_BUTTON_CLICK = '[class="_13HXc"]';
+export const SPEAK_BUTTON_TYPE = '[class="_2J2do"]';
+export const SPEAK_BUTTON = `${SPEAK_BUTTON_CLICK}, ${SPEAK_BUTTON_TYPE}`;
 export const SPEAK_SELECTED_TEXT = '[data-test="challenge-tap-token-text"]';
 
 export const TYPE_TAPCLOZE = 'tapCloze';
@@ -84,7 +86,9 @@ export const TYPE_TAPCOMPLETE = 'tapComplete';
 export const TAPCOMPLETE = '[data-test="challenge challenge-tapComplete"]';
 export const TAPCOMPLETE_PROMPT = '[data-test="hint-token"]';
 export const TAPCOMPLETE_SELECTED = '[class="_2Z2xv"]';
-export const TAPCOMPLETE_SELECTED_TEXT = '[data-test="challenge-tap-token-text"]';
+export const TAPCOMPLETE_SELECTED_TEXT_CLICK = '[data-test="challenge-tap-token-text"]';
+export const TAPCOMPLETE_SELECTED_TEXT_TYPE = '[class="_2J2do"]';
+export const TAPCOMPLETE_SELECTED_TEXT = `${TAPCOMPLETE_SELECTED_TEXT_CLICK}, ${TAPCOMPLETE_SELECTED_TEXT_TYPE}`;
 
 export const TYPE_TAPCOMPLETETABLE = 'tapCompleteTable';
 export const TAPCOMPLETETABLE = '[data-test="challenge challenge-tapCompleteTable"]';

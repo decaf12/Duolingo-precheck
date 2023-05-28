@@ -100,7 +100,7 @@ export default function makeSubmission(extraInfo = null) {
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     return [challengePrompt, choiceID, constants.TYPE_READCOMPREHENSION];
   }
-  
+
   if (document.querySelector(constants.TAPCLOZE)) {
     const promptArray = Array.from(document.querySelectorAll(constants.TAPCLOZE_PROMPT));
     const challengePrompt = promptArray.map((x) => x.textContent).join('');
@@ -108,7 +108,7 @@ export default function makeSubmission(extraInfo = null) {
     const chosenButtonText = chosenButton.querySelector(constants.TAPCLOZE_BUTTON_TEXT).textContent;
     return [challengePrompt, chosenButtonText, constants.TYPE_TAPCLOZE];
   }
-  
+
   if (document.querySelector(constants.TAPCOMPLETE)) {
     const promptArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETE_PROMPT));
     const challengePrompt = promptArray.map((x) => x.textContent).filter((x) => x !== ' ').join(' ');
@@ -118,16 +118,16 @@ export default function makeSubmission(extraInfo = null) {
     console.log(`Answer submitted: ${selectionText}`);
     return [challengePrompt, selectionText, constants.TYPE_TAPCOMPLETE];
   }
-  
+
   if (document.querySelector(constants.TAPCOMPLETETABLE)) {
     // eslint-disable-next-line max-len
     const promptArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETETABLE_HINT_TOKENS)).slice(1);
     const challengePrompt = promptArray.map((x) => x.textContent).sort();
-    
+
     const choiceArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETETABLE_CHOICES));
     // eslint-disable-next-line max-len
     const choices = choiceArray.map((x) => x.querySelector(constants.TAPCOMPLETETABLE_CHOICE_TEXT).textContent).join();
-    
+
     return [challengePrompt, choices, constants.TYPE_TAPCOMPLETETABLE];
   }
 
@@ -140,12 +140,13 @@ export default function makeSubmission(extraInfo = null) {
       const selectionArray = Array.from(answerArea.querySelectorAll(constants.SPEAK_BUTTON));
       const selectionText = selectionArray.map((button) => button.textContent).join(' ');
       console.log(`Speak prompt: ${challengePrompt}`);
+      console.log(`Speak array: ${selectionArray}`);
       console.log(`Speak answer: ${selectionText}`);
       return [challengePrompt, selectionText, constants.TYPE_TRANSLATE];
-    } else {
-      console.log(`Translate prompt submitted: ${challengePrompt}`);
-      return [challengePrompt, answer, constants.TYPE_TRANSLATE];
     }
+
+    console.log(`Translate prompt submitted: ${challengePrompt}`);
+    return [challengePrompt, answer, constants.TYPE_TRANSLATE];
   }
 
   if (document.querySelector(constants.TYPECLOZE)) {
