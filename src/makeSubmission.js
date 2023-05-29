@@ -85,11 +85,17 @@ export default function makeSubmission(extraInfo = null) {
     return [challengePrompt, answer, constants.TYPE_TRANSLATE];
   }
 
-  if (document.querySelector(constants.SELECT)) {
-    const challengePrompt = document.querySelector(constants.SELECT_PROMPT).textContent;
-    const choices = Array.from(document.querySelectorAll(constants.SELECT_CHOICES));
-    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-    return [challengePrompt, choiceID, constants.TYPE_SELECT];
+  if (document.querySelector(constants.PARTIALREVERSETRANSLATE)) {
+    console.log('partialReverseTranslate detected');
+    const promptArray = Array.from(document.querySelectorAll(constants.PARTIALREVERSETRANSLATE_PROMPT));
+    const challengePrompt = promptArray.map((x) => x.textContent).join('');
+    console.log(`Prompt submitted: ${challengePrompt}`);
+    const textbox = document.querySelector(constants.PARTIALREVERSETRANSLATE_TEXTBOX);
+    const answerArray = Array.from(textbox.querySelectorAll(constants.PARTIALREVERSETRANSLATE_TEXT));
+    console.log(`answerArrray: ${answerArray}`);
+    const answer = answerArray.map((x) => x.textContent).join('');
+    console.log(`answer: ${answer}`);
+    return [challengePrompt, answer, constants.TYPE_TRANSLATE];
   }
 
   if (document.querySelector(constants.READCOMPREHENSION)) {
@@ -100,6 +106,14 @@ export default function makeSubmission(extraInfo = null) {
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     return [challengePrompt, choiceID, constants.TYPE_READCOMPREHENSION];
   }
+
+  if (document.querySelector(constants.SELECT)) {
+    const challengePrompt = document.querySelector(constants.SELECT_PROMPT).textContent;
+    const choices = Array.from(document.querySelectorAll(constants.SELECT_CHOICES));
+    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    return [challengePrompt, choiceID, constants.TYPE_SELECT];
+  }
+
 
   if (document.querySelector(constants.TAPCLOZE)) {
     const promptArray = Array.from(document.querySelectorAll(constants.TAPCLOZE_PROMPT));

@@ -49,9 +49,13 @@ const NAME_PROMPT = '[data-test="challenge-header"]';
 const NAME_TEXTBOX = '[data-test="challenge-text-input"]';
 
 const TYPE_READCOMPREHENSION = 'readComprehension';
-const READCOMPREHENSION_PROMPT = '[data-test="hint-token"]';
 const READCOMPREHENSION = '[data-test="challenge challenge-readComprehension"]';
+const READCOMPREHENSION_PROMPT = '[data-test="hint-token"]';
 const READCOMPREHENSION_BUTTONS = '[data-test="challenge-choice"]';
+const PARTIALREVERSETRANSLATE = '[data-test="challenge challenge-partialReverseTranslate"]';
+const PARTIALREVERSETRANSLATE_PROMPT = '[data-test="hint-token"]';
+const PARTIALREVERSETRANSLATE_TEXTBOX = '[class="_1fYGK _2FKqf _2ti2i"]';
+const PARTIALREVERSETRANSLATE_TEXT = 'span:not([class]), [contenteditable="true"]';
 
 const TYPE_SELECT = 'select';
 const SELECT = '[data-test="challenge challenge-select"]';
@@ -182,11 +186,17 @@ function makeSubmission(extraInfo = null) {
     return [challengePrompt, answer, TYPE_TRANSLATE];
   }
 
-  if (document.querySelector(SELECT)) {
-    const challengePrompt = document.querySelector(SELECT_PROMPT).textContent;
-    const choices = Array.from(document.querySelectorAll(SELECT_CHOICES));
-    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-    return [challengePrompt, choiceID, TYPE_SELECT];
+  if (document.querySelector(PARTIALREVERSETRANSLATE)) {
+    console.log('partialReverseTranslate detected');
+    const promptArray = Array.from(document.querySelectorAll(PARTIALREVERSETRANSLATE_PROMPT));
+    const challengePrompt = promptArray.map((x) => x.textContent).join('');
+    console.log(`Prompt submitted: ${challengePrompt}`);
+    const textbox = document.querySelector(PARTIALREVERSETRANSLATE_TEXTBOX);
+    const answerArray = Array.from(textbox.querySelectorAll(PARTIALREVERSETRANSLATE_TEXT));
+    console.log(`answerArrray: ${answerArray}`);
+    const answer = answerArray.map((x) => x.textContent).join('');
+    console.log(`answer: ${answer}`);
+    return [challengePrompt, answer, TYPE_TRANSLATE];
   }
 
   if (document.querySelector(READCOMPREHENSION)) {
@@ -197,6 +207,14 @@ function makeSubmission(extraInfo = null) {
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     return [challengePrompt, choiceID, TYPE_READCOMPREHENSION];
   }
+
+  if (document.querySelector(SELECT)) {
+    const challengePrompt = document.querySelector(SELECT_PROMPT).textContent;
+    const choices = Array.from(document.querySelectorAll(SELECT_CHOICES));
+    const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    return [challengePrompt, choiceID, TYPE_SELECT];
+  }
+
 
   if (document.querySelector(TAPCLOZE)) {
     const promptArray = Array.from(document.querySelectorAll(TAPCLOZE_PROMPT));

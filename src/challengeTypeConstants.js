@@ -58,9 +58,15 @@ export const NAME_PROMPT = '[data-test="challenge-header"]';
 export const NAME_TEXTBOX = '[data-test="challenge-text-input"]';
 
 export const TYPE_READCOMPREHENSION = 'readComprehension';
-export const READCOMPREHENSION_PROMPT = '[data-test="hint-token"]';
 export const READCOMPREHENSION = '[data-test="challenge challenge-readComprehension"]';
+export const READCOMPREHENSION_PROMPT = '[data-test="hint-token"]';
 export const READCOMPREHENSION_BUTTONS = '[data-test="challenge-choice"]';
+
+export const TYPE_PARTIALREVERSETRANSLATE = 'partialReverseTranslate';
+export const PARTIALREVERSETRANSLATE = '[data-test="challenge challenge-partialReverseTranslate"]';
+export const PARTIALREVERSETRANSLATE_PROMPT = '[data-test="hint-token"]';
+export const PARTIALREVERSETRANSLATE_TEXTBOX = '[class="_1fYGK _2FKqf _2ti2i"]';
+export const PARTIALREVERSETRANSLATE_TEXT = 'span:not([class]), [contenteditable="true"]';
 
 export const TYPE_SELECT = 'select';
 export const SELECT = '[data-test="challenge challenge-select"]';
