@@ -45,6 +45,14 @@ export const JUDGE = '[data-test="challenge challenge-judge"]';
 export const JUDGE_PROMPT = '[class="_3-JBe"]';
 export const JUDGE_CHOICES = '[data-test="challenge-choice"]';
 
+export const TYPE_LISTENLAP = 'listenTap';
+export const LISTENTAP = '[data-test="challenge challenge-translate"]';
+export const LISTENTAP_PROMPT = '[data-test="hint-token"]';
+export const LISTENTAP_ANSWER_AREA = '[class="PcKtj"]';
+export const LISTENTAP_BUTTON_CLICK = '[class="_13HXc"]';
+export const LISTENTAP_BUTTON_TYPE = '[class="_2J2do"]';
+export const LISTENTAP_BUTTON = `${LISTENTAP_BUTTON_CLICK}, ${LISTENTAP_BUTTON_TYPE}`;
+
 export const TYPE_MATCH = 'match';
 export const MATCH = '[data-test="challenge challenge-match"]';
 export const MATCH_BUTTONS = '[class="_35eLX"]';

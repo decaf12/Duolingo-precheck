@@ -20,7 +20,7 @@ document.addEventListener(
 
       console.log('Submission button: ');
       console.log(submissionButton);
-      console.log(JSON.parse(JSON.stringify(submissionButton)))
+      console.log(JSON.parse(JSON.stringify(submissionButton)));
       console.log(submissionButton.onclick);
       submissionButton.onclick();
 

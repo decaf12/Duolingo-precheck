@@ -62,9 +62,7 @@ const SELECT = '[data-test="challenge challenge-select"]';
 const SELECT_PROMPT = '[data-test="challenge-header"]';
 const SELECT_CHOICES = '[data-test="challenge-choice"]';
 const SPEAK_ANSWER_AREA = '[class="PcKtj"]';
-const SPEAK_BUTTON_CLICK = '[class="_13HXc"]';
-const SPEAK_BUTTON_TYPE = '[class="_2J2do"]';
-const SPEAK_BUTTON = `${SPEAK_BUTTON_CLICK}, ${SPEAK_BUTTON_TYPE}`;
+const SPEAK_SELECTED_TEXT = '[data-test="challenge-tap-token-text"]';
 
 const TYPE_TAPCLOZE = 'tapCloze';
 const TAPCLOZE = '[data-test="challenge challenge-tapCloze"]';
@@ -115,6 +113,8 @@ function makeSubmission(extraInfo = null) {
     const challengePrompt = promptArray.map((x) => x.textContent).join('');
     // eslint-disable-next-line max-len
     const textbox = Array.from(document.querySelector(COMPLETEREVERSETRANSLATION_TEXTBOX).children);
+    console.log('completeReverseTranslation textbox:');
+    console.log(textbox);
     const answerArray = textbox.map((element) => {
       const blank = element.querySelector(COMPLETEREVERSETRANSLATION_BLANK);
       return blank?.value || element.textContent;
@@ -168,6 +168,19 @@ function makeSubmission(extraInfo = null) {
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
     return [challengePrompt, choiceID, TYPE_JUDGE];
   }
+
+  // if (document.querySelector(constants.LISTENTAP)) {
+  //   console.log('listenTap detected');
+  //   const promptArray = Array.from(document.querySelectorAll(constants.LISTENTAP_PROMPT));
+  //   const challengePrompt = promptArray.map((x) => x.textContent).join('');
+  //   const answerArea = document.querySelector(constants.LISTENTAP_ANSWER_AREA);
+  //   const selectionArray = Array.from(answerArea.querySelectorAll(constants.LISTENTAP_BUTTON));
+  //   const selectionText = selectionArray.map((button) => button.textContent).join(' ');
+  //   console.log(`ListenTap prompt: ${challengePrompt}`);
+  //   console.log(`ListenTap array: ${selectionArray}`);
+  //   console.log(`ListenTap answer: ${selectionText}`);
+  //   return [challengePrompt, selectionText, constants.TYPE_TRANSLATE];
+  // }
 
   if (document.querySelector(MATCH)) {
     const buttonArray = Array.from(document.querySelectorAll(MATCH_BUTTON_TEXT));
@@ -252,7 +265,7 @@ function makeSubmission(extraInfo = null) {
     const answer = document.querySelector(TRANSLATE_TEXTBOX)?.value;
     if (answer === undefined) {
       const answerArea = document.querySelector(SPEAK_ANSWER_AREA);
-      const selectionArray = Array.from(answerArea.querySelectorAll(SPEAK_BUTTON));
+      const selectionArray = Array.from(answerArea.querySelectorAll(SPEAK_SELECTED_TEXT));
       const selectionText = selectionArray.map((button) => button.textContent).join(' ');
       console.log(`Speak prompt: ${challengePrompt}`);
       console.log(`Speak array: ${selectionArray}`);
