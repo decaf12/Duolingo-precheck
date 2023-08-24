@@ -62,7 +62,8 @@ const SELECT = '[data-test="challenge challenge-select"]';
 const SELECT_PROMPT = '[data-test="challenge-header"]';
 const SELECT_CHOICES = '[data-test="challenge-choice"]';
 const SPEAK_ANSWER_AREA = '[class="PcKtj"]';
-const SPEAK_SELECTED_TEXT = '[data-test="challenge-tap-token-text"]';
+const SPEAK_BUTTON_TYPE = '[class="_2J2do"]';
+const SPEAK_SELECTED_TEXT_CLICK = '[data-test="challenge-tap-token-text"]';
 
 const TYPE_TAPCLOZE = 'tapCloze';
 const TAPCLOZE = '[data-test="challenge challenge-tapCloze"]';
@@ -265,7 +266,9 @@ function makeSubmission(extraInfo = null) {
     const answer = document.querySelector(TRANSLATE_TEXTBOX)?.value;
     if (answer === undefined) {
       const answerArea = document.querySelector(SPEAK_ANSWER_AREA);
-      const selectionArray = Array.from(answerArea.querySelectorAll(SPEAK_SELECTED_TEXT));
+      const selectionArrayClick = Array.from(answerArea.querySelectorAll(SPEAK_SELECTED_TEXT_CLICK));
+      const selectionArrayType = Array.from(answerArea.querySelectorAll(SPEAK_BUTTON_TYPE));
+      const selectionArray = selectionArrayClick.length ? selectionArrayClick : selectionArrayType;
       const selectionText = selectionArray.map((button) => button.textContent).join(' ');
       console.log(`Speak prompt: ${challengePrompt}`);
       console.log(`Speak array: ${selectionArray}`);

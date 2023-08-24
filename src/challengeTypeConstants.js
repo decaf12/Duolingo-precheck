@@ -88,7 +88,7 @@ export const SPEAK_ANSWER_AREA = '[class="PcKtj"]';
 export const SPEAK_BUTTON_CLICK = '[class="_13HXc"]';
 export const SPEAK_BUTTON_TYPE = '[class="_2J2do"]';
 export const SPEAK_BUTTON = `${SPEAK_BUTTON_CLICK}, ${SPEAK_BUTTON_TYPE}`;
-export const SPEAK_SELECTED_TEXT = '[data-test="challenge-tap-token-text"]';
+export const SPEAK_SELECTED_TEXT_CLICK = '[data-test="challenge-tap-token-text"]';
 
 export const TYPE_TAPCLOZE = 'tapCloze';
 export const TAPCLOZE = '[data-test="challenge challenge-tapCloze"]';

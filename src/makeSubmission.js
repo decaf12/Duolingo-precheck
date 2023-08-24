@@ -166,7 +166,9 @@ export default function makeSubmission(extraInfo = null) {
     const answer = document.querySelector(constants.TRANSLATE_TEXTBOX)?.value;
     if (answer === undefined) {
       const answerArea = document.querySelector(constants.SPEAK_ANSWER_AREA);
-      const selectionArray = Array.from(answerArea.querySelectorAll(constants.SPEAK_SELECTED_TEXT));
+      const selectionArrayClick = Array.from(answerArea.querySelectorAll(constants.SPEAK_SELECTED_TEXT_CLICK));
+      const selectionArrayType = Array.from(answerArea.querySelectorAll(constants.SPEAK_BUTTON_TYPE));
+      const selectionArray = selectionArrayClick.length ? selectionArrayClick : selectionArrayType;
       const selectionText = selectionArray.map((button) => button.textContent).join(' ');
       console.log(`Speak prompt: ${challengePrompt}`);
       console.log(`Speak array: ${selectionArray}`);
