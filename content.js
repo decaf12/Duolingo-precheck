@@ -109,20 +109,24 @@ function makeSubmission(extraInfo = null) {
   }
 
   if (document.querySelector(COMPLETEREVERSETRANSLATION)) {
+    console.log('completeReverseTranslation detected');
     // eslint-disable-next-line max-len
     const promptArray = Array.from(document.querySelectorAll(COMPLETEREVERSETRANSLATION_PROMPT));
     const challengePrompt = promptArray.map((x) => x.textContent).join('');
-    // eslint-disable-next-line max-len
-    const textbox = Array.from(document.querySelector(COMPLETEREVERSETRANSLATION_TEXTBOX).children);
-    console.log('completeReverseTranslation textbox:');
-    console.log(textbox);
-    const answerArray = textbox.map((element) => {
-      const blank = element.querySelector(COMPLETEREVERSETRANSLATION_BLANK);
-      return blank?.value || element.textContent;
-    });
-    const answer = answerArray.join('');
-    console.log(`completeReverseTranslation prompt: ${challengePrompt}`);
-    console.log(`completeReverseTranslation answer: ${answer}`);
+    const answer = document.querySelector(TRANSLATE_TEXTBOX)?.value;
+    if (answer === undefined) {
+      // eslint-disable-next-line max-len
+      const textbox = Array.from(document.querySelector(COMPLETEREVERSETRANSLATION_TEXTBOX).children);
+      console.log('completeReverseTranslation textbox:');
+      console.log(textbox);
+      const answerArray = textbox.map((element) => {
+        const blank = element.querySelector(COMPLETEREVERSETRANSLATION_BLANK);
+        return blank?.value || element.textContent;
+      });
+      const answer = answerArray.join('');
+      console.log(`completeReverseTranslation prompt: ${challengePrompt}`);
+      console.log(`completeReverseTranslation answer: ${answer}`);
+    }
     return [challengePrompt, answer, TYPE_TRANSLATE];
   }
 
