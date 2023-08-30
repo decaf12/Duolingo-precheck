@@ -10,7 +10,7 @@ export const STRAIGHT_QUOTE = String.fromCharCode(34);
 
 export const TYPE_ASSIST = 'assist';
 export const ASSIST = '[data-test="challenge challenge-assist"]';
-export const ASSIST_PROMPT = '[data-test="challenge-header"]';
+export const ASSIST_PROMPT = '[class="_1KUxv _11rtD"]';
 export const ASSIST_CHOICES = '[data-test="challenge-choice"]';
 
 export const TYPE_COMPLETEREVERSETRANSLATION = 'completeReverseTranslation';

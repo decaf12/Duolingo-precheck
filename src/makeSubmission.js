@@ -5,6 +5,9 @@ export default function makeSubmission(extraInfo = null) {
     const challengePrompt = document.querySelector(constants.ASSIST_PROMPT).textContent;
     const choices = Array.from(document.querySelectorAll(constants.ASSIST_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    console.log("assist detected");
+    console.log(`assist prompt: ${challengePrompt}`);
+    console.log(`assist button chosen: ${choiceID}`);
     return [challengePrompt, choiceID, constants.TYPE_ASSIST];
   }
 

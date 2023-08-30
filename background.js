@@ -415,8 +415,10 @@ function addToKey(answerKey, challenges) {
             challengePrompt: the prompt displayed to the user
             value: the correct choice */
         case TYPE_ASSIST: {
-          challengePrompt = `How do you say "${challenge.prompt}"?`;
+          challengePrompt = `${challenge.prompt}`;
           value = challenge.correctIndex;
+          console.log(`assist prompt added to key: ${challengePrompt}`);
+          console.log(`assist answer added to key: ${challengePrompt}`);
           break;
         }
 

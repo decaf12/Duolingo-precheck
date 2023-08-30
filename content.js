@@ -7,7 +7,7 @@ const IGNORED_CHARACTERS = /[_'\-\s,.?!;]/g;
 
 const TYPE_ASSIST = 'assist';
 const ASSIST = '[data-test="challenge challenge-assist"]';
-const ASSIST_PROMPT = '[data-test="challenge-header"]';
+const ASSIST_PROMPT = '[class="_1KUxv _11rtD"]';
 const ASSIST_CHOICES = '[data-test="challenge-choice"]';
 const COMPLETEREVERSETRANSLATION = '[data-test="challenge challenge-completeReverseTranslation"]';
 const COMPLETEREVERSETRANSLATION_PROMPT = '[data-test="hint-token"]';
@@ -105,6 +105,9 @@ function makeSubmission(extraInfo = null) {
     const challengePrompt = document.querySelector(ASSIST_PROMPT).textContent;
     const choices = Array.from(document.querySelectorAll(ASSIST_CHOICES));
     const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+    console.log("assist detected");
+    console.log(`assist prompt: ${challengePrompt}`);
+    console.log(`assist button chosen: ${choiceID}`);
     return [challengePrompt, choiceID, TYPE_ASSIST];
   }
 
