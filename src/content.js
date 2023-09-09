@@ -2,7 +2,9 @@ import makeSubmission from './makeSubmission';
 import * as constants from './challengeTypeConstants';
 import * as check from './checkAnswers';
 
+
 const frame = document.createElement('iframe');
+frame.style = "border: 0";
 document.body.appendChild(frame);
 frame.contentWindow.console.log('Content script running');
 

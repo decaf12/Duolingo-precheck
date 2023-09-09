@@ -10,7 +10,7 @@
       "48": "icons/border-48.png"
     },
 
-    "web_accessible_resources": ["src/makeSubmssion.js"],
+    "web_accessible_resources": ["makeSubmssion.js"],
 
     "content_scripts": [
       {
@@ -20,10 +20,6 @@
         "js": ["init.js"]
       }
     ],
-
-    "background": {
-      "page": "background.html"
-    },
 
     "permissions": [
       "https://www.duolingo.com/*/sessions",
