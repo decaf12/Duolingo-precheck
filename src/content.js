@@ -1,5 +1,6 @@
 import makeSubmission from './makeSubmission';
 import * as constants from './challengeTypeConstants';
+import * as check from './checkAnswers';
 
 const frame = document.createElement('iframe');
 document.body.appendChild(frame);
@@ -23,18 +24,20 @@ document.addEventListener(
       e.stopImmediatePropagation();
 
       frame.contentWindow.console.log('Submission button: ');
+      frame.contentWindow.console.log(submissionButton);
       frame.contentWindow.console.log(Object.keys(submissionButton));
       // console.log(JSON.parse(JSON.stringify(submissionButton)));
       // console.log(submissionButton.onclick);
-      submissionButton.onclick();
-
+      // submissionButton.onclick();
       const [challengePrompt, answer, challengeType] = makeSubmission();
-      const marking = await browser.runtime.sendMessage({
-        challengePrompt,
-        answer,
-        challengeType,
-      });
+      // const marking = await browser.runtime.sendMessage({
+      //   challengePrompt,
+      //   answer,
+      //   challengeType,
+      // });
 
+      const marking = check.test();
+      console.log(marking);
       if (marking.correct) {
         submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       }

@@ -313,6 +313,335 @@ function makeSubmission(extraInfo = null) {
   return 0;
 }
 
+var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+var typescriptMap = {};
+
+var __spreadArrays = (commonjsGlobal && commonjsGlobal.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
+Object.defineProperty(typescriptMap, "__esModule", { value: true });
+typescriptMap.TSMap = void 0;
+var TSMap = /** @class */ (function () {
+    function TSMap(inputMap) {
+        var t = this;
+        t._keys = [];
+        t._values = [];
+        t.length = 0;
+        if (inputMap) {
+            inputMap.forEach(function (v, k) {
+                t.set(v[0], v[1]);
+            });
+        }
+    }
+    /**
+     * Convert a JSON object to a map.
+     *
+     * @param {*} jsonObject JSON object to convert
+     * @param {boolean} [convertObjs] convert nested objects to maps
+     * @returns {TSMap<K, V>}
+     * @memberof TSMap
+     */
+    TSMap.prototype.fromJSON = function (jsonObject, convertObjs) {
+        var t = this;
+        var setProperty = function (value) {
+            if (value !== null && typeof value === 'object' && convertObjs)
+                return new TSMap().fromJSON(value, true);
+            if (Array.isArray(value) && convertObjs)
+                return value.map(function (v) { return setProperty(v); });
+            return value;
+        };
+        Object.keys(jsonObject).forEach(function (property) {
+            if (jsonObject.hasOwnProperty(property)) {
+                t.set(property, setProperty(jsonObject[property]));
+            }
+        });
+        return t;
+    };
+    /**
+     * Outputs the contents of the map to a JSON object
+     *
+     * @returns {{[key: string]: V}}
+     * @memberof TSMap
+     */
+    TSMap.prototype.toJSON = function () {
+        var obj = {};
+        var t = this;
+        var getValue = function (value) {
+            if (value instanceof TSMap) {
+                return value.toJSON();
+            }
+            else if (Array.isArray(value)) {
+                return value.map(function (v) { return getValue(v); });
+            }
+            else {
+                return value;
+            }
+        };
+        t.keys().forEach(function (k) {
+            obj[String(k)] = getValue(t.get(k));
+        });
+        return obj;
+    };
+    /**
+     * Get an array of arrays respresenting the map, kind of like an export function.
+     *
+     * @returns {(Array<Array<K|V>>)}
+     *
+     * @memberOf TSMap
+     */
+    TSMap.prototype.entries = function () {
+        var _this = this;
+        return [].slice.call(this.keys().map(function (k) { return [k, _this.get(k)]; }));
+    };
+    /**
+     * Get an array of keys in the map.
+     *
+     * @returns {Array<K>}
+     *
+     * @memberOf TSMap
+     */
+    TSMap.prototype.keys = function () {
+        return [].slice.call(this._keys);
+    };
+    /**
+     * Get an array of the values in the map.
+     *
+     * @returns {Array<V>}
+     *
+     * @memberOf TSMap
+     */
+    TSMap.prototype.values = function () {
+        return [].slice.call(this._values);
+    };
+    /**
+     * Check to see if an item in the map exists given it's key.
+     *
+     * @param {K} key
+     * @returns {Boolean}
+     *
+     * @memberOf TSMap
+     */
+    TSMap.prototype.has = function (key) {
+        return this._keys.indexOf(key) > -1;
+    };
+    /**
+     * Get a specific item from the map given it's key.
+     *
+     * @param {K} key
+     * @returns {V}
+     *
+     * @memberOf TSMap
+     */
+    TSMap.prototype.get = function (key) {
+        var i = this._keys.indexOf(key);
+        return i > -1 ? this._values[i] : undefined;
+    };
+    /**
+     * Safely retrieve a deeply nested property.
+     *
+     * @param {K[]} path
+     * @returns {V}
+     *
+     * @memberOf TSMap
+     */
+    TSMap.prototype.deepGet = function (path) {
+        if (!path || !path.length)
+            return null;
+        var recursiveGet = function (obj, path) {
+            if (obj === undefined || obj === null)
+                return null;
+            if (!path.length)
+                return obj;
+            return recursiveGet(obj instanceof TSMap ? obj.get(path[0]) : obj[path[0]], path.slice(1));
+        };
+        return recursiveGet(this.get(path[0]), path.slice(1));
+    };
+    /**
+     * Set a specific item in the map given it's key, automatically adds new items as needed.
+     * Ovewrrites existing items
+     *
+     * @param {K} key
+     * @param {V} value
+     *
+     * @memberOf TSMap
+     */
+    TSMap.prototype.set = function (key, value) {
+        var t = this;
+        // check if key exists and overwrite
+        var i = this._keys.indexOf(key);
+        if (i > -1) {
+            t._values[i] = value;
+        }
+        else {
+            t._keys.push(key);
+            t._values.push(value);
+            t.length = t._values.length;
+        }
+        return this;
+    };
+    /**
+     * Enters a value into the map forcing the keys to always be sorted.
+     * Stolen from https://machinesaredigging.com/2014/04/27/binary-insert-how-to-keep-an-array-sorted-as-you-insert-data-in-it/
+     * Best case speed is O(1), worse case is O(N).
+     *
+     * @param {K} key
+     * @param {V} value
+     * @param {number} [startVal]
+     * @param {number} [endVal]
+     * @returns {this}
+     * @memberof TSMap
+     */
+    TSMap.prototype.sortedSet = function (key, value, startVal, endVal) {
+        var t = this;
+        var length = this._keys.length;
+        var start = startVal || 0;
+        var end = endVal !== undefined ? endVal : length - 1;
+        if (length == 0) {
+            t._keys.push(key);
+            t._values.push(value);
+            return t;
+        }
+        if (key == this._keys[start]) {
+            this._values[start] = value;
+            return this;
+        }
+        if (key == this._keys[end]) {
+            this._values[end] = value;
+            return this;
+        }
+        if (key > this._keys[end]) {
+            this._keys.splice(end + 1, 0, key);
+            this._values.splice(end + 1, 0, value);
+            return this;
+        }
+        if (key < this._keys[start]) {
+            this._values.splice(start, 0, value);
+            this._keys.splice(start, 0, key);
+            return this;
+        }
+        if (start >= end) {
+            return this;
+        }
+        var m = start + Math.floor((end - start) / 2);
+        if (key < this._keys[m]) {
+            return this.sortedSet(key, value, start, m - 1);
+        }
+        if (key > this._keys[m]) {
+            return this.sortedSet(key, value, m + 1, end);
+        }
+        return this;
+    };
+    /**
+     * Provide a number representing the number of items in the map
+     *
+     * @returns {number}
+     *
+     * @memberOf TSMap
+     */
+    TSMap.prototype.size = function () {
+        return this.length;
+    };
+    /**
+     * Clear all the contents of the map
+     *
+     * @returns {TSMap<K,V>}
+     *
+     * @memberOf TSMap
+     */
+    TSMap.prototype.clear = function () {
+        var t = this;
+        t._keys.length = t.length = t._values.length = 0;
+        return this;
+    };
+    /**
+     * Delete an item from the map given it's key
+     *
+     * @param {K} key
+     * @returns {Boolean}
+     *
+     * @memberOf TSMap
+     */
+    TSMap.prototype.delete = function (key) {
+        var t = this;
+        var i = t._keys.indexOf(key);
+        if (i > -1) {
+            t._keys.splice(i, 1);
+            t._values.splice(i, 1);
+            t.length = t._keys.length;
+            return true;
+        }
+        return false;
+    };
+    /**
+     * Used to loop through the map.
+     *
+     * @param {(value:V,key?:K,index?:number) => void} callbackfn
+     *
+     * @memberOf TSMap
+     */
+    TSMap.prototype.forEach = function (callbackfn) {
+        var _this = this;
+        this._keys.forEach(function (v, i) {
+            callbackfn(_this.get(v), v, i);
+        });
+    };
+    /**
+     * Returns an array containing the returned value of each item in the map.
+     *
+     * @param {(value:V,key?:K,index?:number) => any} callbackfn
+     * @returns {Array<any>}
+     *
+     * @memberOf TSMap
+     */
+    TSMap.prototype.map = function (callbackfn) {
+        var _this = this;
+        return this.keys().map(function (itemKey, i) {
+            return callbackfn(_this.get(itemKey), itemKey, i);
+        });
+    };
+    /**
+     * Removes items based on a conditional function passed to filter.
+     * Mutates the map in place.
+     *
+     * @param {(value:V,key?:K,index?:number) => Boolean} callbackfn
+     * @returns {TSMap<K,V>}
+     *
+     * @memberOf TSMap
+     */
+    TSMap.prototype.filter = function (callbackfn) {
+        var t = this;
+        __spreadArrays(t._keys).forEach(function (v, i) {
+            if (callbackfn(t.get(v), v, i) === false)
+                t.delete(v);
+        });
+        return this;
+    };
+    /**
+     * Creates a deep copy of the map, breaking all references to the old map and it's children.
+     * Uses JSON.parse so any functions will be stringified and lose their original purpose.
+     *
+     * @returns {TSMap<K,V>}
+     *
+     * @memberOf TSMap
+     */
+    TSMap.prototype.clone = function () {
+        return new TSMap(this.entries());
+    };
+    return TSMap;
+}());
+typescriptMap.TSMap = TSMap;
+
+function test() {
+  return { correct: false };
+}
+
+JSON.parse('{"À":"A","Á":"A","Â":"A","Ã":"A","Ä":"A","Å":"A","Ç":"C","È":"E","É":"E","Ê":"E","Ë":"E","Ì":"I","Í":"I","Î":"I","Ï":"I","Ð":"D","Ñ":"N","Ò":"O","Ó":"O","Ô":"O","Õ":"O","Ö":"O","×":"x","Ø":"O","Ù":"U","Ú":"U","Û":"U","Ü":"U","Ý":"Y","à":"a","á":"a","â":"a","ã":"a","ä":"a","å":"a","ç":"c","è":"e","é":"e","ê":"e","ë":"e","ì":"i","í":"i","î":"i","ï":"i","ð":"d","ñ":"n","ò":"o","ó":"o","ô":"o","õ":"o","ö":"o","÷":"/","ø":"o","ù":"u","ú":"u","û":"u","ü":"u","ý":"y","ÿ":"y","Ā":"A","ā":"a","Ă":"A","ă":"a","Ą":"A","ą":"a","Ć":"C","ć":"c","Ĉ":"C","ĉ":"c","Ċ":"C","ċ":"c","Č":"C","č":"c","Ď":"D","ď":"d","Đ":"D","đ":"d","Ē":"E","ē":"e","Ĕ":"E","ĕ":"e","Ė":"E","ė":"e","Ę":"E","ę":"e","Ě":"E","ě":"e","Ĝ":"G","ĝ":"g","Ğ":"G","ğ":"g","Ġ":"G","ġ":"g","Ģ":"G","ģ":"g","Ĥ":"H","ĥ":"h","Ħ":"H","ħ":"h","Ĩ":"I","ĩ":"i","Ī":"I","ī":"i","Ĭ":"I","ĭ":"i","Į":"I","į":"i","İ":"I","ı":"i","Ĵ":"J","ĵ":"j","Ķ":"K","ķ":"k","ĸ":"k","Ĺ":"L","ĺ":"l","Ļ":"L","ļ":"l","Ľ":"L","ľ":"l","Ŀ":"L","ŀ":"l","Ł":"L","ł":"l","Ń":"N","ń":"n","Ņ":"N","ņ":"n","Ň":"N","ň":"n","Ō":"O","ō":"o","Ŏ":"O","ŏ":"o","Ő":"O","ő":"o","Ŕ":"R","ŕ":"r","Ŗ":"R","ŗ":"r","Ř":"R","ř":"r","Ś":"S","ś":"s","Ŝ":"S","ŝ":"s","Ş":"S","ş":"s","Š":"S","š":"s","Ţ":"T","ţ":"t","Ť":"T","ť":"t","Ŧ":"T","ŧ":"t","Ũ":"U","ũ":"u","Ū":"U","ū":"u","Ŭ":"U","ŭ":"u","Ů":"U","ů":"u","Ű":"U","ű":"u","Ų":"U","ų":"u","Ŵ":"W","ŵ":"w","Ŷ":"Y","ŷ":"y","Ÿ":"Y","Ź":"Z","ź":"z","Ż":"Z","ż":"z","Ž":"Z","ž":"z","Ơ":"O","ơ":"o","Ư":"U","ư":"u","Ș":"S","ș":"s","Ț":"T","ț":"t","Ά":"Α","Έ":"Ε","Ή":"Η","Ί":"Ι","Ό":"Ο","Ύ":"Υ","Ώ":"Ω","ΐ":"ι","Ϊ":"Ι","Ϋ":"Υ","ά":"α","έ":"ε","ή":"η","ί":"ι","ΰ":"υ","ϊ":"ι","ϋ":"υ","ό":"ο","ύ":"υ","ώ":"ω","Ạ":"A","ạ":"a","Ả":"A","ả":"a","Ấ":"A","ấ":"a","Ầ":"A","ầ":"a","Ẩ":"A","ẩ":"a","Ẫ":"A","ẫ":"a","Ậ":"A","ậ":"a","Ắ":"A","ắ":"a","Ằ":"A","ằ":"a","Ẳ":"A","ẳ":"a","Ẵ":"A","ẵ":"a","Ặ":"A","ặ":"a","Ẹ":"E","ẹ":"e","Ẻ":"E","ẻ":"e","Ẽ":"E","ẽ":"e","Ế":"E","ế":"e","Ề":"E","ề":"e","Ể":"E","ể":"e","Ễ":"E","ễ":"e","Ệ":"E","ệ":"e","Ỉ":"I","ỉ":"i","Ị":"I","ị":"i","Ọ":"O","ọ":"o","Ỏ":"O","ỏ":"o","Ố":"O","ố":"o","Ồ":"O","ồ":"o","Ổ":"O","ổ":"o","Ỗ":"O","ỗ":"o","Ộ":"O","ộ":"o","Ớ":"O","ớ":"o","Ờ":"O","ờ":"o","Ở":"O","ở":"o","Ỡ":"O","ỡ":"o","Ợ":"O","ợ":"o","Ụ":"U","ụ":"u","Ủ":"U","ủ":"u","Ứ":"U","ứ":"u","Ừ":"U","ừ":"u","Ử":"U","ử":"u","Ữ":"U","ữ":"u","Ự":"U","ự":"u","Ỳ":"Y","ỳ":"y","Ỵ":"Y","ỵ":"y","Ỷ":"Y","ỷ":"y","Ỹ":"Y","ỹ":"y"}');
+
 const frame = document.createElement('iframe');
 document.body.appendChild(frame);
 frame.contentWindow.console.log('Content script running');
@@ -335,18 +664,20 @@ document.addEventListener(
       e.stopImmediatePropagation();
 
       frame.contentWindow.console.log('Submission button: ');
+      frame.contentWindow.console.log(submissionButton);
       frame.contentWindow.console.log(Object.keys(submissionButton));
       // console.log(JSON.parse(JSON.stringify(submissionButton)));
       // console.log(submissionButton.onclick);
-      submissionButton.onclick();
+      // submissionButton.onclick();
+      makeSubmission();
+      // const marking = await browser.runtime.sendMessage({
+      //   challengePrompt,
+      //   answer,
+      //   challengeType,
+      // });
 
-      const [challengePrompt, answer, challengeType] = makeSubmission();
-      const marking = await browser.runtime.sendMessage({
-        challengePrompt,
-        answer,
-        challengeType,
-      });
-
+      const marking = test();
+      console.log(marking);
       if (marking.correct) {
         submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       }
