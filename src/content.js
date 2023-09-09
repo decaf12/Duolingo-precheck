@@ -13,35 +13,33 @@ document.addEventListener(
   'keydown',
   async (e) => {
     if (e.key === 'Enter') {
-      const submissionButton = document.querySelector(constants.SUBMISSION_BUTTON);
-      const submissionButtonSpan = submissionButton.querySelector(constants.SUBMISSION_BUTTON_SPAN);
-      if (submissionButtonSpan.innerHTML !== 'Check') {
-        /* The submission button can be either "Check" or "Continue".
-        If it is "continue" then just propagate the "Enter key pressed" event. */
-        return;
-      }
-
       // If the button is "Check" then do not propagate the keypress.
       e.preventDefault();
       e.stopImmediatePropagation();
 
-      frame.contentWindow.console.log('Submission button: ');
-      frame.contentWindow.console.log(submissionButton);
-      const reactFiber = Object.keys(submissionButton).find((s) => s.startsWith('__reactFiber$'));
-      frame.contentWindow.console.log(submissionButton[reactFiber]);
-      // console.log(JSON.parse(JSON.stringify(submissionButton)));
-      // console.log(submissionButton.onclick);
-      // submissionButton.onclick();
+      const solution = document.querySelector(".mQ0GW");
+
+      const reactFiber = Object.keys(solution).find((s) => s.startsWith('__reactFiber$'));
+      const answerKey = solution[reactFiber].return.return.stateNode.props.currentChallenge;
+      frame.contentWindow.console.log(answerKey);
+            
       const [challengePrompt, answer, challengeType] = makeSubmission();
+      
+      let isCorrect;
+      if (answerKey.grader.vertices !== null) {
+        frame.contentWindow.console.log("Has vertices");
+        isCorrect = check.gradeTranslation(answer, answerKey.grader.vertices);
+      }
       // const marking = await browser.runtime.sendMessage({
       //   challengePrompt,
       //   answer,
       //   challengeType,
       // });
 
-      const marking = check.test();
-      console.log(marking);
-      if (marking.correct) {
+      frame.contentWindow.console.log(isCorrect);
+      if (isCorrect) {
+        frame.contentWindow.console.log("Correct");
+        const submissionButton = document.querySelector(constants.SUBMISSION_BUTTON);
         submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       }
     }
