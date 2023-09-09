@@ -13,7 +13,7 @@ export default [
   },
 
   {
-    input: ['src/content.js'],
+    input: ['src/init.js', 'src/content.js'],
     output: {
       dir: '.',
       format: 'es',

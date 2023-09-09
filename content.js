@@ -313,6 +313,10 @@ function makeSubmission(extraInfo = null) {
   return 0;
 }
 
+const frame = document.createElement('iframe');
+document.body.appendChild(frame);
+frame.contentWindow.console.log('Content script running');
+
 // Check user submission whenever the Enter key is pressed
 document.addEventListener(
   'keydown',
@@ -330,11 +334,10 @@ document.addEventListener(
       e.preventDefault();
       e.stopImmediatePropagation();
 
-      console.log('Submission button: ');
-      console.log(document);
-      console.log(submissionButton);
-      console.log(JSON.parse(JSON.stringify(submissionButton)));
-      console.log(submissionButton.onclick);
+      frame.contentWindow.console.log('Submission button: ');
+      frame.contentWindow.console.log(Object.keys(submissionButton));
+      // console.log(JSON.parse(JSON.stringify(submissionButton)));
+      // console.log(submissionButton.onclick);
       submissionButton.onclick();
 
       const [challengePrompt, answer, challengeType] = makeSubmission();
