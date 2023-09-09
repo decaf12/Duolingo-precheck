@@ -331,6 +331,7 @@ document.addEventListener(
       e.stopImmediatePropagation();
 
       console.log('Submission button: ');
+      console.log(document);
       console.log(submissionButton);
       console.log(JSON.parse(JSON.stringify(submissionButton)));
       console.log(submissionButton.onclick);
