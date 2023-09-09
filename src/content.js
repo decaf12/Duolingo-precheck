@@ -27,7 +27,8 @@ document.addEventListener(
 
       frame.contentWindow.console.log('Submission button: ');
       frame.contentWindow.console.log(submissionButton);
-      frame.contentWindow.console.log(Object.keys(submissionButton));
+      const reactFiber = Object.keys(submissionButton).find((s) => s.startsWith('__reactFiber$'));
+      frame.contentWindow.console.log(submissionButton[reactFiber]);
       // console.log(JSON.parse(JSON.stringify(submissionButton)));
       // console.log(submissionButton.onclick);
       // submissionButton.onclick();
