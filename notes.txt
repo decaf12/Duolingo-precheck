@@ -1,1 +1,0 @@
-Object.keys() works far better on Chrome than on Firefox
