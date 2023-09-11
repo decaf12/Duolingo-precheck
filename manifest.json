@@ -9,25 +9,14 @@
     "icons": {
       "48": "icons/border-48.png"
     },
-
-    "web_accessible_resources": ["makeSubmssion.js"],
-
+    
     "content_scripts": [
       {
         "matches": [
           "*://*.duolingo.com/*"
           ],
-        "js": ["init.js"]
+        "js": ["injectScript.js"]
       }
-    ],
-
-    "permissions": [
-      "https://www.duolingo.com/*/sessions",
-      "https://www.duolingo.com/skill/*",
-      "tabs",
-      "webNavigation",
-      "webRequest",
-      "webRequestBlocking"
     ],
 
     "devtools_page": "devtools/devtools-page.html"

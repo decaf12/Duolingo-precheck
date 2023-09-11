@@ -1,6 +1,6 @@
 {
     "typeAcquisition":
         {
-            "include": ["firefox-webext-browser", "es6-map"]
+            "include": ["firefox-webext-browser"]
         }
 }
