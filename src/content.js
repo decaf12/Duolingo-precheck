@@ -12,38 +12,40 @@ frame.contentWindow.console.log('Content script running');
 document.addEventListener(
   'keydown',
   async (e) => {
-    if (e.key === 'Enter') {
-      // If the button is "Check" then do not propagate the keypress.
-      e.preventDefault();
-      e.stopImmediatePropagation();
-
-      const solution = document.querySelector(".mQ0GW");
-
-      const reactFiber = Object.keys(solution).find((s) => s.startsWith('__reactFiber$'));
-      const answerKey = solution[reactFiber].return.return.stateNode.props.currentChallenge;
-      frame.contentWindow.console.log(answerKey);
-            
-      const [challengePrompt, answer, challengeType] = makeSubmission();
-      
-      let isCorrect;
-      if (answerKey.grader.vertices !== null) {
-        frame.contentWindow.console.log("Has vertices");
-        isCorrect = check.gradeTranslation(answer, answerKey.grader.vertices);
-      }
-      // const marking = await browser.runtime.sendMessage({
-      //   challengePrompt,
-      //   answer,
-      //   challengeType,
-      // });
-
-      frame.contentWindow.console.log(isCorrect);
-      if (isCorrect) {
-        frame.contentWindow.console.log("Correct");
-        const submissionButton = document.querySelector(constants.SUBMISSION_BUTTON);
-        submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      }
+    if (e.key !== 'Enter') {
+      return;
     }
-  },
+
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    
+    const submissionButton = document.querySelector(constants.SUBMISSION_BUTTON);
+    // If the button is "Check" then do not propagate the keypress.
+    if (submissionButton.querySelector(constants.SUBMISSION_BUTTON_SPAN).innerHTML !== 'Check') {
+      submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    }
+
+
+    const challengeData = getChallengeData();
+    frame.contentWindow.console.log(challengeData);
+        
+    const challengeType = challengeData.type;
+    frame.contentWindow.console.log(challengeType);
+    const [challengePrompt, answer, _] = makeSubmission();
+    
+    let isCorrect = false;
+    if (challengeData.grader?.vertices !== undefined) {
+      frame.contentWindow.console.log("Has vertices");
+      isCorrect = check.gradeTranslation(answer, challengeData.grader.vertices);
+    }
+
+
+    frame.contentWindow.console.log(isCorrect);
+    if (isCorrect) {
+      frame.contentWindow.console.log("Correct");
+      submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    }
+  }
 );
 
 function addSubmissionListener(button) {
@@ -82,3 +84,10 @@ const observer = new MutationObserver(() => {
 });
 
 observer.observe(document.body, { childList: true, subtree: true });
+
+
+function getChallengeData() {
+  const solution = document.querySelector(".mQ0GW");
+  const reactFiber = Object.keys(solution).find((s) => s.startsWith('__reactFiber$'));
+  return solution[reactFiber].return.return.stateNode.props.currentChallenge;
+}
