@@ -1,4 +1,3 @@
-import makeSubmission from './makeSubmission';
 import * as constants from './challengeTypeConstants';
 import * as check from './checkAnswers';
 
@@ -25,21 +24,10 @@ document.addEventListener(
       submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     }
 
-
     const challengeData = getChallengeData();
     frame.contentWindow.console.log(challengeData);
         
-    const challengeType = challengeData.type;
-    frame.contentWindow.console.log(challengeType);
-    const [challengePrompt, answer, _] = makeSubmission();
-    
-    let isCorrect = false;
-    if (challengeData.grader?.vertices !== undefined) {
-      frame.contentWindow.console.log("Has vertices");
-      isCorrect = check.gradeTranslation(answer, challengeData.grader.vertices);
-    }
-
-
+    const isCorrect = check.markSubmission(challengeData);
     frame.contentWindow.console.log(isCorrect);
     if (isCorrect) {
       frame.contentWindow.console.log("Correct");
@@ -63,7 +51,7 @@ function addSubmissionListener(button) {
     const buttonNumber = currentButton.slice(0, 1);
     const currentText = currentButton.slice(1);
 
-    const [challengePrompt, answer, challengeType] = makeSubmission({ previousText, currentText });
+    const [challengePrompt, answer, challengeType] = markSubmission({ previousText, currentText });
     const marking = await browser.runtime.sendMessage({
       challengePrompt,
       answer,

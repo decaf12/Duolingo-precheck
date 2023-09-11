@@ -299,3 +299,27 @@ export function checkAnswer(answerKey, answer, challengePrompt, challengeType) {
   const correctAnswer = answerKey.get(key);
   return answer === correctAnswer;
 }
+
+
+export function markSubmission(challengeData) {
+  switch (challengeData.type) {
+    case 'assist':
+      const choices = Array.from(document.querySelectorAll(constants.ASSIST_CHOICES));
+      const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+      return choiceID === challengeData.correctIndex;
+    
+    case 'translate':
+      let answer = document.querySelector(constants.TRANSLATE_TEXTBOX)?.value;
+      if (answer === undefined) {
+        const answerArea = document.querySelector(constants.SPEAK_ANSWER_AREA);
+        const selectionArrayClick = Array.from(answerArea.querySelectorAll(constants.SPEAK_SELECTED_TEXT_CLICK));
+        const selectionArrayType = Array.from(answerArea.querySelectorAll(constants.SPEAK_BUTTON_TYPE));
+        const selectionArray = selectionArrayClick.length ? selectionArrayClick : selectionArrayType;
+        answer = selectionArray.map((button) => button.textContent).join(' ');
+      }
+      return gradeTranslation(answer, challengeData.grader.vertices);
+      
+    default:
+      return false
+  }
+}
