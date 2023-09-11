@@ -1,5 +1,7 @@
-const SUBMISSION_BUTTON = '[data-test="player-next"]';
+const SUBMISSION_BUTTON_LESSON = '[data-test="player-next"]';
 const SUBMISSION_BUTTON_SPAN = '[class="_13HXc"]';
+const SUBMISSION_BUTTON_STORY = '[data-test="stories-player-continue"]';
+const START_BUTTON_STORY = '[data-test="story-start"]';
 
 const IGNORED_CHARACTERS = /[_'\-\s,.?!;]/g;
 const ASSIST_CHOICES = '[data-test="challenge-choice"]';
@@ -284,25 +286,50 @@ document.addEventListener(
     e.preventDefault();
     e.stopImmediatePropagation();
     
-    const submissionButton = document.querySelector(SUBMISSION_BUTTON);
-    // If the button is "Check" then do not propagate the keypress.
-    if (submissionButton.querySelector(SUBMISSION_BUTTON_SPAN).innerHTML !== 'Check') {
-      submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    const submissionButtonLesson = document.querySelector(SUBMISSION_BUTTON_LESSON);
+    if (submissionButtonLesson !== null) {
+      if (checkLessonSubmission(submissionButtonLesson)) {
+        submissionButtonLesson.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        return ;
+      }
     }
 
-    const challengeData = getChallengeData();
-    console$1.log(challengeData);
-    
-    console$1.log(challengeData.type);
-        
-    const isCorrect = markSubmission(challengeData);
-    console$1.log(isCorrect);
-    if (isCorrect) {
-      frame.contentWindow.console.log("Correct");
-      submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    const startButtonStory = document.querySelector(START_BUTTON_STORY);
+    if (startButtonStory !== null) {
+      startButtonStory.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      return;
+    }
+
+    const submissionButtonStory = document.querySelector(SUBMISSION_BUTTON_STORY);
+    if (checkStorySubmission(submissionButtonStory)) {
+      submissionButtonStory.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     }
   }
 );
+
+function checkLessonSubmission(submissionButton) {
+  // If the button is "Check" then do not propagate the keypress.
+  if (submissionButton?.querySelector(SUBMISSION_BUTTON_SPAN)?.innerHTML !== 'Check') {
+    return true;
+  }
+
+  const challengeData = getChallengeDataLesson();
+  console$1.log(challengeData);
+  console$1.log(challengeData.type);
+      
+  return markSubmission(challengeData);
+}
+
+function checkStorySubmission(submissionButton) {
+  console$1.log(submissionButton);
+  if (submissionButton.innerHTML !== 'Check') {
+    return true;
+  }
+
+  const challengeData = getChallengeDataStory();
+  console$1.log(challengeData);
+  return false;
+}
 
 function addMatchListener(challengeData, button) {
   button.addEventListener('click', async (e) => {
@@ -326,7 +353,7 @@ function addMatchListener(challengeData, button) {
 }
 
 const observer = new MutationObserver(() => {
-  const challengeData = getChallengeData();
+  const challengeData = getChallengeDataLesson();
   console$1.log(challengeData);
   if (challengeData.type === 'match') {
     const matchButtons = document.querySelectorAll(MATCH_BUTTONS);
@@ -337,8 +364,15 @@ const observer = new MutationObserver(() => {
 observer.observe(document.body, { childList: true, subtree: true });
 
 
-function getChallengeData() {
+function getChallengeDataLesson() {
   const solution = document.querySelector(".mQ0GW");
+  const reactFiber = Object.keys(solution).find((s) => s.startsWith('__reactFiber$'));
+  return solution[reactFiber].return.return.stateNode.props.currentChallenge;
+}
+
+function getChallengeDataStory() {
+  const solution = document.querySelector("class=['_35e5D']");
+  console$1.log(solution);
   const reactFiber = Object.keys(solution).find((s) => s.startsWith('__reactFiber$'));
   return solution[reactFiber].return.return.stateNode.props.currentChallenge;
 }

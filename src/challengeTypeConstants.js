@@ -1,6 +1,8 @@
 export const CHALLENGE_AREA = '[class="_863KE"]';
-export const SUBMISSION_BUTTON = '[data-test="player-next"]';
+export const SUBMISSION_BUTTON_LESSON = '[data-test="player-next"]';
 export const SUBMISSION_BUTTON_SPAN = '[class="_13HXc"]';
+export const SUBMISSION_BUTTON_STORY = '[data-test="stories-player-continue"]';
+export const START_BUTTON_STORY = '[data-test="story-start"]';
 export const SKIP_CHECKING_TRUE = 'skip checking: true';
 export const SKIP_CHECKING_FALSE = 'skip checking: false';
 

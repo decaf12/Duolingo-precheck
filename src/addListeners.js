@@ -19,25 +19,50 @@ document.addEventListener(
     e.preventDefault();
     e.stopImmediatePropagation();
     
-    const submissionButton = document.querySelector(constants.SUBMISSION_BUTTON);
-    // If the button is "Check" then do not propagate the keypress.
-    if (submissionButton.querySelector(constants.SUBMISSION_BUTTON_SPAN).innerHTML !== 'Check') {
-      submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    const submissionButtonLesson = document.querySelector(constants.SUBMISSION_BUTTON_LESSON);
+    if (submissionButtonLesson !== null) {
+      if (checkLessonSubmission(submissionButtonLesson)) {
+        submissionButtonLesson.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        return ;
+      }
     }
 
-    const challengeData = getChallengeData();
-    console.log(challengeData);
-    
-    console.log(challengeData.type);
-        
-    const isCorrect = check.markSubmission(challengeData);
-    console.log(isCorrect);
-    if (isCorrect) {
-      frame.contentWindow.console.log("Correct");
-      submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    const startButtonStory = document.querySelector(constants.START_BUTTON_STORY);
+    if (startButtonStory !== null) {
+      startButtonStory.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      return;
+    }
+
+    const submissionButtonStory = document.querySelector(constants.SUBMISSION_BUTTON_STORY);
+    if (checkStorySubmission(submissionButtonStory)) {
+      submissionButtonStory.dispatchEvent(new MouseEvent('click', { bubbles: true }));
     }
   }
 );
+
+function checkLessonSubmission(submissionButton) {
+  // If the button is "Check" then do not propagate the keypress.
+  if (submissionButton?.querySelector(constants.SUBMISSION_BUTTON_SPAN)?.innerHTML !== 'Check') {
+    return true;
+  }
+
+  const challengeData = getChallengeDataLesson();
+  console.log(challengeData);
+  console.log(challengeData.type);
+      
+  return check.markSubmission(challengeData);
+}
+
+function checkStorySubmission(submissionButton) {
+  console.log(submissionButton);
+  if (submissionButton.innerHTML !== 'Check') {
+    return true;
+  }
+
+  const challengeData = getChallengeDataStory();
+  console.log(challengeData);
+  return false;
+}
 
 function addMatchListener(challengeData, button) {
   button.addEventListener('click', async (e) => {
@@ -61,7 +86,7 @@ function addMatchListener(challengeData, button) {
 }
 
 const observer = new MutationObserver(() => {
-  const challengeData = getChallengeData();
+  const challengeData = getChallengeDataLesson();
   console.log(challengeData);
   if (challengeData.type === 'match') {
     const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
@@ -72,8 +97,15 @@ const observer = new MutationObserver(() => {
 observer.observe(document.body, { childList: true, subtree: true });
 
 
-function getChallengeData() {
+function getChallengeDataLesson() {
   const solution = document.querySelector(".mQ0GW");
+  const reactFiber = Object.keys(solution).find((s) => s.startsWith('__reactFiber$'));
+  return solution[reactFiber].return.return.stateNode.props.currentChallenge;
+}
+
+function getChallengeDataStory() {
+  const solution = document.querySelector("class=['_35e5D']");
+  console.log(solution);
   const reactFiber = Object.keys(solution).find((s) => s.startsWith('__reactFiber$'));
   return solution[reactFiber].return.return.stateNode.props.currentChallenge;
 }
