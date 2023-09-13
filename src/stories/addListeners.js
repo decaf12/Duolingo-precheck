@@ -15,27 +15,26 @@ document.addEventListener(
     if (e.key !== 'Enter') {
       return;
     }
+    const submissionButtonLesson = document.querySelector(constants.SUBMISSION_BUTTON_LESSON);
+    if (submissionButtonLesson === null && submissionButtonStory === null) {
+      console.log('Neither button found');
+      return;
+    }
 
     e.preventDefault();
     e.stopImmediatePropagation();
     
-    const submissionButtonLesson = document.querySelector(constants.SUBMISSION_BUTTON_LESSON);
     if (submissionButtonLesson !== null) {
       if (checkLessonSubmission(submissionButtonLesson)) {
         submissionButtonLesson.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-        return ;
+        console.log('translation correct');
+      } else {
+        console.log('translation incorrect');
       }
-    }
-
-    const startButtonStory = document.querySelector(constants.START_BUTTON_STORY);
-    if (startButtonStory !== null) {
-      startButtonStory.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      return;
-    }
-
-    const submissionButtonStory = document.querySelector(constants.SUBMISSION_BUTTON_STORY);
-    if (checkStorySubmission(submissionButtonStory)) {
-      submissionButtonStory.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    } else {
+      if (checkStorySubmission(submissionButtonStory)) {
+        submissionButtonStory.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      }
     }
   }
 );
@@ -54,12 +53,14 @@ function checkLessonSubmission(submissionButton) {
 }
 
 function checkStorySubmission(submissionButton) {
-  console.log(submissionButton);
-  if (submissionButton.innerHTML !== 'Check') {
+  if (submissionButton.innerHTML !== 'Continue') {
     return true;
   }
 
   const challengeData = getChallengeDataStory();
+  if (challengeData === null) {
+    return true;
+  }
   console.log(challengeData);
   return false;
 }
@@ -87,8 +88,7 @@ function addMatchListener(challengeData, button) {
 
 const observer = new MutationObserver(() => {
   const challengeData = getChallengeDataLesson();
-  console.log(challengeData);
-  if (challengeData.type === 'match') {
+  if (challengeData?.type === 'match') {
     const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
     matchButtons.forEach((x) => addMatchListener(challengeData, x));
   }
@@ -99,13 +99,15 @@ observer.observe(document.body, { childList: true, subtree: true });
 
 function getChallengeDataLesson() {
   const solution = document.querySelector(".mQ0GW");
+  if (solution === null) {
+    return null;
+  }
   const reactFiber = Object.keys(solution).find((s) => s.startsWith('__reactFiber$'));
   return solution[reactFiber].return.return.stateNode.props.currentChallenge;
 }
 
 function getChallengeDataStory() {
-  const solution = document.querySelector("class=['_35e5D']");
-  console.log(solution);
+  const solution = document.querySelector("[class=\"_35e5D\"]");
   const reactFiber = Object.keys(solution).find((s) => s.startsWith('__reactFiber$'));
-  return solution[reactFiber].return.return.stateNode.props.currentChallenge;
+  return solution[reactFiber].return.memoizedProps.storyElement;
 }

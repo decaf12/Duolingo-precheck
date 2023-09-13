@@ -3,7 +3,11 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 export default [
   {
-    input: ['src/injectScript.js', 'src/addListeners.js'],
+    input: [
+      'src/lessons/injectScriptLesson.js',
+      'src/lessons/addListeners.js',
+      'src/stories/injectScriptStory.js',
+    ],
     output: {
       dir: '.',
       format: 'es',
