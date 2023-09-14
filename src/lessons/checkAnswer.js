@@ -33,7 +33,6 @@ function startsWithAt(target, candidate, startPos, strictCmp) {
 
 function markTranslate(answer, vertices) {
   const answerNoSpaces = answer.replace(constants.IGNORED_CHARACTERS, '');
-  console.log(`answerNoSpaces: ${answerNoSpaces}`);
   const lastVertexID = vertices.length - 1;
   const lastPos = answerNoSpaces.length;
   const stack = [[0, 0, { 0: null }]];
@@ -44,8 +43,6 @@ function markTranslate(answer, vertices) {
     if (currVertexID === lastVertexID && currPos >= lastPos) {
       return true;
     }
-
-    console.log(`Current vertex: ${currVertexID}`);
 
     vertices[currVertexID].forEach((vertex) => {
       if (!(vertex.to in currVisited)) {
@@ -61,7 +58,6 @@ function markTranslate(answer, vertices) {
           // const origNoPunctuation = vertex.orig.replace(constants.IGNORED_CHARACTERS, '');
           const origNoPunctuation = vertex.orig.replace(constants.IGNORED_CHARACTERS, '');
           const origNoPunctuationLen = origNoPunctuation.length;
-          console.log(`Orig no punctuation: ${origNoPunctuation}`);
           if (startsWithAt(vertex.orig, answerNoSpaces, currPos, false)) {
             stack.push([vertex.to, currPos + origLen, { ...currVisited, [vertex.to]: null }]);
           // eslint-disable-next-line max-len
@@ -94,7 +90,7 @@ export function markSubmission(challengeData) {
     case 'readComprehension':
     case 'select':
       return markMultipleChoice(challengeData);
-    
+
     case 'completeReverseTranslation': {
       let answer = document.querySelector(constants.TRANSLATE_TEXTBOX)?.value;
       if (answer === undefined) {
@@ -110,7 +106,7 @@ export function markSubmission(challengeData) {
     }
 
     case 'judge': {
-      const choices = Array.from(document.querySelectorAll(constants.JUDGE_CHOICES));
+      const choices = Array.from(document.querySelectorAll(constants.MULTIPLE_CHOICE_CHOICES));
       const choiceID = choices.findIndex((x) => x.tabIndex === 0);
       return choiceID === challengeData.correctIndices[0];
     }
@@ -196,9 +192,9 @@ export function markSubmission(challengeData) {
         return correctAnswer.toLowerCase() === submission.toLowerCase().trim();
       });
     }
-  
+
     default:
-      return false
+      return false;
   }
 }
 
@@ -206,9 +202,8 @@ export function markMatch(challengeData, word1, word2) {
   if (word1 === word2) {
     return true;
   }
-  return Object.values(challengeData.pairs).some((pair) => {
-    return (word1 === pair.learningToken && word2 === pair.fromToken) ||
-      (word2 === pair.learningToken && word1 === pair.fromToken)
-    }
+  return Object.values(challengeData.pairs).some((pair) =>
+    (word1 === pair.learningToken && word2 === pair.fromToken) ||
+    (word2 === pair.learningToken && word1 === pair.fromToken)
   )
 }
