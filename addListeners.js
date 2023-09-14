@@ -1,14 +1,10 @@
 const SUBMISSION_BUTTON_LESSON = '[data-test="player-next"]';
 const SUBMISSION_BUTTON_SPAN = '[class="_13HXc"]';
+const MULTIPLE_CHOICE_CHOICES = '[data-test="challenge-choice"]';
 
 const IGNORED_CHARACTERS = /[_'\-\s,.?!;]/g;
-const ASSIST_CHOICES = '[data-test="challenge-choice"]';
 const COMPLETEREVERSETRANSLATION_TEXTBOX = '[class="_3f_Q3 _2FKqf _2ti2i"]';
 const COMPLETEREVERSETRANSLATION_BLANK = '[data-test="challenge-text-input"]';
-const DEFINITION_CHOICES = '[data-test="challenge-choice"]';
-const DIALOGUE_CHOICES = '[data-test="challenge-choice"]';
-const FORM_CHOICES = '[data-test="challenge-choice"]';
-const GAPFILL_CHOICES = '[data-test="challenge-choice"]';
 const JUDGE_CHOICES = '[data-test="challenge-choice"]';
 const MATCH_BUTTONS = '[class="_1deIS"]';
 const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
@@ -16,10 +12,8 @@ const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6
 const NAME_BUTTON = '[data-test="challenge-choice"]';
 const NAME_BUTTON_TEXT = '[data-test="challenge-judge-text"]';
 const NAME_TEXTBOX = '[data-test="challenge-text-input"]';
-const READCOMPREHENSION_BUTTONS = '[data-test="challenge-choice"]';
 const PARTIALREVERSETRANSLATE_TEXTBOX = '[class="_1fYGK _2FKqf _2ti2i"]';
 const PARTIALREVERSETRANSLATE_TEXT = 'span:not([class]), [contenteditable="true"]';
-const SELECT_CHOICES = '[data-test="challenge-choice"]';
 const SPEAK_ANSWER_AREA = '[class="PcKtj"]';
 const SPEAK_BUTTON_TYPE = '[class="_2J2do"]';
 const SPEAK_SELECTED_TEXT_CLICK = '[data-test="challenge-tap-token-text"]';
@@ -116,24 +110,23 @@ function markTranslate(answer, vertices) {
   return false;
 }
 
-function markMatch(challengeData, word1, word2) {
-  if (word1 === word2) {
-    return true;
-  }
-  return Object.values(challengeData.pairs).some((pair) => {
-    return (word1 === pair.learningToken && word2 === pair.fromToken) ||
-      (word2 === pair.learningToken && word1 === pair.fromToken)
-    }
-  )
+function markMultipleChoice(challengeData)
+{
+  const choices = Array.from(document.querySelectorAll(MULTIPLE_CHOICE_CHOICES));
+  const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+  return choiceID === challengeData.correctIndex;
 }
 
 function markSubmission(challengeData) {
   switch (challengeData.type) {
-    case 'assist': {
-      const choices = Array.from(document.querySelectorAll(ASSIST_CHOICES));
-      const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-      return choiceID === challengeData.correctIndex;
-    }
+    case 'assist':
+    case 'definition':
+    case 'dialogue':
+    case 'form':
+    case 'gapFill':
+    case 'readComprehension':
+    case 'select':
+      return markMultipleChoice(challengeData);
     
     case 'completeReverseTranslation': {
       let answer = document.querySelector(TRANSLATE_TEXTBOX)?.value;
@@ -149,30 +142,6 @@ function markSubmission(challengeData) {
       return markTranslate(answer, challengeData.grader.vertices);
     }
 
-    case 'definition': {
-      const choices = Array.from(document.querySelectorAll(DEFINITION_CHOICES));
-      const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-      return choiceID === challengeData.correctIndex;
-    }
-
-    case 'dialogue': {
-      const choices = Array.from(document.querySelectorAll(DIALOGUE_CHOICES));
-      const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-      return choiceID === challengeData.correctIndex;
-    }
-
-    case 'form': {
-      const choices = Array.from(document.querySelectorAll(FORM_CHOICES));
-      const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-      return choiceID === challengeData.correctIndex;
-    }
-    
-    case 'gapFill': {
-      const choices = Array.from(document.querySelectorAll(GAPFILL_CHOICES));
-      const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-      return choiceID === challengeData.correctIndex;
-    }
-
     case 'judge': {
       const choices = Array.from(document.querySelectorAll(JUDGE_CHOICES));
       const choiceID = choices.findIndex((x) => x.tabIndex === 0);
@@ -180,18 +149,14 @@ function markSubmission(challengeData) {
     }
 
     case 'name': {
-      console$1.log('name detected');
       const textBox = document.querySelector(NAME_TEXTBOX);
       const buttons = document.querySelectorAll(NAME_BUTTON);
       let answer;
       if (buttons !== null) {
         const buttonArray = Array.from(buttons);
-        console$1.log(buttonArray);
         const button = buttonArray.find((x) => x.tabIndex === 0);
-        console$1.log(button);
         const buttonText = button.querySelector(NAME_BUTTON_TEXT).innerHTML;
         answer = `${buttonText} ${textBox.value}`;
-        console$1.log(answer);
       } else {
         answer = textBox.value;
       }
@@ -203,18 +168,6 @@ function markSubmission(challengeData) {
       const answerArray = Array.from(textbox.querySelectorAll(PARTIALREVERSETRANSLATE_TEXT));
       const answer = answerArray.map((x) => x.textContent).join('');
       return markTranslate(answer, challengeData.grader.vertices);
-    }
-    
-    case 'readComprehension': {
-      const choices = Array.from(document.querySelectorAll(READCOMPREHENSION_BUTTONS));
-      const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-      return choiceID === challengeData.correctIndex;
-    }
-
-    case 'select': {
-      const choices = Array.from(document.querySelectorAll(SELECT_CHOICES));
-      const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-      return choiceID === challengeData.correctIndex;
     }
 
     case 'tapCloze': {
@@ -280,6 +233,17 @@ function markSubmission(challengeData) {
     default:
       return false
   }
+}
+
+function markMatch(challengeData, word1, word2) {
+  if (word1 === word2) {
+    return true;
+  }
+  return Object.values(challengeData.pairs).some((pair) => {
+    return (word1 === pair.learningToken && word2 === pair.fromToken) ||
+      (word2 === pair.learningToken && word1 === pair.fromToken)
+    }
+  )
 }
 
 const frame = document.createElement('iframe');

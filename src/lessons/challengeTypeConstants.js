@@ -5,6 +5,7 @@ export const SUBMISSION_BUTTON_STORY = '[data-test="stories-player-continue"]';
 export const START_BUTTON_STORY = '[data-test="story-start"]';
 export const SKIP_CHECKING_TRUE = 'skip checking: true';
 export const SKIP_CHECKING_FALSE = 'skip checking: false';
+export const MULTIPLE_CHOICE_CHOICES = '[data-test="challenge-choice"]';
 
 export const IGNORED_CHARACTERS = /[_'\-\s,.?!;]/g;
 export const IGNORED_CHARACTERS_STR = "_'-,.?!;";

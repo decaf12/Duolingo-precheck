@@ -31,7 +31,7 @@ function startsWithAt(target, candidate, startPos, strictCmp) {
   return true;
 }
 
-export function markTranslate(answer, vertices) {
+function markTranslate(answer, vertices) {
   const answerNoSpaces = answer.replace(constants.IGNORED_CHARACTERS, '');
   console.log(`answerNoSpaces: ${answerNoSpaces}`);
   const lastVertexID = vertices.length - 1;
@@ -77,24 +77,23 @@ export function markTranslate(answer, vertices) {
   return false;
 }
 
-export function markMatch(challengeData, word1, word2) {
-  if (word1 === word2) {
-    return true;
-  }
-  return Object.values(challengeData.pairs).some((pair) => {
-    return (word1 === pair.learningToken && word2 === pair.fromToken) ||
-      (word2 === pair.learningToken && word1 === pair.fromToken)
-    }
-  )
+function markMultipleChoice(challengeData)
+{
+  const choices = Array.from(document.querySelectorAll(constants.MULTIPLE_CHOICE_CHOICES));
+  const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+  return choiceID === challengeData.correctIndex;
 }
 
 export function markSubmission(challengeData) {
   switch (challengeData.type) {
-    case 'assist': {
-      const choices = Array.from(document.querySelectorAll(constants.ASSIST_CHOICES));
-      const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-      return choiceID === challengeData.correctIndex;
-    }
+    case 'assist':
+    case 'definition':
+    case 'dialogue':
+    case 'form':
+    case 'gapFill':
+    case 'readComprehension':
+    case 'select':
+      return markMultipleChoice(challengeData);
     
     case 'completeReverseTranslation': {
       let answer = document.querySelector(constants.TRANSLATE_TEXTBOX)?.value;
@@ -108,30 +107,6 @@ export function markSubmission(challengeData) {
         answer = answerArray.join('');
       }
       return markTranslate(answer, challengeData.grader.vertices);
-    }
-
-    case 'definition': {
-      const choices = Array.from(document.querySelectorAll(constants.DEFINITION_CHOICES));
-      const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-      return choiceID === challengeData.correctIndex;
-    }
-
-    case 'dialogue': {
-      const choices = Array.from(document.querySelectorAll(constants.DIALOGUE_CHOICES));
-      const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-      return choiceID === challengeData.correctIndex;
-    }
-
-    case 'form': {
-      const choices = Array.from(document.querySelectorAll(constants.FORM_CHOICES));
-      const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-      return choiceID === challengeData.correctIndex;
-    }
-    
-    case 'gapFill': {
-      const choices = Array.from(document.querySelectorAll(constants.GAPFILL_CHOICES));
-      const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-      return choiceID === challengeData.correctIndex;
     }
 
     case 'judge': {
@@ -160,18 +135,6 @@ export function markSubmission(challengeData) {
       const answerArray = Array.from(textbox.querySelectorAll(constants.PARTIALREVERSETRANSLATE_TEXT));
       const answer = answerArray.map((x) => x.textContent).join('');
       return markTranslate(answer, challengeData.grader.vertices);
-    }
-    
-    case 'readComprehension': {
-      const choices = Array.from(document.querySelectorAll(constants.READCOMPREHENSION_BUTTONS));
-      const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-      return choiceID === challengeData.correctIndex;
-    }
-
-    case 'select': {
-      const choices = Array.from(document.querySelectorAll(constants.SELECT_CHOICES));
-      const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-      return choiceID === challengeData.correctIndex;
     }
 
     case 'tapCloze': {
@@ -237,4 +200,15 @@ export function markSubmission(challengeData) {
     default:
       return false
   }
+}
+
+export function markMatch(challengeData, word1, word2) {
+  if (word1 === word2) {
+    return true;
+  }
+  return Object.values(challengeData.pairs).some((pair) => {
+    return (word1 === pair.learningToken && word2 === pair.fromToken) ||
+      (word2 === pair.learningToken && word1 === pair.fromToken)
+    }
+  )
 }
