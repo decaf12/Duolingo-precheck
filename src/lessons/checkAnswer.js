@@ -137,12 +137,21 @@ export function markSubmission(challengeData) {
     case 'judge': {
       const choices = Array.from(document.querySelectorAll(constants.JUDGE_CHOICES));
       const choiceID = choices.findIndex((x) => x.tabIndex === 0);
-      return choices === challengeData.correctIndices[0];
+      return choiceID === challengeData.correctIndices[0];
     }
 
     case 'name': {
       const textBox = document.querySelector(constants.NAME_TEXTBOX);
-      const answer = textBox.value;
+      const buttons = document.querySelectorAll(constants.NAME_BUTTON);
+      let answer;
+      if (buttons !== null) {
+        const buttonArray = Array.from(buttons);
+        const button = buttonArray.find((x) => x.tabIndex === 0);
+        const buttonText = button.querySelector(constants.NAME_BUTTON_TEXT).innerHTML;
+        answer = `${buttonText} ${textBox.value}`;
+      } else {
+        answer = textBox.value;
+      }
       return markTranslate(answer, challengeData.grader.vertices);
     }
 

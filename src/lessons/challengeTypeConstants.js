@@ -64,6 +64,8 @@ export const MATCH_BUTTON_NUMBER = '[class="Z7UoT _2S0Zh _2TrnF"]';
 
 export const TYPE_NAME = 'name';
 export const NAME = '[data-test="challenge challenge-name"]';
+export const NAME_BUTTON = '[data-test="challenge-choice"]';
+export const NAME_BUTTON_TEXT = '[data-test="challenge-judge-text"]';
 export const NAME_PROMPT = '[data-test="challenge-header"]';
 export const NAME_TEXTBOX = '[data-test="challenge-text-input"]';
 

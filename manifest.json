@@ -15,7 +15,10 @@
         "matches": [
           "*://*.duolingo.com/*"
           ],
-        "js": ["injectScript.js"]
+        "js": [
+          "injectScriptLesson.js",
+          "injectScriptStory.js"
+        ]
       }
     ],
 

@@ -13,6 +13,8 @@ const JUDGE_CHOICES = '[data-test="challenge-choice"]';
 const MATCH_BUTTONS = '[class="_1deIS"]';
 const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
+const NAME_BUTTON = '[data-test="challenge-choice"]';
+const NAME_BUTTON_TEXT = '[data-test="challenge-judge-text"]';
 const NAME_TEXTBOX = '[data-test="challenge-text-input"]';
 const READCOMPREHENSION_BUTTONS = '[data-test="challenge-choice"]';
 const PARTIALREVERSETRANSLATE_TEXTBOX = '[class="_1fYGK _2FKqf _2ti2i"]';
@@ -173,13 +175,26 @@ function markSubmission(challengeData) {
 
     case 'judge': {
       const choices = Array.from(document.querySelectorAll(JUDGE_CHOICES));
-      choices.findIndex((x) => x.tabIndex === 0);
-      return choices === challengeData.correctIndices[0];
+      const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+      return choiceID === challengeData.correctIndices[0];
     }
 
     case 'name': {
+      console$1.log('name detected');
       const textBox = document.querySelector(NAME_TEXTBOX);
-      const answer = textBox.value;
+      const buttons = document.querySelectorAll(NAME_BUTTON);
+      let answer;
+      if (buttons !== null) {
+        const buttonArray = Array.from(buttons);
+        console$1.log(buttonArray);
+        const button = buttonArray.find((x) => x.tabIndex === 0);
+        console$1.log(button);
+        const buttonText = button.querySelector(NAME_BUTTON_TEXT).innerHTML;
+        answer = `${buttonText} ${textBox.value}`;
+        console$1.log(answer);
+      } else {
+        answer = textBox.value;
+      }
       return markTranslate(answer, challengeData.grader.vertices);
     }
 

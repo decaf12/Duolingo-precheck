@@ -1,7 +1,6 @@
 import * as constants from './challengeTypeConstants';
 import * as check from './checkAnswer';
 
-
 const frame = document.createElement('iframe');
 frame.style = "border: 0";
 document.body.appendChild(frame);
