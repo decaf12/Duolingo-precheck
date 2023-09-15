@@ -14,6 +14,7 @@ document.addEventListener(
   'click',
   async (e) => {
     storyConsole.log(e.target);
+    storyConsole.log(e.target.closest("[class=\"_35e5D\"]"));
   },
 );
 
