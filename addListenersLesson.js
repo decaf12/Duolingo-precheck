@@ -5,7 +5,6 @@ const MULTIPLE_CHOICE_CHOICES = '[data-test="challenge-choice"]';
 const IGNORED_CHARACTERS = /[_'\-\s,.?!;]/g;
 const COMPLETEREVERSETRANSLATION_TEXTBOX = '[class="_3f_Q3 _2FKqf _2ti2i"]';
 const COMPLETEREVERSETRANSLATION_BLANK = '[data-test="challenge-text-input"]';
-const JUDGE_CHOICES = '[data-test="challenge-choice"]';
 const MATCH_BUTTONS = '[class="_1deIS"]';
 const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
@@ -66,7 +65,6 @@ function startsWithAt(target, candidate, startPos, strictCmp) {
 
 function markTranslate(answer, vertices) {
   const answerNoSpaces = answer.replace(IGNORED_CHARACTERS, '');
-  console.log(`answerNoSpaces: ${answerNoSpaces}`);
   const lastVertexID = vertices.length - 1;
   const lastPos = answerNoSpaces.length;
   const stack = [[0, 0, { 0: null }]];
@@ -77,8 +75,6 @@ function markTranslate(answer, vertices) {
     if (currVertexID === lastVertexID && currPos >= lastPos) {
       return true;
     }
-
-    console.log(`Current vertex: ${currVertexID}`);
 
     vertices[currVertexID].forEach((vertex) => {
       if (!(vertex.to in currVisited)) {
@@ -94,7 +90,6 @@ function markTranslate(answer, vertices) {
           // const origNoPunctuation = vertex.orig.replace(constants.IGNORED_CHARACTERS, '');
           const origNoPunctuation = vertex.orig.replace(IGNORED_CHARACTERS, '');
           const origNoPunctuationLen = origNoPunctuation.length;
-          console.log(`Orig no punctuation: ${origNoPunctuation}`);
           if (startsWithAt(vertex.orig, answerNoSpaces, currPos, false)) {
             stack.push([vertex.to, currPos + origLen, { ...currVisited, [vertex.to]: null }]);
           // eslint-disable-next-line max-len
@@ -127,7 +122,7 @@ function markSubmission(challengeData) {
     case 'readComprehension':
     case 'select':
       return markMultipleChoice(challengeData);
-    
+
     case 'completeReverseTranslation': {
       let answer = document.querySelector(TRANSLATE_TEXTBOX)?.value;
       if (answer === undefined) {
@@ -143,7 +138,7 @@ function markSubmission(challengeData) {
     }
 
     case 'judge': {
-      const choices = Array.from(document.querySelectorAll(JUDGE_CHOICES));
+      const choices = Array.from(document.querySelectorAll(MULTIPLE_CHOICE_CHOICES));
       const choiceID = choices.findIndex((x) => x.tabIndex === 0);
       return choiceID === challengeData.correctIndices[0];
     }
@@ -229,9 +224,9 @@ function markSubmission(challengeData) {
         return correctAnswer.toLowerCase() === submission.toLowerCase().trim();
       });
     }
-  
+
     default:
-      return false
+      return false;
   }
 }
 
@@ -239,18 +234,39 @@ function markMatch(challengeData, word1, word2) {
   if (word1 === word2) {
     return true;
   }
-  return Object.values(challengeData.pairs).some((pair) => {
-    return (word1 === pair.learningToken && word2 === pair.fromToken) ||
-      (word2 === pair.learningToken && word1 === pair.fromToken)
-    }
+  return Object.values(challengeData.pairs).some((pair) =>
+    (word1 === pair.learningToken && word2 === pair.fromToken) ||
+    (word2 === pair.learningToken && word1 === pair.fromToken)
   )
 }
 
-const frame = document.createElement('iframe');
-frame.style = "border: 0";
-document.body.appendChild(frame);
-const console$1 = frame.contentWindow.console;
-console$1.log('Adding listeners');
+const lessonFrame = document.createElement('iframe');
+lessonFrame.style = 'display: none';
+document.body.appendChild(lessonFrame);
+const lessonConsole = lessonFrame.contentWindow.console;
+lessonConsole.log('Adding lesson listeners');
+
+function getChallengeDataLesson() {
+  const solution = document.querySelector(".mQ0GW");
+  if (solution === null) {
+    return null;
+  }
+  const reactFiber = Object.keys(solution).find((s) => s.startsWith('__reactFiber$'));
+  return solution[reactFiber].return.return.stateNode.props.currentChallenge;
+}
+
+function checkSubmission(submissionButton) {
+  // If the button is "Check" then do not propagate the keypress.
+  if (submissionButton?.querySelector(SUBMISSION_BUTTON_SPAN)?.innerHTML !== 'Check') {
+    return true;
+  }
+
+  const challengeData = getChallengeDataLesson();
+  lessonConsole.log(challengeData);
+  lessonConsole.log(challengeData.type);
+
+  return markSubmission(challengeData);
+}
 
 // Check user submission whenever the Enter key is pressed
 document.addEventListener(
@@ -266,28 +282,15 @@ document.addEventListener(
 
     e.preventDefault();
     e.stopImmediatePropagation();
-    
+
     if (checkSubmission(submissionButton)) {
       submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      console$1.log('translation correct');
+      lessonConsole.log('translation correct');
     } else {
-      console$1.log('translation incorrect');
+      lessonConsole.log('translation incorrect');
     }
-  }
+  },
 );
-
-function checkSubmission(submissionButton) {
-  // If the button is "Check" then do not propagate the keypress.
-  if (submissionButton?.querySelector(SUBMISSION_BUTTON_SPAN)?.innerHTML !== 'Check') {
-    return true;
-  }
-
-  const challengeData = getChallengeDataLesson();
-  console$1.log(challengeData);
-  console$1.log(challengeData.type);
-      
-  return markSubmission(challengeData);
-}
 
 function addMatchListener(challengeData, button) {
   button.addEventListener('click', async (e) => {
@@ -298,12 +301,12 @@ function addMatchListener(challengeData, button) {
 
     e.preventDefault();
     e.stopImmediatePropagation();
-    
+
     const previousText = previouslyClicked.querySelector(MATCH_BUTTON_TEXT).textContent;
     const currentButton = button.textContent;
     const buttonNumber = currentButton.slice(0, 1);
     const currentText = currentButton.slice(1);
-    
+
     if (markMatch(challengeData, previousText, currentText)) {
       document.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: buttonNumber }));
     }
@@ -319,13 +322,3 @@ const observer = new MutationObserver(() => {
 });
 
 observer.observe(document.body, { childList: true, subtree: true });
-
-
-function getChallengeDataLesson() {
-  const solution = document.querySelector(".mQ0GW");
-  if (solution === null) {
-    return null;
-  }
-  const reactFiber = Object.keys(solution).find((s) => s.startsWith('__reactFiber$'));
-  return solution[reactFiber].return.return.stateNode.props.currentChallenge;
-}

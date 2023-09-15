@@ -5,8 +5,9 @@ export default [
   {
     input: [
       'src/lessons/injectScriptLesson.js',
-      'src/lessons/addListeners.js',
+      'src/lessons/addListenersLesson.js',
       'src/stories/injectScriptStory.js',
+      'src/stories/addListenersStory.js',
     ],
     output: {
       dir: '.',

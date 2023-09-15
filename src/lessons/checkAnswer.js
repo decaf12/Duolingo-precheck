@@ -115,7 +115,7 @@ export function markSubmission(challengeData) {
       const textBox = document.querySelector(constants.NAME_TEXTBOX);
       const buttons = document.querySelectorAll(constants.NAME_BUTTON);
       let answer;
-      if (buttons !== null) {
+      if (buttons.length > 0) {
         const buttonArray = Array.from(buttons);
         const button = buttonArray.find((x) => x.tabIndex === 0);
         const buttonText = button.querySelector(constants.NAME_BUTTON_TEXT).innerHTML;

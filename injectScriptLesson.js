@@ -1,5 +1,5 @@
-const s = document.createElement('script');
-s.src = chrome.runtime.getURL('addListeners.js');
+const lessonScript = document.createElement('script');
+lessonScript.src = chrome.runtime.getURL('addListenersLesson.js');
 // Don't use an arrow function here, otherwise 'this' would have no meaning.
-s.onload = function () { this.remove(); };
-(document.head || document.documentElement).appendChild(s);
+lessonScript.onload = function () { this.remove(); };
+(document.head || document.documentElement).appendChild(lessonScript);

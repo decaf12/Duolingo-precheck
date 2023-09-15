@@ -1,12 +1,11 @@
 import * as constants from './challengeTypeConstants';
 import * as check from './checkAnswer';
 
-
-const frame = document.createElement('iframe');
-frame.style = 'border: 0';
-document.body.appendChild(frame);
-const console = frame.contentWindow.console;
-console.log('Adding listeners');
+const lessonFrame = document.createElement('iframe');
+lessonFrame.style = 'display: none';
+document.body.appendChild(lessonFrame);
+const lessonConsole = lessonFrame.contentWindow.console;
+lessonConsole.log('Adding lesson listeners');
 
 function getChallengeDataLesson() {
   const solution = document.querySelector(".mQ0GW");
@@ -24,8 +23,8 @@ function checkSubmission(submissionButton) {
   }
 
   const challengeData = getChallengeDataLesson();
-  console.log(challengeData);
-  console.log(challengeData.type);
+  lessonConsole.log(challengeData);
+  lessonConsole.log(challengeData.type);
 
   return check.markSubmission(challengeData);
 }
@@ -47,9 +46,9 @@ document.addEventListener(
 
     if (checkSubmission(submissionButton)) {
       submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      console.log('translation correct');
+      lessonConsole.log('translation correct');
     } else {
-      console.log('translation incorrect');
+      lessonConsole.log('translation incorrect');
     }
   },
 );
