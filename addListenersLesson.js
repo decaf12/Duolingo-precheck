@@ -271,7 +271,7 @@ function checkSubmission(submissionButton) {
 // Check user submission whenever the Enter key is pressed
 document.addEventListener(
   'keydown',
-  async (e) => {
+  (e) => {
     if (e.key !== 'Enter') {
       return;
     }
