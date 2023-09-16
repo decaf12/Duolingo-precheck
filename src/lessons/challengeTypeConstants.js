@@ -7,8 +7,8 @@ export const SKIP_CHECKING_TRUE = 'skip checking: true';
 export const SKIP_CHECKING_FALSE = 'skip checking: false';
 export const MULTIPLE_CHOICE_CHOICES = '[data-test="challenge-choice"]';
 
-export const IGNORED_CHARACTERS = /[_'\-\s,.?!;]/g;
-export const IGNORED_CHARACTERS_STR = "_'-,.?!;";
+export const IGNORED_CHARACTERS = /[_\-\s,.?!;]/g;
+export const IGNORED_CHARACTERS_STR = "_-,.?!;";
 export const STRAIGHT_QUOTE = String.fromCharCode(34);
 
 export const TYPE_ASSIST = 'assist';
