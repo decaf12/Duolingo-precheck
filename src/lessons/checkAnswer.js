@@ -116,17 +116,12 @@ export function markSubmission(challengeData) {
       const buttonArray = Array.from(document.querySelectorAll(constants.NAME_BUTTON));
       let answer;
       if (buttonArray.length > 0) {
-        lessonConsole.log(buttonArray);
-        lessonConsole.log(buttonArray.map((x) => x.className));
         const button = buttonArray.find((x) => x.className === constants.NAME_BUTTON_SELECTED);
-        lessonConsole.log(button);
         const buttonText = button.querySelector(constants.NAME_BUTTON_TEXT).innerHTML;
-        lessonConsole.log(buttonText);
         answer = `${buttonText} ${textBox.value}`;
       } else {
         answer = textBox.value;
       }
-      lessonConsole.log(answer);
       return markTranslate(answer, challengeData.grader.vertices);
     }
 

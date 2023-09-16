@@ -149,17 +149,12 @@ function markSubmission(challengeData) {
       const buttonArray = Array.from(document.querySelectorAll(NAME_BUTTON));
       let answer;
       if (buttonArray.length > 0) {
-        lessonConsole$1.log(buttonArray);
-        lessonConsole$1.log(buttonArray.map((x) => x.className));
         const button = buttonArray.find((x) => x.className === NAME_BUTTON_SELECTED);
-        lessonConsole$1.log(button);
         const buttonText = button.querySelector(NAME_BUTTON_TEXT).innerHTML;
-        lessonConsole$1.log(buttonText);
         answer = `${buttonText} ${textBox.value}`;
       } else {
         answer = textBox.value;
       }
-      lessonConsole$1.log(answer);
       return markTranslate(answer, challengeData.grader.vertices);
     }
 
@@ -248,8 +243,8 @@ function markMatch(challengeData, word1, word2) {
 const lessonFrame = document.createElement('iframe');
 lessonFrame.style = 'display: none';
 document.body.appendChild(lessonFrame);
-const lessonConsole$1 = lessonFrame.contentWindow.console;
-lessonConsole$1.log('Adding lesson listeners');
+const lessonConsole = lessonFrame.contentWindow.console;
+lessonConsole.log('Adding lesson listeners');
 
 function getChallengeDataLesson() {
   const solution = document.querySelector(".mQ0GW");
@@ -267,8 +262,8 @@ function checkSubmission(submissionButton) {
   }
 
   const challengeData = getChallengeDataLesson();
-  lessonConsole$1.log(challengeData);
-  lessonConsole$1.log(challengeData.type);
+  lessonConsole.log(challengeData);
+  lessonConsole.log(challengeData.type);
 
   return markSubmission(challengeData);
 }
@@ -290,9 +285,9 @@ document.addEventListener(
 
     if (checkSubmission(submissionButton)) {
       submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      lessonConsole$1.log('translation correct');
+      lessonConsole.log('translation correct');
     } else {
-      lessonConsole$1.log('translation incorrect');
+      lessonConsole.log('translation incorrect');
     }
   },
 );
