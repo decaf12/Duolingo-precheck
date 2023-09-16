@@ -10,6 +10,7 @@ const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
 const NAME_BUTTON = '[data-test="challenge-choice"]';
 const NAME_BUTTON_TEXT = '[data-test="challenge-judge-text"]';
+const NAME_BUTTON_SELECTED = '_3C_oC disCS _2bJln _2-OmZ';
 const NAME_TEXTBOX = '[data-test="challenge-text-input"]';
 const PARTIALREVERSETRANSLATE_TEXTBOX = '[class="_1fYGK _2FKqf _2ti2i"]';
 const PARTIALREVERSETRANSLATE_TEXT = 'span:not([class]), [contenteditable="true"]';
@@ -145,16 +146,20 @@ function markSubmission(challengeData) {
 
     case 'name': {
       const textBox = document.querySelector(NAME_TEXTBOX);
-      const buttons = document.querySelectorAll(NAME_BUTTON);
+      const buttonArray = Array.from(document.querySelectorAll(NAME_BUTTON));
       let answer;
-      if (buttons.length > 0) {
-        const buttonArray = Array.from(buttons);
-        const button = buttonArray.find((x) => x.tabIndex === 0);
+      if (buttonArray.length > 0) {
+        lessonConsole$1.log(buttonArray);
+        lessonConsole$1.log(buttonArray.map((x) => x.className));
+        const button = buttonArray.find((x) => x.className === NAME_BUTTON_SELECTED);
+        lessonConsole$1.log(button);
         const buttonText = button.querySelector(NAME_BUTTON_TEXT).innerHTML;
+        lessonConsole$1.log(buttonText);
         answer = `${buttonText} ${textBox.value}`;
       } else {
         answer = textBox.value;
       }
+      lessonConsole$1.log(answer);
       return markTranslate(answer, challengeData.grader.vertices);
     }
 
@@ -243,8 +248,8 @@ function markMatch(challengeData, word1, word2) {
 const lessonFrame = document.createElement('iframe');
 lessonFrame.style = 'display: none';
 document.body.appendChild(lessonFrame);
-const lessonConsole = lessonFrame.contentWindow.console;
-lessonConsole.log('Adding lesson listeners');
+const lessonConsole$1 = lessonFrame.contentWindow.console;
+lessonConsole$1.log('Adding lesson listeners');
 
 function getChallengeDataLesson() {
   const solution = document.querySelector(".mQ0GW");
@@ -262,8 +267,8 @@ function checkSubmission(submissionButton) {
   }
 
   const challengeData = getChallengeDataLesson();
-  lessonConsole.log(challengeData);
-  lessonConsole.log(challengeData.type);
+  lessonConsole$1.log(challengeData);
+  lessonConsole$1.log(challengeData.type);
 
   return markSubmission(challengeData);
 }
@@ -285,15 +290,15 @@ document.addEventListener(
 
     if (checkSubmission(submissionButton)) {
       submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      lessonConsole.log('translation correct');
+      lessonConsole$1.log('translation correct');
     } else {
-      lessonConsole.log('translation incorrect');
+      lessonConsole$1.log('translation incorrect');
     }
   },
 );
 
 function addMatchListener(challengeData, button) {
-  button.addEventListener('click', async (e) => {
+  button.addEventListener('click', (e) => {
     const previouslyClicked = document.querySelector(MATCH_BUTTON_SELECTED);
     if (!previouslyClicked) {
       return;

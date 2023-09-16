@@ -54,7 +54,7 @@ document.addEventListener(
 );
 
 function addMatchListener(challengeData, button) {
-  button.addEventListener('click', async (e) => {
+  button.addEventListener('click', (e) => {
     const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
     if (!previouslyClicked) {
       return;

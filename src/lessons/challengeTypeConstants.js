@@ -67,6 +67,7 @@ export const TYPE_NAME = 'name';
 export const NAME = '[data-test="challenge challenge-name"]';
 export const NAME_BUTTON = '[data-test="challenge-choice"]';
 export const NAME_BUTTON_TEXT = '[data-test="challenge-judge-text"]';
+export const NAME_BUTTON_SELECTED = '_3C_oC disCS _2bJln _2-OmZ'
 export const NAME_PROMPT = '[data-test="challenge-header"]';
 export const NAME_TEXTBOX = '[data-test="challenge-text-input"]';
 
