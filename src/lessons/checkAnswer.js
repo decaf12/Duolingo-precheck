@@ -169,10 +169,8 @@ export function markSubmission(challengeData) {
       let identicalToCorrectTokens = true;
       if (answer === undefined) {
         const answerArea = document.querySelector(constants.SPEAK_ANSWER_AREA);
-        const selectionArrayClick = Array.from(answerArea.querySelectorAll(constants.SPEAK_SELECTED_TEXT_CLICK));
-        const selectionArrayType = Array.from(answerArea.querySelectorAll(constants.SPEAK_BUTTON_TYPE));
-        const selectionArray = selectionArrayClick.length ? selectionArrayClick : selectionArrayType;
-        const selectionArrayText = selectionArray.map((button) => button.textContent);
+        const selectionArray = Array.from(answerArea.childNodes).map((div) => div.getElementsByTagName('button')[0]);
+        const selectionArrayText = selectionArray.map((button) => button.innerText);
         const correctTokens = challengeData.correctTokens;
         if (selectionArrayText.length === correctTokens.length) {
           for (let i = 0; i < selectionArrayText.length; ++i) {

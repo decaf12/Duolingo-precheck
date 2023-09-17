@@ -15,8 +15,6 @@ const NAME_TEXTBOX = '[data-test="challenge-text-input"]';
 const PARTIALREVERSETRANSLATE_TEXTBOX = '[class="_1fYGK _2FKqf _2ti2i"]';
 const PARTIALREVERSETRANSLATE_TEXT = 'span:not([class]), [contenteditable="true"]';
 const SPEAK_ANSWER_AREA = '[class="PcKtj"]';
-const SPEAK_BUTTON_TYPE = '[class="_2J2do"]';
-const SPEAK_SELECTED_TEXT_CLICK = '[data-test="challenge-tap-token-text"]';
 const TAPCLOZE_SELECTED = '[class="_1LQx7"]';
 const TAPCLOZE_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 const TAPCOMPLETE_SELECTED = '[class="_2Z2xv"]';
@@ -202,19 +200,25 @@ function markSubmission(challengeData) {
       let identicalToCorrectTokens = true;
       if (answer === undefined) {
         const answerArea = document.querySelector(SPEAK_ANSWER_AREA);
-        const selectionArrayClick = Array.from(answerArea.querySelectorAll(SPEAK_SELECTED_TEXT_CLICK));
-        const selectionArrayType = Array.from(answerArea.querySelectorAll(SPEAK_BUTTON_TYPE));
-        const selectionArray = selectionArrayClick.length ? selectionArrayClick : selectionArrayType;
-        const selectionArrayText = selectionArray.map((button) => button.textContent);
+        // const selectionArrayClick = Array.from(answerArea.querySelectorAll(constants.SPEAK_SELECTED_TEXT_CLICK));
+        // const selectionArrayType = Array.from(answerArea.querySelectorAll(constants.SPEAK_BUTTON_TYPE));
+        const selectionArray = Array.from(answerArea.childNodes).map((div) => div.getElementsByTagName('button')[0]);
+        lessonConsole$1.log(selectionArray);
+        // const selectionArray = selectionArrayClick.length ? selectionArrayClick : selectionArrayType;
+        const selectionArrayText = selectionArray.map((button) => button.innerText);
         const correctTokens = challengeData.correctTokens;
+        lessonConsole$1.log(selectionArrayText);
+        lessonConsole$1.log(correctTokens);
         if (selectionArrayText.length === correctTokens.length) {
           for (let i = 0; i < selectionArrayText.length; ++i) {
+            lessonConsole$1.log(`selection: ${selectionArrayText[i]}, correct: ${correctTokens[i]}`);
             if (selectionArrayText[i] !== correctTokens[i]) {
               identicalToCorrectTokens = false;
               break;
             }
           }
         } else {
+          lessonConsole$1.log('Different lengths');
           identicalToCorrectTokens = false;
         }
         answer = selectionArrayText.join(' ');
@@ -259,8 +263,8 @@ function markMatch(challengeData, word1, word2) {
 const lessonFrame = document.createElement('iframe');
 lessonFrame.style = 'display: none';
 document.body.appendChild(lessonFrame);
-const lessonConsole = lessonFrame.contentWindow.console;
-lessonConsole.log('Adding lesson listeners');
+const lessonConsole$1 = lessonFrame.contentWindow.console;
+lessonConsole$1.log('Adding lesson listeners');
 
 function getChallengeDataLesson() {
   const solution = document.querySelector(".mQ0GW");
@@ -278,8 +282,8 @@ function checkSubmission(submissionButton) {
   }
 
   const challengeData = getChallengeDataLesson();
-  lessonConsole.log(challengeData);
-  lessonConsole.log(challengeData.type);
+  lessonConsole$1.log(challengeData);
+  lessonConsole$1.log(challengeData.type);
 
   return markSubmission(challengeData);
 }
@@ -301,9 +305,9 @@ document.addEventListener(
 
     if (checkSubmission(submissionButton)) {
       submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      lessonConsole.log('translation correct');
+      lessonConsole$1.log('translation correct');
     } else {
-      lessonConsole.log('translation incorrect');
+      lessonConsole$1.log('translation incorrect');
     }
   },
 );
