@@ -2,7 +2,7 @@ const SUBMISSION_BUTTON_LESSON = '[data-test="player-next"]';
 const SUBMISSION_BUTTON_SPAN = '[class="_13HXc"]';
 const MULTIPLE_CHOICE_CHOICES = '[data-test="challenge-choice"]';
 
-const IGNORED_CHARACTERS = /[_'\-\s,.?!;]/g;
+const IGNORED_CHARACTERS = /[_\-\s,.?!;]/g;
 const COMPLETEREVERSETRANSLATION_TEXTBOX = '[class="_3f_Q3 _2FKqf _2ti2i"]';
 const COMPLETEREVERSETRANSLATION_BLANK = '[data-test="challenge-text-input"]';
 const MATCH_BUTTONS = '[class="_1deIS"]';
@@ -199,14 +199,32 @@ function markSubmission(challengeData) {
 
     case 'translate': {
       let answer = document.querySelector(TRANSLATE_TEXTBOX)?.value;
+      let identicalToCorrectTokens = true;
       if (answer === undefined) {
         const answerArea = document.querySelector(SPEAK_ANSWER_AREA);
         const selectionArrayClick = Array.from(answerArea.querySelectorAll(SPEAK_SELECTED_TEXT_CLICK));
         const selectionArrayType = Array.from(answerArea.querySelectorAll(SPEAK_BUTTON_TYPE));
         const selectionArray = selectionArrayClick.length ? selectionArrayClick : selectionArrayType;
-        answer = selectionArray.map((button) => button.textContent).join(' ');
+        const selectionArrayText = selectionArray.map((button) => button.textContent);
+        const correctTokens = challengeData.correctTokens;
+        if (selectionArrayText.length === correctTokens.length) {
+          for (let i = 0; i < selectionArrayText.length; ++i) {
+            if (selectionArrayText[i] !== correctTokens[i]) {
+              identicalToCorrectTokens = false;
+              break;
+            }
+          }
+        } else {
+          identicalToCorrectTokens = false;
+        }
+        answer = selectionArrayText.join(' ');
+      } else {
+        identicalToCorrectTokens = false;
       }
-      return markTranslate(answer, challengeData.grader.vertices);
+      if (identicalToCorrectTokens) {
+        lessonConsole$1.log('marking by correctTokens');
+      }
+      return identicalToCorrectTokens ? true : markTranslate(answer, challengeData.grader.vertices);
     }
 
     case 'typeCloze': {
@@ -243,8 +261,8 @@ function markMatch(challengeData, word1, word2) {
 const lessonFrame = document.createElement('iframe');
 lessonFrame.style = 'display: none';
 document.body.appendChild(lessonFrame);
-const lessonConsole = lessonFrame.contentWindow.console;
-lessonConsole.log('Adding lesson listeners');
+const lessonConsole$1 = lessonFrame.contentWindow.console;
+lessonConsole$1.log('Adding lesson listeners');
 
 function getChallengeDataLesson() {
   const solution = document.querySelector(".mQ0GW");
@@ -262,8 +280,8 @@ function checkSubmission(submissionButton) {
   }
 
   const challengeData = getChallengeDataLesson();
-  lessonConsole.log(challengeData);
-  lessonConsole.log(challengeData.type);
+  lessonConsole$1.log(challengeData);
+  lessonConsole$1.log(challengeData.type);
 
   return markSubmission(challengeData);
 }
@@ -285,9 +303,9 @@ document.addEventListener(
 
     if (checkSubmission(submissionButton)) {
       submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      lessonConsole.log('translation correct');
+      lessonConsole$1.log('translation correct');
     } else {
-      lessonConsole.log('translation incorrect');
+      lessonConsole$1.log('translation incorrect');
     }
   },
 );

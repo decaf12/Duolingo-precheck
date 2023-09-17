@@ -166,14 +166,30 @@ export function markSubmission(challengeData) {
 
     case 'translate': {
       let answer = document.querySelector(constants.TRANSLATE_TEXTBOX)?.value;
+      let identicalToCorrectTokens = true;
       if (answer === undefined) {
         const answerArea = document.querySelector(constants.SPEAK_ANSWER_AREA);
         const selectionArrayClick = Array.from(answerArea.querySelectorAll(constants.SPEAK_SELECTED_TEXT_CLICK));
         const selectionArrayType = Array.from(answerArea.querySelectorAll(constants.SPEAK_BUTTON_TYPE));
         const selectionArray = selectionArrayClick.length ? selectionArrayClick : selectionArrayType;
-        answer = selectionArray.map((button) => button.textContent).join(' ');
+        const selectionArrayText = selectionArray.map((button) => button.textContent);
+        const correctTokens = challengeData.correctTokens;
+        if (selectionArrayText.length === correctTokens.length) {
+          for (let i = 0; i < selectionArrayText.length; ++i) {
+            if (selectionArrayText[i] !== correctTokens[i]) {
+              identicalToCorrectTokens = false;
+              break;
+            }
+          }
+        } else {
+          identicalToCorrectTokens = false;
+        }
+        answer = selectionArrayText.join(' ');
+      } else {
+        identicalToCorrectTokens = false;
       }
-      return markTranslate(answer, challengeData.grader.vertices);
+
+      return identicalToCorrectTokens ? true : markTranslate(answer, challengeData.grader.vertices);
     }
 
     case 'typeCloze': {
