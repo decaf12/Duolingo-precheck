@@ -35,6 +35,16 @@ storyChoicesArray.forEach((button) => button.removeAttribute('onclick'));
 //   },
 // );
 
+function addStoryListener(challengeData, storyChoice) {
+  storyChoice.addEventListener(
+    'click',
+    (e) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  )
+}
+
 function checkStorySubmission(submissionButton) {
   if (submissionButton.innerHTML !== 'Continue') {
     return true;
@@ -47,3 +57,14 @@ function checkStorySubmission(submissionButton) {
   storyConsole.log(challengeData);
   return false;
 }
+
+const observerStory = new MutationObserver(() => {
+    challengeData = getChallengeDataStory();
+    const matchButtons = document.querySelectorAll(constants.STORY_CHOICE);
+    if (matchButtons.length > 0) {
+      matchButtons.forEach((x) => addStoryListener(challengeData, x));
+    }
+  }
+);
+
+observerStory.observe(document.body, { childList: true, subtree: true });

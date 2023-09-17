@@ -221,9 +221,7 @@ function markSubmission(challengeData) {
       } else {
         identicalToCorrectTokens = false;
       }
-      if (identicalToCorrectTokens) {
-        lessonConsole$1.log('marking by correctTokens');
-      }
+
       return identicalToCorrectTokens ? true : markTranslate(answer, challengeData.grader.vertices);
     }
 
@@ -261,8 +259,8 @@ function markMatch(challengeData, word1, word2) {
 const lessonFrame = document.createElement('iframe');
 lessonFrame.style = 'display: none';
 document.body.appendChild(lessonFrame);
-const lessonConsole$1 = lessonFrame.contentWindow.console;
-lessonConsole$1.log('Adding lesson listeners');
+const lessonConsole = lessonFrame.contentWindow.console;
+lessonConsole.log('Adding lesson listeners');
 
 function getChallengeDataLesson() {
   const solution = document.querySelector(".mQ0GW");
@@ -280,8 +278,8 @@ function checkSubmission(submissionButton) {
   }
 
   const challengeData = getChallengeDataLesson();
-  lessonConsole$1.log(challengeData);
-  lessonConsole$1.log(challengeData.type);
+  lessonConsole.log(challengeData);
+  lessonConsole.log(challengeData.type);
 
   return markSubmission(challengeData);
 }
@@ -303,9 +301,9 @@ document.addEventListener(
 
     if (checkSubmission(submissionButton)) {
       submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      lessonConsole$1.log('translation correct');
+      lessonConsole.log('translation correct');
     } else {
-      lessonConsole$1.log('translation incorrect');
+      lessonConsole.log('translation incorrect');
     }
   },
 );
@@ -331,7 +329,7 @@ function addMatchListener(challengeData, button) {
   });
 }
 
-const observer = new MutationObserver(() => {
+const observerMatch = new MutationObserver(() => {
   const challengeData = getChallengeDataLesson();
   if (challengeData?.type === 'match') {
     const matchButtons = document.querySelectorAll(MATCH_BUTTONS);
@@ -339,4 +337,4 @@ const observer = new MutationObserver(() => {
   }
 });
 
-observer.observe(document.body, { childList: true, subtree: true });
+observerMatch.observe(document.body, { childList: true, subtree: true });

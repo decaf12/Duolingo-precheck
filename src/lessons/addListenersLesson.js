@@ -74,7 +74,7 @@ function addMatchListener(challengeData, button) {
   });
 }
 
-const observer = new MutationObserver(() => {
+const observerMatch = new MutationObserver(() => {
   const challengeData = getChallengeDataLesson();
   if (challengeData?.type === 'match') {
     const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
@@ -82,4 +82,4 @@ const observer = new MutationObserver(() => {
   }
 });
 
-observer.observe(document.body, { childList: true, subtree: true });
+observerMatch.observe(document.body, { childList: true, subtree: true });
