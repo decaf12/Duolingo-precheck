@@ -39,8 +39,17 @@ function addStoryListener(challengeData, storyChoice) {
   storyChoice.addEventListener(
     'click',
     (e) => {
-      e.preventDefault();
-      e.stopImmediatePropagation();
+      const orig = e.target.closest("[class=\"_35e5D\"]");
+      storyConsole.log(orig);
+      let pass = true;
+      if (orig !== null) {
+        pass = false;
+      }
+
+      if (!pass) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
     }
   )
 }

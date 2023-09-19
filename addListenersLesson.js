@@ -200,25 +200,17 @@ function markSubmission(challengeData) {
       let identicalToCorrectTokens = true;
       if (answer === undefined) {
         const answerArea = document.querySelector(SPEAK_ANSWER_AREA);
-        // const selectionArrayClick = Array.from(answerArea.querySelectorAll(constants.SPEAK_SELECTED_TEXT_CLICK));
-        // const selectionArrayType = Array.from(answerArea.querySelectorAll(constants.SPEAK_BUTTON_TYPE));
         const selectionArray = Array.from(answerArea.childNodes).map((div) => div.getElementsByTagName('button')[0]);
-        lessonConsole$1.log(selectionArray);
-        // const selectionArray = selectionArrayClick.length ? selectionArrayClick : selectionArrayType;
         const selectionArrayText = selectionArray.map((button) => button.innerText);
         const correctTokens = challengeData.correctTokens;
-        lessonConsole$1.log(selectionArrayText);
-        lessonConsole$1.log(correctTokens);
         if (selectionArrayText.length === correctTokens.length) {
           for (let i = 0; i < selectionArrayText.length; ++i) {
-            lessonConsole$1.log(`selection: ${selectionArrayText[i]}, correct: ${correctTokens[i]}`);
             if (selectionArrayText[i] !== correctTokens[i]) {
               identicalToCorrectTokens = false;
               break;
             }
           }
         } else {
-          lessonConsole$1.log('Different lengths');
           identicalToCorrectTokens = false;
         }
         answer = selectionArrayText.join(' ');
@@ -263,8 +255,8 @@ function markMatch(challengeData, word1, word2) {
 const lessonFrame = document.createElement('iframe');
 lessonFrame.style = 'display: none';
 document.body.appendChild(lessonFrame);
-const lessonConsole$1 = lessonFrame.contentWindow.console;
-lessonConsole$1.log('Adding lesson listeners');
+const lessonConsole = lessonFrame.contentWindow.console;
+lessonConsole.log('Adding lesson listeners');
 
 function getChallengeDataLesson() {
   const solution = document.querySelector(".mQ0GW");
@@ -282,8 +274,8 @@ function checkSubmission(submissionButton) {
   }
 
   const challengeData = getChallengeDataLesson();
-  lessonConsole$1.log(challengeData);
-  lessonConsole$1.log(challengeData.type);
+  lessonConsole.log(challengeData);
+  lessonConsole.log(challengeData.type);
 
   return markSubmission(challengeData);
 }
@@ -300,14 +292,12 @@ document.addEventListener(
       return;
     }
 
-    e.preventDefault();
-    e.stopImmediatePropagation();
-
-    if (checkSubmission(submissionButton)) {
-      submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      lessonConsole$1.log('translation correct');
-    } else {
-      lessonConsole$1.log('translation incorrect');
+    
+    if (!checkSubmission(submissionButton)) {
+      // submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      lessonConsole.log('translation incorrect');
     }
   },
 );
