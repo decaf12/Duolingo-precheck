@@ -1,5 +1,6 @@
 import * as constants from './challengeTypeConstants';
 import markStorySubmission from './checkAnswer';
+import getReactFiber from '../getReactFiber';
 
 const storyFrame = document.createElement('iframe');
 storyFrame.style = 'display: none';
@@ -13,8 +14,7 @@ function addStoryListener(storyChoice) {
     (e) => {
       const button = e.target;
       const question = button.closest("[class=\"_35e5D\"]").previousSibling;
-      const reactFiberStory = Object.keys(question).find((s) => s.startsWith('__reactFiber$'));
-      const storyData = question[reactFiberStory].return.memoizedProps.challengeElement;
+      const storyData = getReactFiber(question).return.memoizedProps.challengeElement;
       if (!markStorySubmission(storyData, button)) {
         e.preventDefault();
         e.stopImmediatePropagation();

@@ -1,3 +1,5 @@
+import { g as getReactFiber } from './getReactFiber-b5720717.js';
+
 const SUBMISSION_BUTTON_LESSON = '[data-test="player-next"]';
 const SUBMISSION_BUTTON_SPAN = '[class="_13HXc"]';
 const MULTIPLE_CHOICE_CHOICES = '[data-test="challenge-choice"]';
@@ -263,8 +265,7 @@ function getChallengeDataLesson() {
   if (solution === null) {
     return null;
   }
-  const reactFiber = Object.keys(solution).find((s) => s.startsWith('__reactFiber$'));
-  return solution[reactFiber].return.return.stateNode.props.currentChallenge;
+  return getReactFiber(solution).return.return.stateNode.props.currentChallenge;
 }
 
 function checkSubmission(submissionButton) {

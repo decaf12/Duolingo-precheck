@@ -1,20 +1,22 @@
+import { g as getReactFiber } from './getReactFiber-b5720717.js';
+
 const STORY_CHOICE = "[data-test='stories-choice']";
 
 function markStorySubmission(storyData, button) {
   switch (storyData.type) {
-    case 'SELECT_PHRASE': {
-      const answerArray = storyData.answers;
-      const correctID = storyData.correctAnswerIndex;
-      const correctText = answerArray[correctID];
-      const buttonText = button.innerText;
-      return correctText === buttonText;
-    }
-    
     case 'MULTIPLE_CHOICE': {
       const answerArray = storyData.answers;
       const correctID = storyData.correctAnswerIndex;
       const buttonText = button.nextElementSibling.textContent;
       const correctText = answerArray[correctID].text;
+      return correctText === buttonText;
+    }
+
+    case 'SELECT_PHRASE': {
+      const answerArray = storyData.answers;
+      const correctID = storyData.correctAnswerIndex;
+      const correctText = answerArray[correctID];
+      const buttonText = button.innerText;
       return correctText === buttonText;
     }
 
@@ -35,8 +37,7 @@ function addStoryListener(storyChoice) {
     (e) => {
       const button = e.target;
       const question = button.closest("[class=\"_35e5D\"]").previousSibling;
-      const reactFiberStory = Object.keys(question).find((s) => s.startsWith('__reactFiber$'));
-      const storyData = question[reactFiberStory].return.memoizedProps.challengeElement;
+      const storyData = getReactFiber(question).return.memoizedProps.challengeElement;
       if (!markStorySubmission(storyData, button)) {
         e.preventDefault();
         e.stopImmediatePropagation();

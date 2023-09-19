@@ -1,5 +1,6 @@
 import * as constants from './challengeTypeConstants';
 import * as check from './checkAnswer';
+import getReactFiber from '../getReactFiber';
 
 const lessonFrame = document.createElement('iframe');
 lessonFrame.style = 'display: none';
@@ -12,8 +13,7 @@ function getChallengeDataLesson() {
   if (solution === null) {
     return null;
   }
-  const reactFiber = Object.keys(solution).find((s) => s.startsWith('__reactFiber$'));
-  return solution[reactFiber].return.return.stateNode.props.currentChallenge;
+  return getReactFiber(solution).return.return.stateNode.props.currentChallenge;
 }
 
 function checkSubmission(submissionButton) {
