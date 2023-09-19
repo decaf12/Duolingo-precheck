@@ -294,10 +294,8 @@ document.addEventListener(
 
     
     if (!checkSubmission(submissionButton)) {
-      // submissionButton.dispatchEvent(new MouseEvent('click', { bubbles: true }));
       e.preventDefault();
       e.stopImmediatePropagation();
-      lessonConsole.log('translation incorrect');
     }
   },
 );
@@ -309,16 +307,14 @@ function addMatchListener(challengeData, button) {
       return;
     }
 
-    e.preventDefault();
-    e.stopImmediatePropagation();
-
+    
     const previousText = previouslyClicked.querySelector(MATCH_BUTTON_TEXT).textContent;
     const currentButton = button.textContent;
-    const buttonNumber = currentButton.slice(0, 1);
     const currentText = currentButton.slice(1);
-
-    if (markMatch(challengeData, previousText, currentText)) {
-      document.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, key: buttonNumber }));
+    
+    if (!markMatch(challengeData, previousText, currentText)) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
     }
   });
 }

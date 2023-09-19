@@ -59,7 +59,6 @@ function addMatchListener(challengeData, button) {
     
     const previousText = previouslyClicked.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
     const currentButton = button.textContent;
-    const buttonNumber = currentButton.slice(0, 1);
     const currentText = currentButton.slice(1);
     
     if (!check.markMatch(challengeData, previousText, currentText)) {
