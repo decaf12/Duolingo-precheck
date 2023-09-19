@@ -1,5 +1,28 @@
 const STORY_CHOICE = "[data-test='stories-choice']";
 
+function markStorySubmission(storyData, button) {
+  switch (storyData.type) {
+    case 'SELECT_PHRASE': {
+      const answerArray = storyData.answers;
+      const correctID = storyData.correctAnswerIndex;
+      const correctText = answerArray[correctID];
+      const buttonText = button.innerText;
+      return correctText === buttonText;
+    }
+    
+    case 'MULTIPLE_CHOICE': {
+      const answerArray = storyData.answers;
+      const correctID = storyData.correctAnswerIndex;
+      const buttonText = button.nextElementSibling.textContent;
+      const correctText = answerArray[correctID].text;
+      return correctText === buttonText;
+    }
+
+    default:
+      return false;
+  }
+}
+
 const storyFrame = document.createElement('iframe');
 storyFrame.style = 'display: none';
 document.body.appendChild(storyFrame);
@@ -10,14 +33,11 @@ function addStoryListener(storyChoice) {
   storyChoice.addEventListener(
     'click',
     (e) => {
-      const orig = e.target.closest("[class=\"_35e5D\"]");
-      storyConsole.log(orig);
-      let pass = true;
-      if (orig !== null) {
-        pass = false;
-      }
-
-      if (!pass) {
+      const button = e.target;
+      const question = button.closest("[class=\"_35e5D\"]").previousSibling;
+      const reactFiberStory = Object.keys(question).find((s) => s.startsWith('__reactFiber$'));
+      const storyData = question[reactFiberStory].return.memoizedProps.challengeElement;
+      if (!markStorySubmission(storyData, button)) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }
