@@ -114,6 +114,15 @@ export function markSubmission(challengeData) {
       return choiceID === challengeData.correctIndices[0];
     }
 
+    case 'listenComplete': {
+      const answerArea = document.querySelector(constants.LISTENCOMPLETE_TEXTBOX);
+      const answer = answerArea.children.forEach((span) => {
+        const blank = span.querySelector(constants.LISTENCOMPLETE_BLANK);
+        return blank?.getAttribute('value') ?? span.innerText;
+      }).join('');
+      return markTranslate(answer, challengeData.grader.vertices);
+    }
+
     case 'name': {
       const textBox = document.querySelector(constants.NAME_TEXTBOX);
       const buttonArray = Array.from(document.querySelectorAll(constants.NAME_BUTTON));

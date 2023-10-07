@@ -48,6 +48,9 @@ export const JUDGE = '[data-test="challenge challenge-judge"]';
 export const JUDGE_PROMPT = '[class="_3-JBe"]';
 export const JUDGE_CHOICES = '[data-test="challenge-choice"]';
 
+export const LISTENCOMPLETE_TEXTBOX = '[class="_3t3oQ _2FKqf _2ti2i"]';
+export const LISTENCOMPLETE_BLANK = '[data-test="challenge-text-input"]';
+
 export const TYPE_LISTENLAP = 'listenTap';
 export const LISTENTAP = '[data-test="challenge challenge-translate"]';
 export const LISTENTAP_PROMPT = '[data-test="hint-token"]';

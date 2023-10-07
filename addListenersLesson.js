@@ -7,6 +7,9 @@ const MULTIPLE_CHOICE_CHOICES = '[data-test="challenge-choice"]';
 const IGNORED_CHARACTERS = /[_\-\s,.?!;]/g;
 const COMPLETEREVERSETRANSLATION_TEXTBOX = '[class="_3f_Q3 _2FKqf _2ti2i"]';
 const COMPLETEREVERSETRANSLATION_BLANK = '[data-test="challenge-text-input"]';
+
+const LISTENCOMPLETE_TEXTBOX = '[class="_3t3oQ _2FKqf _2ti2i"]';
+const LISTENCOMPLETE_BLANK = '[data-test="challenge-text-input"]';
 const LISTENMATCH_SOUNDWAVE = '[class="_2GTek _1bxd8 _19tAr"]';
 const MATCH_BUTTONS = '[class="_1deIS"]';
 const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
@@ -145,6 +148,15 @@ function markSubmission(challengeData) {
       const choices = Array.from(document.querySelectorAll(MULTIPLE_CHOICE_CHOICES));
       const choiceID = choices.findIndex((x) => x.tabIndex === 0);
       return choiceID === challengeData.correctIndices[0];
+    }
+
+    case 'listenComplete': {
+      const answerArea = document.querySelector(LISTENCOMPLETE_TEXTBOX);
+      const answer = answerArea.children.forEach((span) => {
+        const blank = span.querySelector(LISTENCOMPLETE_BLANK);
+        return blank?.getAttribute('value') ?? span.innerText;
+      }).join('');
+      return markTranslate(answer, challengeData.grader.vertices);
     }
 
     case 'name': {
