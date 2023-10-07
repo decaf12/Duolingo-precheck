@@ -13,22 +13,21 @@ function addStoryListener(storyChoice) {
     'click',
     (e) => {
       const button = e.target;
-      const question = button.closest("[class=\"_35e5D\"]").previousSibling;
+      const question = button.closest('[class="_35e5D"]').previousSibling;
       const storyData = getReactFiber(question).return.memoizedProps.challengeElement;
       if (!markStorySubmission(storyData, button)) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }
-    }
-  )
+    },
+  );
 }
 
 const observerStory = new MutationObserver(() => {
-    const matchButtons = document.querySelectorAll(constants.STORY_CHOICE);
-    if (matchButtons.length > 0) {
-      matchButtons.forEach((x) => addStoryListener(x));
-    }
+  const matchButtons = document.querySelectorAll(constants.STORY_CHOICE);
+  if (matchButtons.length > 0) {
+    matchButtons.forEach((x) => addStoryListener(x));
   }
-);
+});
 
 observerStory.observe(document.body, { childList: true, subtree: true });

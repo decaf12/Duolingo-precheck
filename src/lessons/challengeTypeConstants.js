@@ -8,7 +8,7 @@ export const SKIP_CHECKING_FALSE = 'skip checking: false';
 export const MULTIPLE_CHOICE_CHOICES = '[data-test="challenge-choice"]';
 
 export const IGNORED_CHARACTERS = /[_\-\s,.?!;]/g;
-export const IGNORED_CHARACTERS_STR = "_-,.?!;";
+export const IGNORED_CHARACTERS_STR = '_-,.?!;';
 export const STRAIGHT_QUOTE = String.fromCharCode(34);
 
 export const TYPE_ASSIST = 'assist';
@@ -67,7 +67,7 @@ export const TYPE_NAME = 'name';
 export const NAME = '[data-test="challenge challenge-name"]';
 export const NAME_BUTTON = '[data-test="challenge-choice"]';
 export const NAME_BUTTON_TEXT = '[data-test="challenge-judge-text"]';
-export const NAME_BUTTON_SELECTED = '_3C_oC disCS _2bJln _2-OmZ'
+export const NAME_BUTTON_SELECTED = '_3C_oC disCS _2bJln _2-OmZ';
 export const NAME_PROMPT = '[data-test="challenge-header"]';
 export const NAME_TEXTBOX = '[data-test="challenge-text-input"]';
 

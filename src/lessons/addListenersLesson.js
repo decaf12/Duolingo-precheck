@@ -9,7 +9,7 @@ const lessonConsole = lessonFrame.contentWindow.console;
 lessonConsole.log('Adding lesson listeners');
 
 function getChallengeDataLesson() {
-  const solution = document.querySelector(".mQ0GW");
+  const solution = document.querySelector('.mQ0GW');
   if (solution === null) {
     return null;
   }
@@ -41,7 +41,6 @@ document.addEventListener(
       return;
     }
 
-    
     if (!checkSubmission(submissionButton)) {
       e.preventDefault();
       e.stopImmediatePropagation();
@@ -56,11 +55,10 @@ function addMatchListener(challengeData, button) {
       return;
     }
 
-    
     const previousText = previouslyClicked.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
     const currentButton = button.textContent;
     const currentText = currentButton.slice(1);
-    
+
     if (!check.markMatch(challengeData, previousText, currentText)) {
       e.preventDefault();
       e.stopImmediatePropagation();
