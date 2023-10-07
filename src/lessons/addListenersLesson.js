@@ -2,12 +2,9 @@
 import * as constants from './challengeTypeConstants';
 import * as check from './checkAnswer';
 import getReactFiber from '../getReactFiber';
+import newConsole from '../setUpConsole';
 
-const lessonFrame = document.createElement('iframe');
-lessonFrame.style = 'display: none';
-document.body.appendChild(lessonFrame);
-const lessonConsole = lessonFrame.contentWindow.console;
-lessonConsole.log('Adding lesson listeners');
+newConsole.log('Adding lesson listeners');
 
 function getChallengeDataLesson() {
   const solution = document.querySelector('.mQ0GW');
@@ -24,8 +21,8 @@ function checkSubmission(submissionButton) {
   }
 
   const challengeData = getChallengeDataLesson();
-  lessonConsole.log(challengeData);
-  lessonConsole.log(challengeData.type);
+  newConsole.log(challengeData);
+  newConsole.log(challengeData.type);
 
   return check.markSubmission(challengeData);
 }

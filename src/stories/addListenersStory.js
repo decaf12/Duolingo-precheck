@@ -1,12 +1,9 @@
 import * as constants from './challengeTypeConstants';
 import markStorySubmission from './checkAnswer';
 import getReactFiber from '../getReactFiber';
+import newConsole from '../setUpConsole';
 
-const storyFrame = document.createElement('iframe');
-storyFrame.style = 'display: none';
-document.body.appendChild(storyFrame);
-const storyConsole = storyFrame.contentWindow.console;
-storyConsole.log('Adding story listeners');
+newConsole.log('Adding story listeners');
 
 function addStoryListener(storyChoice) {
   storyChoice.addEventListener(
