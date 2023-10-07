@@ -1,4 +1,4 @@
-import { g as getReactFiber } from './getReactFiber-3b77e72b.js';
+import { n as newConsole, g as getReactFiber } from './getReactFiber-a328b13c.js';
 
 const SUBMISSION_BUTTON_LESSON = '[data-test="player-next"]';
 const SUBMISSION_BUTTON_SPAN = '[class="_13HXc"]';
@@ -36,12 +36,6 @@ const TYPECLOZE_SUBMISSION = '[class="Y5JxA _17nEt"]';
 const TYPECOMPLETETABLE_BLANKS = '[class="_1Rf3h"]';
 const TYPECOMPLETETABLE_ANSWER = '[class="caPDQ"]';
 const TYPECOMPLETETABLE_SUBMISSION = '[class="Y5JxA _17nEt"]';
-
-const fakeFrame = document.createElement('iframe');
-fakeFrame.style = 'display: none';
-document.body.appendChild(fakeFrame);
-const newConsole = fakeFrame.contentWindow.console;
-newConsole.log('Adding lesson listeners');
 
 /* eslint-disable no-unused-vars */
 

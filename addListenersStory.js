@@ -1,4 +1,4 @@
-import { g as getReactFiber } from './getReactFiber-3b77e72b.js';
+import { n as newConsole, g as getReactFiber } from './getReactFiber-a328b13c.js';
 
 const STORY_CHOICE = "[data-test='stories-choice']";
 
@@ -25,11 +25,7 @@ function markStorySubmission(storyData, button) {
   }
 }
 
-const storyFrame = document.createElement('iframe');
-storyFrame.style = 'display: none';
-document.body.appendChild(storyFrame);
-const storyConsole = storyFrame.contentWindow.console;
-storyConsole.log('Adding story listeners');
+newConsole.log('Adding story listeners');
 
 function addStoryListener(storyChoice) {
   storyChoice.addEventListener(
