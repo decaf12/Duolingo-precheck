@@ -74,8 +74,14 @@ function addListenMatchListener(button) {
       return;
     }
 
-    const previousText = previouslyClicked.getAttribute('data-test');
     const currClicked = button.getElementsByTagName('button')[0];
+    const prevIsSound = previouslyClicked.querySelector(constants.LISTENMATCH_SOUNDWAVE) !== null;
+    const currIsSound = currClicked.querySelector(constants.LISTENMATCH_SOUNDWAVE) !== null;
+    if (prevIsSound === currIsSound) {
+      return;
+    }
+
+    const previousText = previouslyClicked.getAttribute('data-test');
     const currentText = currClicked.getAttribute('data-test');
 
     if (previousText !== currentText) {

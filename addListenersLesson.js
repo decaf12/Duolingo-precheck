@@ -7,6 +7,7 @@ const MULTIPLE_CHOICE_CHOICES = '[data-test="challenge-choice"]';
 const IGNORED_CHARACTERS = /[_\-\s,.?!;]/g;
 const COMPLETEREVERSETRANSLATION_TEXTBOX = '[class="_3f_Q3 _2FKqf _2ti2i"]';
 const COMPLETEREVERSETRANSLATION_BLANK = '[data-test="challenge-text-input"]';
+const LISTENMATCH_SOUNDWAVE = '[class="_2GTek _1bxd8 _19tAr"]';
 const MATCH_BUTTONS = '[class="_1deIS"]';
 const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
@@ -321,18 +322,22 @@ function addMatchListener(challengeData, button) {
   });
 }
 
-function addListenMatchListener(challengeData, button) {
+function addListenMatchListener(button) {
   button.addEventListener('click', (e) => {
     const previouslyClicked = document.querySelector(MATCH_BUTTON_SELECTED);
     if (!previouslyClicked) {
       return;
     }
 
-    const previousText = previouslyClicked.getAttribute('data-test');
     const currClicked = button.getElementsByTagName('button')[0];
+    const prevIsSound = previouslyClicked.querySelector(LISTENMATCH_SOUNDWAVE) !== null;
+    const currIsSound = currClicked.querySelector(LISTENMATCH_SOUNDWAVE) !== null;
+    if (prevIsSound === currIsSound) {
+      return;
+    }
+
+    const previousText = previouslyClicked.getAttribute('data-test');
     const currentText = currClicked.getAttribute('data-test');
-    lessonConsole.log(previousText);
-    lessonConsole.log(currentText);
 
     if (previousText !== currentText) {
       e.preventDefault();
@@ -348,7 +353,7 @@ const observerMatch = new MutationObserver(() => {
     matchButtons.forEach((x) => addMatchListener(challengeData, x));
   } else if (challengeData?.type === 'listenMatch') {
     const listenMatchButtons = document.querySelectorAll(MATCH_BUTTONS);
-    listenMatchButtons.forEach((x) => addListenMatchListener(challengeData, x));
+    listenMatchButtons.forEach((x) => addListenMatchListener(x));
   }
 });
 
