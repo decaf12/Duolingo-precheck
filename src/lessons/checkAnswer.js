@@ -118,9 +118,7 @@ export function markSubmission(challengeData) {
 
     case 'listenComplete': {
       const answerArea = document.querySelector(constants.LISTENCOMPLETE_TEXTBOX);
-      newConsole.log(answerArea);
-      newConsole.log(answerArea.children);
-      const answer = Array.from(answerArea.children).forEach((span) => {
+      const answer = Array.from(answerArea.children).map((span) => {
         const blank = span.querySelector(constants.LISTENCOMPLETE_BLANK);
         return blank?.getAttribute('value') ?? span.innerText;
       }).join('');

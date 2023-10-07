@@ -153,9 +153,10 @@ function markSubmission(challengeData) {
 
     case 'listenComplete': {
       const answerArea = document.querySelector(LISTENCOMPLETE_TEXTBOX);
+      const spans = Array.from(answerArea.children);
       newConsole.log(answerArea);
-      newConsole.log(answerArea.children);
-      const answer = Array.from(answerArea.children).forEach((span) => {
+      newConsole.log(spans);
+      const answer = spans.map((span) => {
         const blank = span.querySelector(LISTENCOMPLETE_BLANK);
         return blank?.getAttribute('value') ?? span.innerText;
       }).join('');
