@@ -153,10 +153,7 @@ function markSubmission(challengeData) {
 
     case 'listenComplete': {
       const answerArea = document.querySelector(LISTENCOMPLETE_TEXTBOX);
-      const spans = Array.from(answerArea.children);
-      newConsole.log(answerArea);
-      newConsole.log(spans);
-      const answer = spans.map((span) => {
+      const answer = Array.from(answerArea.children).map((span) => {
         const blank = span.querySelector(LISTENCOMPLETE_BLANK);
         return blank?.getAttribute('value') ?? span.innerText;
       }).join('');
@@ -216,6 +213,7 @@ function markSubmission(challengeData) {
       return choices === valueArray.join();
     }
 
+    case 'listen':
     case 'translate': {
       let answer = document.querySelector(TRANSLATE_TEXTBOX)?.value;
       let identicalToCorrectTokens = true;

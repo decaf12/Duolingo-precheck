@@ -178,6 +178,7 @@ export function markSubmission(challengeData) {
       return choices === valueArray.join();
     }
 
+    case 'listen':
     case 'translate': {
       let answer = document.querySelector(constants.TRANSLATE_TEXTBOX)?.value;
       let identicalToCorrectTokens = true;
