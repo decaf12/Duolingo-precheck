@@ -90,6 +90,7 @@ export function markSubmission(challengeData) {
     case 'dialogue':
     case 'form':
     case 'gapFill':
+    case 'listenIsolation':
     case 'readComprehension':
     case 'select':
     case 'selectTranscription':
@@ -117,7 +118,9 @@ export function markSubmission(challengeData) {
 
     case 'listenComplete': {
       const answerArea = document.querySelector(constants.LISTENCOMPLETE_TEXTBOX);
-      const answer = answerArea.children.forEach((span) => {
+      newConsole.log(answerArea);
+      newConsole.log(answerArea.children);
+      const answer = Array.from(answerArea.children).forEach((span) => {
         const blank = span.querySelector(constants.LISTENCOMPLETE_BLANK);
         return blank?.getAttribute('value') ?? span.innerText;
       }).join('');
