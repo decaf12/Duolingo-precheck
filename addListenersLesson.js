@@ -1,4 +1,4 @@
-import { n as newConsole, g as getReactFiber } from './getReactFiber-a328b13c.js';
+import { n as newConsole, g as getReactFiber } from './getReactFiber-56206b7a.js';
 
 const SUBMISSION_BUTTON_LESSON = '[data-test="player-next"]';
 const SUBMISSION_BUTTON_SPAN = '[class="_13HXc"]';
@@ -125,6 +125,7 @@ function markSubmission(challengeData) {
     case 'dialogue':
     case 'form':
     case 'gapFill':
+    case 'listenComprehension':
     case 'listenIsolation':
     case 'readComprehension':
     case 'select':

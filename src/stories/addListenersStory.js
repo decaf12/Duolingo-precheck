@@ -1,4 +1,4 @@
-import * as constants from './challengeTypeConstants';
+import STORY_CHOICE from './challengeTypeConstants';
 import markStorySubmission from './checkAnswer';
 import getReactFiber from '../getReactFiber';
 import newConsole from '../setUpConsole';
@@ -21,7 +21,7 @@ function addStoryListener(storyChoice) {
 }
 
 const observerStory = new MutationObserver(() => {
-  const matchButtons = document.querySelectorAll(constants.STORY_CHOICE);
+  const matchButtons = document.querySelectorAll(STORY_CHOICE);
   if (matchButtons.length > 0) {
     matchButtons.forEach((x) => addStoryListener(x));
   }

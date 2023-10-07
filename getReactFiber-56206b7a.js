@@ -1,5 +1,5 @@
 const fakeFrame = document.createElement('iframe');
-fakeFrame.style = 'display: none';
+fakeFrame.style.display = 'none';
 document.body.appendChild(fakeFrame);
 const newConsole = fakeFrame.contentWindow.console;
 

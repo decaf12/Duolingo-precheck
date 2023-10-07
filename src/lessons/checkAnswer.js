@@ -90,6 +90,7 @@ export function markSubmission(challengeData) {
     case 'dialogue':
     case 'form':
     case 'gapFill':
+    case 'listenComprehension':
     case 'listenIsolation':
     case 'readComprehension':
     case 'select':

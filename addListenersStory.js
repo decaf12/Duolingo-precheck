@@ -1,6 +1,6 @@
-import { n as newConsole, g as getReactFiber } from './getReactFiber-a328b13c.js';
+import { n as newConsole, g as getReactFiber } from './getReactFiber-56206b7a.js';
 
-const STORY_CHOICE = "[data-test='stories-choice']";
+const STORY_CHOICE = '[data-test="stories-choice"]';
 
 function markStorySubmission(storyData, button) {
   switch (storyData.type) {
