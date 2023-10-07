@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import * as constants from './challengeTypeConstants';
 import * as check from './checkAnswer';
 import getReactFiber from '../getReactFiber';
@@ -66,11 +67,32 @@ function addMatchListener(challengeData, button) {
   });
 }
 
+function addListenMatchListener(button) {
+  button.addEventListener('click', (e) => {
+    const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
+    if (!previouslyClicked) {
+      return;
+    }
+
+    const previousText = previouslyClicked.getAttribute('data-test');
+    const currClicked = button.getElementsByTagName('button')[0];
+    const currentText = currClicked.getAttribute('data-test');
+
+    if (previousText !== currentText) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  });
+}
+
 const observerMatch = new MutationObserver(() => {
   const challengeData = getChallengeDataLesson();
   if (challengeData?.type === 'match') {
     const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
     matchButtons.forEach((x) => addMatchListener(challengeData, x));
+  } else if (challengeData?.type === 'listenMatch') {
+    const listenMatchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
+    listenMatchButtons.forEach((x) => addListenMatchListener(x));
   }
 });
 

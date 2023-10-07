@@ -56,6 +56,8 @@ export const LISTENTAP_BUTTON_CLICK = '[class="_13HXc"]';
 export const LISTENTAP_BUTTON_TYPE = '[class="_2J2do"]';
 export const LISTENTAP_BUTTON = `${LISTENTAP_BUTTON_CLICK}, ${LISTENTAP_BUTTON_TYPE}`;
 
+export const LISTENMATCH_BUTTON_SELECTED = '[class="LhRk3 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ edf-m"]';
+
 export const TYPE_MATCH = 'match';
 export const MATCH = '[data-test="challenge challenge-match"]';
 export const MATCH_BUTTONS = '[class="_1deIS"]';

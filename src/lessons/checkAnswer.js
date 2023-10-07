@@ -91,6 +91,7 @@ export function markSubmission(challengeData) {
     case 'gapFill':
     case 'readComprehension':
     case 'select':
+    case 'selectTranscription':
       return markMultipleChoice(challengeData);
 
     case 'completeReverseTranslation': {
