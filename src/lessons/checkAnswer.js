@@ -180,6 +180,7 @@ export function markSubmission(challengeData) {
     }
 
     case 'listen':
+    case 'listenTap':
     case 'translate': {
       let answer = document.querySelector(constants.TRANSLATE_TEXTBOX)?.value;
       let identicalToCorrectTokens = true;
