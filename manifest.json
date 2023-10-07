@@ -16,8 +16,7 @@
           "*://*.duolingo.com/*"
           ],
         "js": [
-          "injectScriptLesson.js",
-          "injectScriptStory.js"
+          "injectScripts.js"
         ]
       }
     ],

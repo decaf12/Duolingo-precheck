@@ -1,4 +1,4 @@
-import { g as getReactFiber } from './getReactFiber-b5720717.js';
+import { g as getReactFiber } from './getReactFiber-3b77e72b.js';
 
 const STORY_CHOICE = "[data-test='stories-choice']";
 

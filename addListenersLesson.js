@@ -1,4 +1,4 @@
-import { g as getReactFiber } from './getReactFiber-b5720717.js';
+import { g as getReactFiber } from './getReactFiber-3b77e72b.js';
 
 const SUBMISSION_BUTTON_LESSON = '[data-test="player-next"]';
 const SUBMISSION_BUTTON_SPAN = '[class="_13HXc"]';
