@@ -10,13 +10,6 @@ export default function markStorySubmission(storyData, button) {
       const phraseArray = storyData.selectablePhrases;
       const correctOrder = storyData.phraseOrder;
       const correctButtonContent = phraseArray[correctOrder[selectedButtonCount]];
-      newConsole.log(storyData);
-      newConsole.log(button);
-      newConsole.log(tokenBank);
-      newConsole.log(selectedButtonCount);
-      newConsole.log(phraseArray);
-      newConsole.log(correctOrder);
-      newConsole.log(correctButtonContent);
       return button.textContent === correctButtonContent;
     }
 
@@ -26,6 +19,14 @@ export default function markStorySubmission(storyData, button) {
       const buttonText = button.nextElementSibling.textContent;
       const correctText = answerArray[correctID].text;
       return correctText === buttonText;
+    }
+
+    case 'POINT_TO_PHRASE': {
+      const buttonBank = button.closest(constants.POINT_TO_PHRASE_BUTTON_BANK);
+      const buttons = Array.from(buttonBank.querySelectorAll(constants.POINT_TO_PHRASE_BUTTON));
+      const correctIndex = storyData.correctAnswerIndex;
+      const correctButton = buttons[correctIndex];
+      return button.innerText === correctButton.innerText;
     }
 
     case 'SELECT_PHRASE': {
