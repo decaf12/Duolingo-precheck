@@ -2,7 +2,7 @@
 import * as constants from './challengeTypeConstants';
 import newConsole from '../setUpConsole';
 
-export default function markStorySubmission(storyData, button) {
+export function markStorySubmission(storyData, button) {
   switch (storyData.type) {
     case 'ARRANGE': {
       const tokenBank = button.closest(constants.STORY_TOKEN_BANK);
@@ -40,4 +40,15 @@ export default function markStorySubmission(storyData, button) {
     default:
       return false;
   }
+}
+
+export function markMatchSubmission(storyData, word1, word2) {
+  if (word1 === word2) {
+    return true;
+  }
+  newConsole.log(storyData);
+  newConsole.log(word1);
+  newConsole.log(word2);
+  return Object.values(storyData.matches).some((pair) => (word1 === pair.phrase && word2 === pair.translation)
+  || (word2 === pair.phrase && word1 === pair.translation));
 }

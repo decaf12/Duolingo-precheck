@@ -1,5 +1,5 @@
 import * as constants from './challengeTypeConstants';
-import markStorySubmission from './checkAnswer';
+import * as check from './checkAnswer';
 import getReactFiber from '../getReactFiber';
 import newConsole from '../setUpConsole';
 
@@ -15,7 +15,30 @@ function addStoryListener(storyChoice) {
       newConsole.log(button);
       newConsole.log(question);
       newConsole.log(storyData);
-      if (!markStorySubmission(storyData, button)) {
+      if (!check.markStorySubmission(storyData, button)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    },
+  );
+}
+
+function addMatchListener(storyChoice) {
+  storyChoice.addEventListener(
+    'click',
+    (e) => {
+      const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
+      if (!previouslyClicked) {
+        return;
+      }
+
+      const previousText = previouslyClicked.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
+      const button = e.target;
+      const currentText = button.textContent;
+      const question = button.closest('[class="_35e5D"]');
+      const storyData = getReactFiber(question).return.memoizedProps.storyElement;
+
+      if (!check.markMatchSubmission(storyData, previousText, currentText)) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }
@@ -36,7 +59,7 @@ const observerStory = new MutationObserver(() => {
 
   const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
   if (matchButtons.length > 0) {
-    matchButtons.forEach((button) => addStoryListener(button));
+    matchButtons.forEach((button) => addMatchListener(button));
   }
 });
 

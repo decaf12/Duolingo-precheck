@@ -1,10 +1,15 @@
 import { n as newConsole, g as getReactFiber } from './getReactFiber-56206b7a.js';
 
 const STORY_CHOICE = '[data-test="stories-choice"]';
+
 const STORY_TOKENS = '[data-test="challenge-tap-token-text"]';
 const STORY_TOKEN_SELECTED = '[class="LhRk3 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_"]';
 const STORY_TOKEN_BANK = '[data-test="stories-element"]';
+
 const MATCH_BUTTONS = '[class="_1deIS"]';
+const MATCH_BUTTON_SELECTED = '[class="WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
+const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
+
 const POINT_TO_PHRASE_BUTTON_BANK = '[class="_3jGFa _1RoWn"]';
 const POINT_TO_PHRASE_BUTTON = '[data-test="challenge-tap-token-text"]';
 
@@ -34,12 +39,6 @@ function markStorySubmission(storyData, button) {
       const buttons = Array.from(buttonBank.querySelectorAll(POINT_TO_PHRASE_BUTTON));
       const correctIndex = storyData.correctAnswerIndex;
       const correctButton = buttons[correctIndex];
-      newConsole.log(storyData);
-      newConsole.log(button);
-      newConsole.log(buttonBank);
-      newConsole.log(buttons);
-      newConsole.log(correctIndex);
-      newConsole.log(correctButton);
       return button.innerText === correctButton.innerText;
     }
 
@@ -54,6 +53,17 @@ function markStorySubmission(storyData, button) {
     default:
       return false;
   }
+}
+
+function markMatchSubmission(storyData, word1, word2) {
+  if (word1 === word2) {
+    return true;
+  }
+  newConsole.log(storyData);
+  newConsole.log(word1);
+  newConsole.log(word2);
+  return Object.values(storyData.matches).some((pair) => (word1 === pair.phrase && word2 === pair.translation)
+  || (word2 === pair.phrase && word1 === pair.translation));
 }
 
 newConsole.log('Adding story listeners');
@@ -76,6 +86,29 @@ function addStoryListener(storyChoice) {
   );
 }
 
+function addMatchListener(storyChoice) {
+  storyChoice.addEventListener(
+    'click',
+    (e) => {
+      const previouslyClicked = document.querySelector(MATCH_BUTTON_SELECTED);
+      if (!previouslyClicked) {
+        return;
+      }
+
+      const previousText = previouslyClicked.querySelector(MATCH_BUTTON_TEXT).textContent;
+      const button = e.target;
+      const currentText = button.textContent;
+      const question = button.closest('[class="_35e5D"]');
+      const storyData = getReactFiber(question).return.memoizedProps.storyElement;
+
+      if (!markMatchSubmission(storyData, previousText, currentText)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    },
+  );
+}
+
 const observerStory = new MutationObserver(() => {
   const storyChoices = document.querySelectorAll(STORY_CHOICE);
   if (storyChoices.length > 0) {
@@ -89,7 +122,7 @@ const observerStory = new MutationObserver(() => {
 
   const matchButtons = document.querySelectorAll(MATCH_BUTTONS);
   if (matchButtons.length > 0) {
-    matchButtons.forEach((button) => addStoryListener(button));
+    matchButtons.forEach((button) => addMatchListener(button));
   }
 });
 
