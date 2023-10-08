@@ -1,3 +1,4 @@
+export const STORY_PARENT = '[class="_35e5D"]';
 export const STORY_CHOICE = '[data-test="stories-choice"]';
 
 export const STORY_TOKENS = '[class="_1deIS"]';
