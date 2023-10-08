@@ -2,7 +2,7 @@ import { n as newConsole, g as getReactFiber } from './getReactFiber-56206b7a.js
 
 const STORY_CHOICE = '[data-test="stories-choice"]';
 
-const STORY_TOKENS = '[data-test="challenge-tap-token-text"]';
+const STORY_TOKENS = '[class="_1deIS"]';
 const STORY_TOKEN_SELECTED = '[class="LhRk3 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_"]';
 const STORY_TOKEN_BANK = '[data-test="stories-element"]';
 
@@ -39,6 +39,14 @@ function markStorySubmission(storyData, button) {
       const buttons = Array.from(buttonBank.querySelectorAll(POINT_TO_PHRASE_BUTTON));
       const correctIndex = storyData.correctAnswerIndex;
       const correctButton = buttons[correctIndex];
+      newConsole.log(storyData);
+      newConsole.log(button);
+      newConsole.log(buttonBank);
+      newConsole.log(buttons);
+      newConsole.log(correctIndex);
+      newConsole.log(correctButton);
+      newConsole.log(button.innerText);
+      newConsole.log(correctButton.innerText);
       return button.innerText === correctButton.innerText;
     }
 
@@ -75,10 +83,9 @@ function addStoryListener(storyChoice) {
       const button = e.target;
       const question = button.closest('[class="_35e5D"]').previousSibling;
       const storyData = getReactFiber(question).return.memoizedProps.challengeElement;
-      newConsole.log(button);
-      newConsole.log(question);
-      newConsole.log(storyData);
-      if (!markStorySubmission(storyData, button)) {
+      const isCorrect = markStorySubmission(storyData, button);
+      newConsole.log(`is correct: ${isCorrect}`);
+      if (!isCorrect) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }

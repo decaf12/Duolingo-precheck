@@ -132,7 +132,7 @@ export function markSubmission(challengeData) {
       let answer;
       if (buttonArray.length > 0) {
         const button = buttonArray.find((x) => x.className === constants.NAME_BUTTON_SELECTED);
-        const buttonText = button.querySelector(constants.NAME_BUTTON_TEXT).innerHTML;
+        const buttonText = button.querySelector(constants.NAME_BUTTON_TEXT).innerText;
         answer = `${buttonText} ${textBox.value}`;
       } else {
         answer = textBox.value;

@@ -167,7 +167,7 @@ function markSubmission(challengeData) {
       let answer;
       if (buttonArray.length > 0) {
         const button = buttonArray.find((x) => x.className === NAME_BUTTON_SELECTED);
-        const buttonText = button.querySelector(NAME_BUTTON_TEXT).innerHTML;
+        const buttonText = button.querySelector(NAME_BUTTON_TEXT).innerText;
         answer = `${buttonText} ${textBox.value}`;
       } else {
         answer = textBox.value;

@@ -12,10 +12,9 @@ function addStoryListener(storyChoice) {
       const button = e.target;
       const question = button.closest('[class="_35e5D"]').previousSibling;
       const storyData = getReactFiber(question).return.memoizedProps.challengeElement;
-      newConsole.log(button);
-      newConsole.log(question);
-      newConsole.log(storyData);
-      if (!check.markStorySubmission(storyData, button)) {
+      const isCorrect = check.markStorySubmission(storyData, button);
+      newConsole.log(`is correct: ${isCorrect}`);
+      if (!isCorrect) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }
