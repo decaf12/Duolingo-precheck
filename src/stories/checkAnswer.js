@@ -26,14 +26,6 @@ export function markStorySubmission(storyData, button) {
       const buttons = Array.from(buttonBank.querySelectorAll(constants.POINT_TO_PHRASE_BUTTON));
       const correctIndex = storyData.correctAnswerIndex;
       const correctButton = buttons[correctIndex];
-      newConsole.log(storyData);
-      newConsole.log(button);
-      newConsole.log(buttonBank);
-      newConsole.log(buttons);
-      newConsole.log(correctIndex);
-      newConsole.log(correctButton);
-      newConsole.log(button.innerText);
-      newConsole.log(correctButton.innerText);
       return button.innerText === correctButton.innerText;
     }
 
