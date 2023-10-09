@@ -89,19 +89,15 @@ function markTranslate(answer, vertices) {
 
         if (!vertex.lenient.trim().length) {
           stack.push([vertex.to, currPos, { ...currVisited, [vertex.to]: null }]);
-        // eslint-disable-next-line max-len
         } else if (startsWithAt(vertex.lenient, answerNoSpaces, currPos, false)) {
           stack.push([vertex.to, currPos + lenientLen, { ...currVisited, [vertex.to]: null }]);
         } else if ('orig' in vertex) {
           const origLen = vertex.orig.length;
-          // const origNoPunctuation = vertex.orig.replace(constants.IGNORED_CHARACTERS, '');
           const origNoPunctuation = vertex.orig.replace(IGNORED_CHARACTERS, '');
           const origNoPunctuationLen = origNoPunctuation.length;
           if (startsWithAt(vertex.orig, answerNoSpaces, currPos, false)) {
             stack.push([vertex.to, currPos + origLen, { ...currVisited, [vertex.to]: null }]);
-          // eslint-disable-next-line max-len
           } else if (startsWithAt(origNoPunctuation, answerNoSpaces, currPos, false)) {
-            // eslint-disable-next-line max-len
             stack.push([vertex.to, currPos + origNoPunctuationLen, { ...currVisited, [vertex.to]: null }]);
           }
         }
@@ -135,7 +131,6 @@ function markSubmission(challengeData) {
     case 'completeReverseTranslation': {
       let answer = document.querySelector(TRANSLATE_TEXTBOX)?.value;
       if (answer === undefined) {
-        // eslint-disable-next-line max-len
         const textbox = Array.from(document.querySelector(COMPLETEREVERSETRANSLATION_TEXTBOX).children);
         const answerArray = textbox.map((element) => {
           const blank = element.querySelector(COMPLETEREVERSETRANSLATION_BLANK);
@@ -198,7 +193,6 @@ function markSubmission(challengeData) {
 
     case 'tapCompleteTable': {
       const choiceArray = Array.from(document.querySelectorAll(TAPCOMPLETETABLE_CHOICES));
-      // eslint-disable-next-line max-len
       const choices = choiceArray.map((x) => x.querySelector(TAPCOMPLETETABLE_CHOICE_TEXT).textContent).join();
       const valueArray = [];
       const tokens = challengeData.displayTokens.slice(1);
@@ -265,11 +259,10 @@ function markSubmission(challengeData) {
 }
 
 function markMatch(challengeData, word1, word2) {
-  if (word1 === word2) {
-    return true;
-  }
-  return Object.values(challengeData.pairs).some((pair) => (word1 === pair.learningToken && word2 === pair.fromToken)
-  || (word2 === pair.learningToken && word1 === pair.fromToken));
+  return word1 === word2
+    ? true
+    : Object.values(challengeData.pairs).some((pair) => (word1 === pair.learningToken && word2 === pair.fromToken)
+      || (word2 === pair.learningToken && word1 === pair.fromToken));
 }
 
 /* eslint-disable max-len */
@@ -326,7 +319,6 @@ function addMatchListener(challengeData, button) {
     const previousText = previouslyClicked.querySelector(MATCH_BUTTON_TEXT).textContent;
     const currentButton = button.textContent;
     const currentText = currentButton.slice(1);
-
     if (!markMatch(challengeData, previousText, currentText)) {
       e.preventDefault();
       e.stopImmediatePropagation();
@@ -351,6 +343,11 @@ function addListenMatchListener(button) {
     const previousText = previouslyClicked.getAttribute('data-test');
     const currentText = currClicked.getAttribute('data-test');
 
+    newConsole.log(button);
+    newConsole.log(previouslyClicked);
+    newConsole.log(currClicked);
+    newConsole.log(previousText);
+    newConsole.log(currentText);
     if (previousText !== currentText) {
       e.preventDefault();
       e.stopImmediatePropagation();

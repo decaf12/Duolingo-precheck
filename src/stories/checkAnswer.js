@@ -2,7 +2,7 @@
 import * as constants from './challengeTypeConstants';
 import newConsole from '../setUpConsole';
 
-export function markStorySubmission(storyData, button) {
+export default function markStorySubmission(storyData, button) {
   switch (storyData.type) {
     case 'ARRANGE': {
       const tokenBank = button.closest(constants.STORY_TOKEN_BANK);
@@ -13,11 +13,30 @@ export function markStorySubmission(storyData, button) {
       return button.textContent === correctButtonContent;
     }
 
+    case 'MATCH': {
+      const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
+      if (!previouslyClicked) {
+        return true;
+      }
+      const previousText = previouslyClicked.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
+      const currentText = button.textContent;
+      return previousText === currentText
+        ? true
+        : Object.values(storyData.matches).some((pair) => (previousText === pair.phrase && currentText === pair.translation)
+          || (currentText === pair.phrase && previousText === pair.translation));
+    }
+
     case 'MULTIPLE_CHOICE': {
       const answerArray = storyData.answers;
       const correctID = storyData.correctAnswerIndex;
       const buttonText = button.nextElementSibling.textContent;
       const correctText = answerArray[correctID].text;
+      newConsole.log(storyData);
+      newConsole.log(button);
+      newConsole.log(answerArray);
+      newConsole.log(correctID);
+      newConsole.log(buttonText);
+      newConsole.log(correctText);
       return correctText === buttonText;
     }
 
@@ -40,15 +59,4 @@ export function markStorySubmission(storyData, button) {
     default:
       return false;
   }
-}
-
-export function markMatchSubmission(storyData, word1, word2) {
-  if (word1 === word2) {
-    return true;
-  }
-  newConsole.log(storyData);
-  newConsole.log(word1);
-  newConsole.log(word2);
-  return Object.values(storyData.matches).some((pair) => (word1 === pair.phrase && word2 === pair.translation)
-  || (word2 === pair.phrase && word1 === pair.translation));
 }
