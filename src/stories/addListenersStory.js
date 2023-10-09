@@ -14,7 +14,7 @@ function addStoryListener(storyChoice) {
       const button = e.target;
 
       const parent = storyChoice.closest(constants.STORY_PARENT);
-      const storyData = getReactFiber(parent)?.return?.memoizedProps?.storyElement;
+      const storyData = getReactFiber(parent).return.memoizedProps.storyElement;
 
       if (!markStorySubmission(storyData, button)) {
         e.preventDefault();
@@ -28,12 +28,12 @@ const observerStory = new MutationObserver(() => {
   const storyChoices = document.querySelectorAll(constants.STORY_CHOICE);
   if (storyChoices.length > 0) {
     newConsole.log('adding story listeners');
-    storyChoices.forEach((x) => addStoryListener(x));
+    storyChoices.forEach((button) => addStoryListener(button));
   }
 
   const tapTokens = document.querySelectorAll(constants.STORY_TOKENS);
   if (tapTokens.length > 0) {
-    tapTokens.forEach((x) => addStoryListener(x));
+    tapTokens.forEach((button) => addStoryListener(button));
   }
 
   const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
