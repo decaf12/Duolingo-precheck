@@ -7,7 +7,7 @@ const STORY_TOKENS = '[class="_1deIS"]';
 const STORY_TOKEN_SELECTED = '[class="LhRk3 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_"]';
 const STORY_TOKEN_BANK = '[data-test="stories-element"]';
 
-const MATCH_BUTTONS = '[class="_1deIS"]';
+const MATCH_BUTTONS = '[class="_3Y3Px"]';
 const MATCH_BUTTON_SELECTED = '[class="WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
 const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 
@@ -32,8 +32,11 @@ function markStorySubmission(storyData, button) {
       if (!previouslyClicked) {
         return true;
       }
+      newConsole.log(button);
       const previousText = previouslyClicked.querySelector(MATCH_BUTTON_TEXT).textContent;
-      const currentText = button.textContent;
+      const currentText = button.querySelector(MATCH_BUTTON_TEXT).textContent;
+      newConsole.log(previousText);
+      newConsole.log(currentText);
       return previousText === currentText
         ? true
         : Object.values(storyData.matches).some((pair) => (previousText === pair.phrase && currentText === pair.translation)
@@ -45,12 +48,6 @@ function markStorySubmission(storyData, button) {
       const correctID = storyData.correctAnswerIndex;
       const buttonText = button.nextElementSibling.textContent;
       const correctText = answerArray[correctID].text;
-      newConsole.log(storyData);
-      newConsole.log(button);
-      newConsole.log(answerArray);
-      newConsole.log(correctID);
-      newConsole.log(buttonText);
-      newConsole.log(correctText);
       return correctText === buttonText;
     }
 
@@ -83,17 +80,14 @@ function addStoryListener(storyChoice) {
   storyChoice.addEventListener(
     'click',
     (e) => {
-      newConsole.log('story event handler running');
-      const button = e.target;
-
       const parent = storyChoice.closest(STORY_PARENT);
-      const storyData = getReactFiber(parent)?.return?.memoizedProps?.storyElement;
-      newConsole.log(storyChoice);
-      newConsole.log(button);
-      newConsole.log(parent);
-      newConsole.log(storyData);
+      if (!parent) {
+        return;
+      }
 
-      if (!markStorySubmission(storyData, button)) {
+      const storyData = getReactFiber(parent)?.return?.memoizedProps?.storyElement;
+
+      if (storyData && !markStorySubmission(storyData, storyChoice)) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }
@@ -103,15 +97,13 @@ function addStoryListener(storyChoice) {
 
 const observerStory = new MutationObserver(() => {
   const storyChoices = document.querySelectorAll(STORY_CHOICE);
-  newConsole.log(storyChoices);
   if (storyChoices.length > 0) {
-    newConsole.log('adding story listeners');
-    storyChoices.forEach((x) => addStoryListener(x));
+    storyChoices.forEach((button) => addStoryListener(button));
   }
 
   const tapTokens = document.querySelectorAll(STORY_TOKENS);
   if (tapTokens.length > 0) {
-    tapTokens.forEach((x) => addStoryListener(x));
+    tapTokens.forEach((button) => addStoryListener(button));
   }
 
   const matchButtons = document.querySelectorAll(MATCH_BUTTONS);

@@ -8,10 +8,7 @@ newConsole.log('Adding lesson listeners');
 
 function getChallengeDataLesson() {
   const solution = document.querySelector('.mQ0GW');
-  if (solution === null) {
-    return null;
-  }
-  return getReactFiber(solution).return.return.stateNode.props.currentChallenge;
+  return getReactFiber(solution)?.return?.return?.stateNode?.props?.currentChallenge;
 }
 
 function checkSubmission(submissionButton) {
@@ -22,7 +19,6 @@ function checkSubmission(submissionButton) {
 
   const challengeData = getChallengeDataLesson();
   newConsole.log(challengeData);
-  newConsole.log(challengeData.type);
 
   return check.markSubmission(challengeData);
 }
@@ -69,7 +65,6 @@ function addListenMatchListener(button) {
     if (!previouslyClicked) {
       return;
     }
-
     const currClicked = button.getElementsByTagName('button')[0];
     const prevIsSound = previouslyClicked.querySelector(constants.LISTENMATCH_SOUNDWAVE) !== null;
     const currIsSound = currClicked.querySelector(constants.LISTENMATCH_SOUNDWAVE) !== null;

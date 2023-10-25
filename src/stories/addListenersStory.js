@@ -10,13 +10,14 @@ function addStoryListener(storyChoice) {
   storyChoice.addEventListener(
     'click',
     (e) => {
-      newConsole.log('story event handler running');
-      const button = e.target;
-
       const parent = storyChoice.closest(constants.STORY_PARENT);
-      const storyData = getReactFiber(parent).return.memoizedProps.storyElement;
+      if (!parent) {
+        return;
+      }
 
-      if (!markStorySubmission(storyData, button)) {
+      const storyData = getReactFiber(parent)?.return?.memoizedProps?.storyElement;
+
+      if (storyData && !markStorySubmission(storyData, storyChoice)) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }
@@ -27,7 +28,6 @@ function addStoryListener(storyChoice) {
 const observerStory = new MutationObserver(() => {
   const storyChoices = document.querySelectorAll(constants.STORY_CHOICE);
   if (storyChoices.length > 0) {
-    newConsole.log('adding story listeners');
     storyChoices.forEach((button) => addStoryListener(button));
   }
 

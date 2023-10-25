@@ -19,7 +19,7 @@ export default function markStorySubmission(storyData, button) {
         return true;
       }
       const previousText = previouslyClicked.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
-      const currentText = button.textContent;
+      const currentText = button.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
       return previousText === currentText
         ? true
         : Object.values(storyData.matches).some((pair) => (previousText === pair.phrase && currentText === pair.translation)
