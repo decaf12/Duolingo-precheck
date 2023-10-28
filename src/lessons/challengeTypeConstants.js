@@ -67,7 +67,9 @@ export const MATCH = '[data-test="challenge challenge-match"]';
 export const MATCH_BUTTONS = '[class="_1deIS"]';
 export const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 export const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
-export const MATCH_BUTTON_NUMBER = '[class="Z7UoT _2S0Zh _2TrnF"]';
+export const MATCH_BUTTON_NUMBER_UNSELECTED = '[class="Z7UoT _2S0Zh _2TrnF"]';
+export const MATCH_BUTTON_NUMBER_SELECTED = '[class="_2R_o5 _2S0Zh _2TrnF"]';
+export const MATCH_BUTTON_NUMBER_GREYED = '[class="_1KBJW _2S0Zh _2TrnF"]';
 
 export const TYPE_NAME = 'name';
 export const NAME = '[data-test="challenge challenge-name"]';

@@ -23,64 +23,93 @@ function checkSubmission(submissionButton) {
   return check.markSubmission(challengeData);
 }
 
+function matchCorrect(challengeData, button) {
+  const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
+  if (!previouslyClicked) {
+    return true;
+  }
+
+  const previousText = previouslyClicked.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
+  const currentButton = button.textContent;
+  const currentText = currentButton.slice(1);
+  return check.markMatch(challengeData, previousText, currentText);
+}
+
+function listenMatchCorrect(button) {
+  const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
+  if (!previouslyClicked) {
+    return true;
+  }
+  const currClicked = button.getElementsByTagName('button')[0];
+  const prevIsSound = previouslyClicked.querySelector(constants.LISTENMATCH_SOUNDWAVE) !== null;
+  const currIsSound = currClicked.querySelector(constants.LISTENMATCH_SOUNDWAVE) !== null;
+  if (prevIsSound === currIsSound) {
+    return true;
+  }
+
+  const previousText = previouslyClicked.getAttribute('data-test');
+  const currentText = currClicked.getAttribute('data-test');
+
+  newConsole.log(button);
+  newConsole.log(previouslyClicked);
+  newConsole.log(currClicked);
+  newConsole.log(previousText);
+  newConsole.log(currentText);
+  return previousText === currentText;
+}
+
 // Check user submission whenever the Enter key is pressed
 document.addEventListener(
   'keydown',
   (e) => {
-    if (e.key !== 'Enter') {
-      return;
-    }
-    const submissionButton = document.querySelector(constants.SUBMISSION_BUTTON_LESSON);
-    if (submissionButton === null) {
-      return;
-    }
+    if (e.key === 'Enter') {
+      const submissionButton = document.querySelector(constants.SUBMISSION_BUTTON_LESSON);
+      if (submissionButton === null) {
+        return;
+      }
 
-    if (!checkSubmission(submissionButton)) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
+      if (!checkSubmission(submissionButton)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    } else if (/^\d$/.test(e.key)) {
+      const challengeData = getChallengeDataLesson();
+      if (challengeData.type === 'match') {
+        newConsole.log('Match key handler');
+        const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
+        newConsole.log(buttons);
+        const button = buttons.find((x) => {
+          const number = x.querySelector(constants.MATCH_BUTTON_NUMBER_SELECTED)
+          ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_UNSELECTED);
+          return number.innerText === e.key;
+        });
+        newConsole.log(button);
+        if (!matchCorrect(challengeData, button)) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      } else if (challengeData.type === 'listenMatch') {
+        newConsole.log('listenMatch key handler');
+        const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
+        newConsole.log(buttons);
+        const button = buttons.find((x) => {
+          const number = x.querySelector(constants.MATCH_BUTTON_NUMBER_SELECTED)
+          ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_UNSELECTED)
+          ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_GREYED);
+          return number.innerText === e.key;
+        });
+        if (!listenMatchCorrect(button)) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      }
     }
   },
 );
 
-function addMatchListener(challengeData, button) {
-  button.addEventListener('click', (e) => {
-    const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
-    if (!previouslyClicked) {
-      return;
-    }
-
-    const previousText = previouslyClicked.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
-    const currentButton = button.textContent;
-    const currentText = currentButton.slice(1);
-    if (!check.markMatch(challengeData, previousText, currentText)) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-    }
-  });
-}
-
 function addListenMatchListener(button) {
   button.addEventListener('click', (e) => {
-    const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
-    if (!previouslyClicked) {
-      return;
-    }
-    const currClicked = button.getElementsByTagName('button')[0];
-    const prevIsSound = previouslyClicked.querySelector(constants.LISTENMATCH_SOUNDWAVE) !== null;
-    const currIsSound = currClicked.querySelector(constants.LISTENMATCH_SOUNDWAVE) !== null;
-    if (prevIsSound === currIsSound) {
-      return;
-    }
-
-    const previousText = previouslyClicked.getAttribute('data-test');
-    const currentText = currClicked.getAttribute('data-test');
-
-    newConsole.log(button);
-    newConsole.log(previouslyClicked);
-    newConsole.log(currClicked);
-    newConsole.log(previousText);
-    newConsole.log(currentText);
-    if (previousText !== currentText) {
+    if (!listenMatchCorrect) {
       e.preventDefault();
       e.stopImmediatePropagation();
     }
@@ -91,10 +120,24 @@ const observerMatch = new MutationObserver(() => {
   const challengeData = getChallengeDataLesson();
   if (challengeData?.type === 'match') {
     const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
-    matchButtons.forEach((x) => addMatchListener(challengeData, x));
+    matchButtons.forEach((button) => {
+      button.addEventListener('click', (e) => {
+        if (!matchCorrect(challengeData, button)) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      });
+    });
   } else if (challengeData?.type === 'listenMatch') {
     const listenMatchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
-    listenMatchButtons.forEach((x) => addListenMatchListener(x));
+    listenMatchButtons.forEach((button) => {
+      button.addEventListener('click', (e) => {
+        if (!listenMatchCorrect) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      });
+    });
   }
 });
 

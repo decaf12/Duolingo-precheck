@@ -14,6 +14,9 @@ const LISTENMATCH_SOUNDWAVE = '[class="_2GTek _1bxd8 _19tAr"]';
 const MATCH_BUTTONS = '[class="_1deIS"]';
 const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
+const MATCH_BUTTON_NUMBER_UNSELECTED = '[class="Z7UoT _2S0Zh _2TrnF"]';
+const MATCH_BUTTON_NUMBER_SELECTED = '[class="_2R_o5 _2S0Zh _2TrnF"]';
+const MATCH_BUTTON_NUMBER_GREYED = '[class="_1KBJW _2S0Zh _2TrnF"]';
 const NAME_BUTTON = '[data-test="challenge-choice"]';
 const NAME_BUTTON_TEXT = '[data-test="challenge-judge-text"]';
 const NAME_BUTTON_SELECTED = '_3C_oC disCS _2bJln _2-OmZ';
@@ -286,78 +289,116 @@ function checkSubmission(submissionButton) {
   return markSubmission(challengeData);
 }
 
+function matchCorrect(challengeData, button) {
+  const previouslyClicked = document.querySelector(MATCH_BUTTON_SELECTED);
+  if (!previouslyClicked) {
+    return true;
+  }
+
+  const previousText = previouslyClicked.querySelector(MATCH_BUTTON_TEXT).textContent;
+  const currentButton = button.textContent;
+  const currentText = currentButton.slice(1);
+  return markMatch(challengeData, previousText, currentText);
+}
+
+function listenMatchCorrect(button) {
+  const previouslyClicked = document.querySelector(MATCH_BUTTON_SELECTED);
+  if (!previouslyClicked) {
+    return true;
+  }
+  const currClicked = button.getElementsByTagName('button')[0];
+  const prevIsSound = previouslyClicked.querySelector(LISTENMATCH_SOUNDWAVE) !== null;
+  const currIsSound = currClicked.querySelector(LISTENMATCH_SOUNDWAVE) !== null;
+  if (prevIsSound === currIsSound) {
+    return true;
+  }
+
+  const previousText = previouslyClicked.getAttribute('data-test');
+  const currentText = currClicked.getAttribute('data-test');
+
+  newConsole.log(button);
+  newConsole.log(previouslyClicked);
+  newConsole.log(currClicked);
+  newConsole.log(previousText);
+  newConsole.log(currentText);
+  return previousText === currentText;
+}
+
 // Check user submission whenever the Enter key is pressed
 document.addEventListener(
   'keydown',
   (e) => {
-    if (e.key !== 'Enter') {
-      return;
-    }
-    const submissionButton = document.querySelector(SUBMISSION_BUTTON_LESSON);
-    if (submissionButton === null) {
-      return;
-    }
+    if (e.key === 'Enter') {
+      const submissionButton = document.querySelector(SUBMISSION_BUTTON_LESSON);
+      if (submissionButton === null) {
+        return;
+      }
 
-    if (!checkSubmission(submissionButton)) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
+      if (!checkSubmission(submissionButton)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    } else if (/^\d$/.test(e.key)) {
+      const challengeData = getChallengeDataLesson();
+      if (challengeData.type === 'match') {
+        newConsole.log('Match key handler');
+        const buttons = Array.from(document.querySelectorAll(MATCH_BUTTONS));
+        newConsole.log(buttons);
+        const button = buttons.find((x) => {
+          const number = x.querySelector(MATCH_BUTTON_NUMBER_SELECTED)
+          ?? x.querySelector(MATCH_BUTTON_NUMBER_UNSELECTED);
+          return number.innerText === e.key;
+        });
+        newConsole.log(button);
+        if (!matchCorrect(challengeData, button)) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      } else if (challengeData.type === 'listenMatch') {
+        newConsole.log('listenMatch key handler');
+        const buttons = Array.from(document.querySelectorAll(MATCH_BUTTONS));
+        newConsole.log(buttons);
+        const button = buttons.find((x) => {
+          newConsole.log(x);
+          newConsole.log(x.querySelector(MATCH_BUTTON_NUMBER_SELECTED));
+          newConsole.log(x.querySelector(MATCH_BUTTON_NUMBER_UNSELECTED));
+
+          const number = x.querySelector(MATCH_BUTTON_NUMBER_SELECTED)
+          ?? x.querySelector(MATCH_BUTTON_NUMBER_UNSELECTED)
+          ?? x.querySelector(MATCH_BUTTON_NUMBER_GREYED);
+          return number.innerText === e.key;
+        });
+        if (!listenMatchCorrect(button)) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      }
     }
   },
 );
-
-function addMatchListener(challengeData, button) {
-  button.addEventListener('click', (e) => {
-    const previouslyClicked = document.querySelector(MATCH_BUTTON_SELECTED);
-    if (!previouslyClicked) {
-      return;
-    }
-
-    const previousText = previouslyClicked.querySelector(MATCH_BUTTON_TEXT).textContent;
-    const currentButton = button.textContent;
-    const currentText = currentButton.slice(1);
-    if (!markMatch(challengeData, previousText, currentText)) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-    }
-  });
-}
-
-function addListenMatchListener(button) {
-  button.addEventListener('click', (e) => {
-    const previouslyClicked = document.querySelector(MATCH_BUTTON_SELECTED);
-    if (!previouslyClicked) {
-      return;
-    }
-    const currClicked = button.getElementsByTagName('button')[0];
-    const prevIsSound = previouslyClicked.querySelector(LISTENMATCH_SOUNDWAVE) !== null;
-    const currIsSound = currClicked.querySelector(LISTENMATCH_SOUNDWAVE) !== null;
-    if (prevIsSound === currIsSound) {
-      return;
-    }
-
-    const previousText = previouslyClicked.getAttribute('data-test');
-    const currentText = currClicked.getAttribute('data-test');
-
-    newConsole.log(button);
-    newConsole.log(previouslyClicked);
-    newConsole.log(currClicked);
-    newConsole.log(previousText);
-    newConsole.log(currentText);
-    if (previousText !== currentText) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-    }
-  });
-}
 
 const observerMatch = new MutationObserver(() => {
   const challengeData = getChallengeDataLesson();
   if (challengeData?.type === 'match') {
     const matchButtons = document.querySelectorAll(MATCH_BUTTONS);
-    matchButtons.forEach((x) => addMatchListener(challengeData, x));
+    matchButtons.forEach((button) => {
+      button.addEventListener('click', (e) => {
+        if (!matchCorrect(challengeData, button)) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      });
+    });
   } else if (challengeData?.type === 'listenMatch') {
     const listenMatchButtons = document.querySelectorAll(MATCH_BUTTONS);
-    listenMatchButtons.forEach((x) => addListenMatchListener(x));
+    listenMatchButtons.forEach((button) => {
+      button.addEventListener('click', (e) => {
+        if (!listenMatchCorrect) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      });
+    });
   }
 });
 

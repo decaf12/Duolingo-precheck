@@ -32,11 +32,8 @@ function markStorySubmission(storyData, button) {
       if (!previouslyClicked) {
         return true;
       }
-      newConsole.log(button);
       const previousText = previouslyClicked.querySelector(MATCH_BUTTON_TEXT).textContent;
       const currentText = button.querySelector(MATCH_BUTTON_TEXT).textContent;
-      newConsole.log(previousText);
-      newConsole.log(currentText);
       return previousText === currentText
         ? true
         : Object.values(storyData.matches).some((pair) => (previousText === pair.phrase && currentText === pair.translation)
