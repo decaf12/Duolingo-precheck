@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import * as constants from './challengeTypeConstants';
-import markStorySubmission from './checkAnswer';
+import * as check from './checkAnswer';
 import getReactFiber from '../getReactFiber';
 import newConsole from '../setUpConsole';
 
@@ -17,7 +17,7 @@ function addStoryListener(storyChoice) {
 
       const storyData = getReactFiber(parent)?.return?.memoizedProps?.storyElement;
 
-      if (storyData && !markStorySubmission(storyData, storyChoice)) {
+      if (storyData && !check.markStorySubmission(storyData, storyChoice)) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }
@@ -30,12 +30,6 @@ document.addEventListener(
   (e) => {
     if (/^\d$/.test(e.key)) {
       newConsole.log('match key listener');
-      const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
-      if (!previouslyClicked) {
-        newConsole.log('No previously clicked');
-        return;
-      }
-
       const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
       const button = buttons.find((x) => {
         const number = x.querySelector(constants.MATCH_BUTTON_NUMBER_SELECTED)
@@ -47,24 +41,7 @@ document.addEventListener(
       const parent = button.closest(constants.STORY_PARENT);
       const storyData = getReactFiber(parent)?.return?.memoizedProps?.storyElement;
 
-      if (!storyData) {
-        newConsole.log('No story data');
-        return;
-      }
-
-      const previousText = previouslyClicked.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
-      const currentText = button.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
-
-      newConsole.log(previouslyClicked);
-      newConsole.log(button);
-      newConsole.log(previousText);
-      newConsole.log(currentText);
-      const correct = previousText === currentText
-        ? true
-        : Object.values(storyData.matches).some((pair) => (previousText === pair.phrase && currentText === pair.translation)
-          || (currentText === pair.phrase && previousText === pair.translation));
-
-      if (!correct) {
+      if (storyData && !check.storyMatchKeyboard(storyData, button)) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }

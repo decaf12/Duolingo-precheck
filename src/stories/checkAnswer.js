@@ -2,7 +2,20 @@
 import * as constants from './challengeTypeConstants';
 import newConsole from '../setUpConsole';
 
-export default function markStorySubmission(storyData, button) {
+export function storyMatchKeyboard(storyData, button) {
+  const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
+  if (!previouslyClicked) {
+    return true;
+  }
+  const previousText = previouslyClicked.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
+  const currentText = button.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
+  return previousText === currentText
+    ? true
+    : Object.values(storyData.matches).some((pair) => (previousText === pair.phrase && currentText === pair.translation)
+      || (currentText === pair.phrase && previousText === pair.translation));
+}
+
+export function markStorySubmission(storyData, button) {
   switch (storyData.type) {
     case 'ARRANGE': {
       const tokenBank = button.closest(constants.STORY_TOKEN_BANK);
@@ -14,16 +27,7 @@ export default function markStorySubmission(storyData, button) {
     }
 
     case 'MATCH': {
-      const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
-      if (!previouslyClicked) {
-        return true;
-      }
-      const previousText = previouslyClicked.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
-      const currentText = button.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
-      return previousText === currentText
-        ? true
-        : Object.values(storyData.matches).some((pair) => (previousText === pair.phrase && currentText === pair.translation)
-          || (currentText === pair.phrase && previousText === pair.translation));
+      return storyMatchKeyboard(storyData, button);
     }
 
     case 'MULTIPLE_CHOICE': {
