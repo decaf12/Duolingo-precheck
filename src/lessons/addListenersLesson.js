@@ -85,14 +85,12 @@ document.addEventListener(
         }
       } else if (challengeData.type === 'listenMatch') {
         const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
-        newConsole.log(buttons);
         const button = buttons.find((x) => {
           const number = x.querySelector(constants.MATCH_BUTTON_NUMBER_SELECTED)
           ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_UNSELECTED)
           ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_GREYED);
           return number.innerText === e.key;
         });
-        newConsole.log(button);
         if (!listenMatchCorrect(button)) {
           e.preventDefault();
           e.stopImmediatePropagation();

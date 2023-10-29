@@ -302,28 +302,20 @@ function matchCorrect(challengeData, button) {
 }
 
 function listenMatchCorrect(button) {
-  newConsole.log('listenMatchCorrect running');
   const previouslyClicked = document.querySelector(MATCH_BUTTON_SELECTED);
   if (!previouslyClicked) {
-    newConsole.log('No previously clicked');
     return true;
   }
   const currClicked = button.getElementsByTagName('button')[0];
   const prevIsSound = previouslyClicked.querySelector(LISTENMATCH_SOUNDWAVE) !== null;
   const currIsSound = currClicked.querySelector(LISTENMATCH_SOUNDWAVE) !== null;
   if (prevIsSound === currIsSound) {
-    newConsole.log('Both are sound/neither is sound');
     return true;
   }
 
   const previousText = previouslyClicked.getAttribute('data-test');
   const currentText = currClicked.getAttribute('data-test');
 
-  newConsole.log(button);
-  newConsole.log(previouslyClicked);
-  newConsole.log(currClicked);
-  newConsole.log(previousText);
-  newConsole.log(currentText);
   return previousText === currentText;
 }
 
@@ -358,16 +350,13 @@ document.addEventListener(
           e.stopImmediatePropagation();
         }
       } else if (challengeData.type === 'listenMatch') {
-        newConsole.log('listenMatch key handler');
         const buttons = Array.from(document.querySelectorAll(MATCH_BUTTONS));
-        newConsole.log(buttons);
         const button = buttons.find((x) => {
           const number = x.querySelector(MATCH_BUTTON_NUMBER_SELECTED)
           ?? x.querySelector(MATCH_BUTTON_NUMBER_UNSELECTED)
           ?? x.querySelector(MATCH_BUTTON_NUMBER_GREYED);
           return number.innerText === e.key;
         });
-        newConsole.log(button);
         if (!listenMatchCorrect(button)) {
           e.preventDefault();
           e.stopImmediatePropagation();
@@ -393,7 +382,6 @@ const observerMatch = new MutationObserver(() => {
     const listenMatchButtons = document.querySelectorAll(MATCH_BUTTONS);
     listenMatchButtons.forEach((button) => {
       button.addEventListener('click', (e) => {
-        newConsole.log('listenMatch mouse handler');
         if (!listenMatchCorrect(button)) {
           e.preventDefault();
           e.stopImmediatePropagation();

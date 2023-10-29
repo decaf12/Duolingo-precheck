@@ -10,6 +10,9 @@ const STORY_TOKEN_BANK = '[data-test="stories-element"]';
 const MATCH_BUTTONS = '[class="_3Y3Px"]';
 const MATCH_BUTTON_SELECTED = '[class="WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
 const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
+const MATCH_BUTTON_NUMBER_UNSELECTED = '[class="Z7UoT _2S0Zh _2TrnF"]';
+const MATCH_BUTTON_NUMBER_SELECTED = '[class="_2R_o5 _2S0Zh _2TrnF"]';
+const MATCH_BUTTON_NUMBER_GREYED = '[class="_1KBJW _2S0Zh _2TrnF"]';
 
 const POINT_TO_PHRASE_BUTTON_BANK = '[class="_3jGFa _1RoWn"]';
 const POINT_TO_PHRASE_BUTTON = '[data-test="challenge-tap-token-text"]';
@@ -91,6 +94,53 @@ function addStoryListener(storyChoice) {
     },
   );
 }
+
+document.addEventListener(
+  'keydown',
+  (e) => {
+    if (/^\d$/.test(e.key)) {
+      newConsole.log('match key listener');
+      const previouslyClicked = document.querySelector(MATCH_BUTTON_SELECTED);
+      if (!previouslyClicked) {
+        newConsole.log('No previously clicked');
+        return;
+      }
+
+      const buttons = Array.from(document.querySelectorAll(MATCH_BUTTONS));
+      const button = buttons.find((x) => {
+        const number = x.querySelector(MATCH_BUTTON_NUMBER_SELECTED)
+        ?? x.querySelector(MATCH_BUTTON_NUMBER_UNSELECTED)
+        ?? x.querySelector(MATCH_BUTTON_NUMBER_GREYED);
+        return number.innerText === e.key;
+      });
+
+      const parent = button.closest(STORY_PARENT);
+      const storyData = getReactFiber(parent)?.return?.memoizedProps?.storyElement;
+
+      if (!storyData) {
+        newConsole.log('No story data');
+        return;
+      }
+
+      const previousText = previouslyClicked.querySelector(MATCH_BUTTON_TEXT).textContent;
+      const currentText = button.querySelector(MATCH_BUTTON_TEXT).textContent;
+
+      newConsole.log(previouslyClicked);
+      newConsole.log(button);
+      newConsole.log(previousText);
+      newConsole.log(currentText);
+      const correct = previousText === currentText
+        ? true
+        : Object.values(storyData.matches).some((pair) => (previousText === pair.phrase && currentText === pair.translation)
+          || (currentText === pair.phrase && previousText === pair.translation));
+
+      if (!correct) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    }
+  },
+);
 
 const observerStory = new MutationObserver(() => {
   const storyChoices = document.querySelectorAll(STORY_CHOICE);
