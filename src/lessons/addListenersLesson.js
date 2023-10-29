@@ -53,6 +53,18 @@ function listenMatchCorrect(button) {
   return previousText === currentText;
 }
 
+function getButton(key) {
+  const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
+  const button = buttons.find((x) => {
+    const number = x.querySelector(constants.MATCH_BUTTON_NUMBER_SELECTED)
+    ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_UNSELECTED)
+    ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_GREYED);
+    return number.innerText === key;
+  });
+
+  return button;
+}
+
 // Check user submission whenever the Enter key is pressed
 document.addEventListener(
   'keydown',
@@ -71,26 +83,14 @@ document.addEventListener(
       const challengeData = getChallengeDataLesson();
       if (challengeData.type === 'match') {
         newConsole.log('Match key handler');
-        const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
-        newConsole.log(buttons);
-        const button = buttons.find((x) => {
-          const number = x.querySelector(constants.MATCH_BUTTON_NUMBER_SELECTED)
-          ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_UNSELECTED);
-          return number.innerText === e.key;
-        });
+        const button = getButton(e.key);
         newConsole.log(button);
         if (!matchCorrect(challengeData, button)) {
           e.preventDefault();
           e.stopImmediatePropagation();
         }
       } else if (challengeData.type === 'listenMatch') {
-        const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
-        const button = buttons.find((x) => {
-          const number = x.querySelector(constants.MATCH_BUTTON_NUMBER_SELECTED)
-          ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_UNSELECTED)
-          ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_GREYED);
-          return number.innerText === e.key;
-        });
+        const button = getButton(e.key);
         if (!listenMatchCorrect(button)) {
           e.preventDefault();
           e.stopImmediatePropagation();
