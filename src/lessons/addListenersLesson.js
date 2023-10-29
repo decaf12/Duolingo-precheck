@@ -50,11 +50,6 @@ function listenMatchCorrect(button) {
   const previousText = previouslyClicked.getAttribute('data-test');
   const currentText = currClicked.getAttribute('data-test');
 
-  newConsole.log(button);
-  newConsole.log(previouslyClicked);
-  newConsole.log(currClicked);
-  newConsole.log(previousText);
-  newConsole.log(currentText);
   return previousText === currentText;
 }
 
@@ -89,7 +84,6 @@ document.addEventListener(
           e.stopImmediatePropagation();
         }
       } else if (challengeData.type === 'listenMatch') {
-        newConsole.log('listenMatch key handler');
         const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
         newConsole.log(buttons);
         const button = buttons.find((x) => {
@@ -98,6 +92,7 @@ document.addEventListener(
           ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_GREYED);
           return number.innerText === e.key;
         });
+        newConsole.log(button);
         if (!listenMatchCorrect(button)) {
           e.preventDefault();
           e.stopImmediatePropagation();
@@ -106,15 +101,6 @@ document.addEventListener(
     }
   },
 );
-
-function addListenMatchListener(button) {
-  button.addEventListener('click', (e) => {
-    if (!listenMatchCorrect) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-    }
-  });
-}
 
 const observerMatch = new MutationObserver(() => {
   const challengeData = getChallengeDataLesson();
@@ -132,7 +118,7 @@ const observerMatch = new MutationObserver(() => {
     const listenMatchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
     listenMatchButtons.forEach((button) => {
       button.addEventListener('click', (e) => {
-        if (!listenMatchCorrect) {
+        if (!listenMatchCorrect(button)) {
           e.preventDefault();
           e.stopImmediatePropagation();
         }

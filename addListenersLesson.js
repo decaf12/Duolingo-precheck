@@ -302,14 +302,17 @@ function matchCorrect(challengeData, button) {
 }
 
 function listenMatchCorrect(button) {
+  newConsole.log('listenMatchCorrect running');
   const previouslyClicked = document.querySelector(MATCH_BUTTON_SELECTED);
   if (!previouslyClicked) {
+    newConsole.log('No previously clicked');
     return true;
   }
   const currClicked = button.getElementsByTagName('button')[0];
   const prevIsSound = previouslyClicked.querySelector(LISTENMATCH_SOUNDWAVE) !== null;
   const currIsSound = currClicked.querySelector(LISTENMATCH_SOUNDWAVE) !== null;
   if (prevIsSound === currIsSound) {
+    newConsole.log('Both are sound/neither is sound');
     return true;
   }
 
@@ -359,15 +362,12 @@ document.addEventListener(
         const buttons = Array.from(document.querySelectorAll(MATCH_BUTTONS));
         newConsole.log(buttons);
         const button = buttons.find((x) => {
-          newConsole.log(x);
-          newConsole.log(x.querySelector(MATCH_BUTTON_NUMBER_SELECTED));
-          newConsole.log(x.querySelector(MATCH_BUTTON_NUMBER_UNSELECTED));
-
           const number = x.querySelector(MATCH_BUTTON_NUMBER_SELECTED)
           ?? x.querySelector(MATCH_BUTTON_NUMBER_UNSELECTED)
           ?? x.querySelector(MATCH_BUTTON_NUMBER_GREYED);
           return number.innerText === e.key;
         });
+        newConsole.log(button);
         if (!listenMatchCorrect(button)) {
           e.preventDefault();
           e.stopImmediatePropagation();
@@ -393,7 +393,8 @@ const observerMatch = new MutationObserver(() => {
     const listenMatchButtons = document.querySelectorAll(MATCH_BUTTONS);
     listenMatchButtons.forEach((button) => {
       button.addEventListener('click', (e) => {
-        if (!listenMatchCorrect) {
+        newConsole.log('listenMatch mouse handler');
+        if (!listenMatchCorrect(button)) {
           e.preventDefault();
           e.stopImmediatePropagation();
         }
