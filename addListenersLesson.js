@@ -1,7 +1,7 @@
 import { n as newConsole, g as getReactFiber } from './getReactFiber-56206b7a.js';
 
 const SUBMISSION_BUTTON_LESSON = '[data-test="player-next"]';
-const SUBMISSION_BUTTON_SPAN = '[class="_13HXc"]';
+const SUBMISSION_BUTTON_SPAN = '[class="_1fHYG"]';
 const MULTIPLE_CHOICE_CHOICES = '[data-test="challenge-choice"]';
 
 const IGNORED_CHARACTERS = /[_\-\s,.?!;]/g;
@@ -112,12 +112,17 @@ function markTranslate(answer, vertices) {
 }
 
 function markMultipleChoice(challengeData) {
+  newConsole.log('markMultipleChoice() called');
   const choices = Array.from(document.querySelectorAll(MULTIPLE_CHOICE_CHOICES));
+  newConsole.log(choices);
   const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+  newConsole.log(choiceID);
+  newConsole.log(challengeData);
   return choiceID === challengeData.correctIndex;
 }
 
 function markSubmission(challengeData) {
+  newConsole.log('markSubmission() called');
   switch (challengeData.type) {
     case 'assist':
     case 'definition':
@@ -133,13 +138,18 @@ function markSubmission(challengeData) {
 
     case 'completeReverseTranslation': {
       let answer = document.querySelector(TRANSLATE_TEXTBOX)?.value;
+      newConsole.log(`answer: ${answer}`);
       if (answer === undefined) {
+        newConsole.log('Answer undefined');
         const textbox = Array.from(document.querySelector(COMPLETEREVERSETRANSLATION_TEXTBOX).children);
+        newConsole.log(textbox);
         const answerArray = textbox.map((element) => {
           const blank = element.querySelector(COMPLETEREVERSETRANSLATION_BLANK);
           return blank?.value || element.textContent;
         });
+        newConsole.log(answerArray);
         answer = answerArray.join('');
+        newConsole.log(`new answer: ${answer}`);
       }
       return markTranslate(answer, challengeData.grader.vertices);
     }
@@ -278,8 +288,10 @@ function getChallengeDataLesson() {
 }
 
 function checkSubmission(submissionButton) {
+  newConsole.log(submissionButton);
   // If the button is "Check" then do not propagate the keypress.
   if (submissionButton?.querySelector(SUBMISSION_BUTTON_SPAN)?.innerHTML !== 'Check') {
+    newConsole.log('button is not check');
     return true;
   }
 
@@ -304,20 +316,17 @@ function matchCorrect(challengeData, button) {
 function listenMatchCorrect(button) {
   const previouslyClicked = document.querySelector(MATCH_BUTTON_SELECTED);
   if (!previouslyClicked) {
-    newConsole.log('No previously clicked');
     return true;
   }
   const currClicked = button.getElementsByTagName('button')[0];
   const prevIsSound = previouslyClicked.querySelector(LISTENMATCH_SOUNDWAVE) !== null;
   const currIsSound = currClicked.querySelector(LISTENMATCH_SOUNDWAVE) !== null;
   if (prevIsSound === currIsSound) {
-    newConsole.log('Both are sounds/neither is sound');
     return true;
   }
 
   const previousText = previouslyClicked.getAttribute('data-test');
   const currentText = currClicked.getAttribute('data-test');
-  newConsole.log(`Prev: ${previousText}, curr: ${currentText}`);
   return previousText === currentText;
 }
 
@@ -338,8 +347,10 @@ document.addEventListener(
   'keydown',
   (e) => {
     if (e.key === 'Enter') {
+      newConsole.log('Enter key pressed');
       const submissionButton = document.querySelector(SUBMISSION_BUTTON_LESSON);
       if (submissionButton === null) {
+        newConsole.log('Null submission button');
         return;
       }
 
@@ -352,7 +363,6 @@ document.addEventListener(
       newConsole.log(challengeData);
       newConsole.log(challengeData.type);
       if (challengeData.type === 'match') {
-        newConsole.log('Match key handler lesson');
         const button = getButton(e.key);
         newConsole.log(button);
         if (!matchCorrect(challengeData, button)) {
@@ -361,7 +371,6 @@ document.addEventListener(
         }
       } else if (challengeData.type === 'listenMatch') {
         const button = getButton(e.key);
-        newConsole.log('listenMatch key handler lesson');
         if (!listenMatchCorrect(button)) {
           e.preventDefault();
           e.stopImmediatePropagation();

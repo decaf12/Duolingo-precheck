@@ -74,12 +74,17 @@ function markTranslate(answer, vertices) {
 }
 
 function markMultipleChoice(challengeData) {
+  newConsole.log('markMultipleChoice() called');
   const choices = Array.from(document.querySelectorAll(constants.MULTIPLE_CHOICE_CHOICES));
+  newConsole.log(choices);
   const choiceID = choices.findIndex((x) => x.tabIndex === 0);
+  newConsole.log(choiceID);
+  newConsole.log(challengeData);
   return choiceID === challengeData.correctIndex;
 }
 
 export function markSubmission(challengeData) {
+  newConsole.log('markSubmission() called');
   switch (challengeData.type) {
     case 'assist':
     case 'definition':
@@ -95,13 +100,18 @@ export function markSubmission(challengeData) {
 
     case 'completeReverseTranslation': {
       let answer = document.querySelector(constants.TRANSLATE_TEXTBOX)?.value;
+      newConsole.log(`answer: ${answer}`);
       if (answer === undefined) {
+        newConsole.log('Answer undefined');
         const textbox = Array.from(document.querySelector(constants.COMPLETEREVERSETRANSLATION_TEXTBOX).children);
+        newConsole.log(textbox);
         const answerArray = textbox.map((element) => {
           const blank = element.querySelector(constants.COMPLETEREVERSETRANSLATION_BLANK);
           return blank?.value || element.textContent;
         });
+        newConsole.log(answerArray);
         answer = answerArray.join('');
+        newConsole.log(`new answer: ${answer}`);
       }
       return markTranslate(answer, challengeData.grader.vertices);
     }
