@@ -49,7 +49,6 @@ function listenMatchCorrect(button) {
 
   const previousText = previouslyClicked.getAttribute('data-test');
   const currentText = currClicked.getAttribute('data-test');
-
   return previousText === currentText;
 }
 
@@ -81,8 +80,9 @@ document.addEventListener(
       }
     } else if (/^\d$/.test(e.key)) {
       const challengeData = getChallengeDataLesson();
+      newConsole.log(challengeData);
+      newConsole.log(challengeData.type);
       if (challengeData.type === 'match') {
-        newConsole.log('Match key handler');
         const button = getButton(e.key);
         newConsole.log(button);
         if (!matchCorrect(challengeData, button)) {

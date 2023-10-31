@@ -13,7 +13,7 @@ const LISTENCOMPLETE_BLANK = '[data-test="challenge-text-input"]';
 const LISTENMATCH_SOUNDWAVE = '[class="_2GTek _1bxd8 _19tAr"]';
 const MATCH_BUTTONS = '[class="_1deIS"]';
 const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
-const MATCH_BUTTON_SELECTED = '[class="_1rl91 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
+const MATCH_BUTTON_SELECTED = '[class="_3CBig _1N-oo _36Vd3 _16r-S notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
 const MATCH_BUTTON_NUMBER_UNSELECTED = '[class="Z7UoT _2S0Zh _2TrnF"]';
 const MATCH_BUTTON_NUMBER_SELECTED = '[class="_2R_o5 _2S0Zh _2TrnF"]';
 const MATCH_BUTTON_NUMBER_GREYED = '[class="_1KBJW _2S0Zh _2TrnF"]';
@@ -304,18 +304,20 @@ function matchCorrect(challengeData, button) {
 function listenMatchCorrect(button) {
   const previouslyClicked = document.querySelector(MATCH_BUTTON_SELECTED);
   if (!previouslyClicked) {
+    newConsole.log('No previously clicked');
     return true;
   }
   const currClicked = button.getElementsByTagName('button')[0];
   const prevIsSound = previouslyClicked.querySelector(LISTENMATCH_SOUNDWAVE) !== null;
   const currIsSound = currClicked.querySelector(LISTENMATCH_SOUNDWAVE) !== null;
   if (prevIsSound === currIsSound) {
+    newConsole.log('Both are sounds/neither is sound');
     return true;
   }
 
   const previousText = previouslyClicked.getAttribute('data-test');
   const currentText = currClicked.getAttribute('data-test');
-
+  newConsole.log(`Prev: ${previousText}, curr: ${currentText}`);
   return previousText === currentText;
 }
 
@@ -347,8 +349,10 @@ document.addEventListener(
       }
     } else if (/^\d$/.test(e.key)) {
       const challengeData = getChallengeDataLesson();
+      newConsole.log(challengeData);
+      newConsole.log(challengeData.type);
       if (challengeData.type === 'match') {
-        newConsole.log('Match key handler');
+        newConsole.log('Match key handler lesson');
         const button = getButton(e.key);
         newConsole.log(button);
         if (!matchCorrect(challengeData, button)) {
@@ -357,6 +361,7 @@ document.addEventListener(
         }
       } else if (challengeData.type === 'listenMatch') {
         const button = getButton(e.key);
+        newConsole.log('listenMatch key handler lesson');
         if (!listenMatchCorrect(button)) {
           e.preventDefault();
           e.stopImmediatePropagation();

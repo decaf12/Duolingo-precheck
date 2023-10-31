@@ -29,7 +29,6 @@ document.addEventListener(
   'keydown',
   (e) => {
     if (/^\d$/.test(e.key)) {
-      newConsole.log('match key listener');
       const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
       const button = buttons.find((x) => {
         const number = x.querySelector(constants.MATCH_BUTTON_NUMBER_SELECTED)
