@@ -31,13 +31,20 @@ export function markStorySubmission(storyData, button) {
     }
 
     case 'MULTIPLE_CHOICE': {
+      newConsole.log('markStorySubmission button:');
+
+      newConsole.log(button);
+
       const answerArray = storyData.answers;
-      const correctID = storyData.correctAnswerIndex;
-      const buttonText = button.nextElementSibling.textContent;
-      const correctText = answerArray[correctID].text;
       newConsole.log(answerArray);
+
+      const correctID = storyData.correctAnswerIndex;
       newConsole.log(correctID);
+
+      const buttonText = button.textContent;
       newConsole.log(buttonText);
+
+      const correctText = answerArray[correctID].text;
       newConsole.log(correctText);
       return correctText === buttonText;
     }
