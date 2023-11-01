@@ -1,7 +1,7 @@
 import { n as newConsole, g as getReactFiber } from './getReactFiber-56206b7a.js';
 
 const STORY_PARENT = '[class="_35e5D"]';
-const STORY_CHECKBOX = '[class="_1eDrh _2ob7j _2mWtz"]';
+const STORY_CHECKBOX = '[class="_1eDrh _2Qk72"]';
 const STORY_CHOICE = '[class="_3p1ox"]';
 
 const STORY_TOKENS = '[class="_1deIS"]';
@@ -112,12 +112,22 @@ document.addEventListener(
   (e) => {
     if (/^\d$/.test(e.key)) {
       const buttons = Array.from(document.querySelectorAll(MATCH_BUTTONS));
+      if (!buttons.length) {
+        return;
+      }
+
       const button = buttons.find((x) => {
+        newConsole.log(x);
         const number = x.querySelector(MATCH_BUTTON_NUMBER_SELECTED)
         ?? x.querySelector(MATCH_BUTTON_NUMBER_UNSELECTED)
         ?? x.querySelector(MATCH_BUTTON_NUMBER_GREYED);
-        return number.innerText === e.key;
+        return number?.innerText === e.key;
       });
+
+      if (!button) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
 
       const parent = button.closest(STORY_PARENT);
       const storyData = getReactFiber(parent)?.return?.memoizedProps?.storyElement;
@@ -131,9 +141,11 @@ document.addEventListener(
 );
 
 const observerStory = new MutationObserver(() => {
-  const checkbox = document.querySelectorAll(STORY_CHECKBOX);
-  if (checkbox.length > 0) {
-    checkbox.forEach((button) => addStoryListener(button));
+  const checkboxes = document.querySelectorAll(STORY_CHECKBOX);
+  if (checkboxes.length > 0) {
+    newConsole.log('Adding checkboxes');
+    newConsole.log(checkboxes);
+    checkboxes.forEach((button) => addStoryListener(button));
   }
 
   const storyChoices = document.querySelectorAll(STORY_CHOICE);

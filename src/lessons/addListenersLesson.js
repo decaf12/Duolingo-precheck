@@ -23,6 +23,10 @@ function checkSubmission(submissionButton) {
 }
 
 function matchCorrect(challengeData, button) {
+  if (!button) {
+    return false;
+  }
+
   const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
   if (!previouslyClicked) {
     return true;
@@ -57,7 +61,7 @@ function getButton(key) {
     const number = x.querySelector(constants.MATCH_BUTTON_NUMBER_SELECTED)
     ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_UNSELECTED)
     ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_GREYED);
-    return number.innerText === key;
+    return number?.innerText === key;
   });
 
   return button;
@@ -89,6 +93,8 @@ document.addEventListener(
         }
       } else if (challengeData.type === 'listenMatch') {
         const button = getButton(e.key);
+        newConsole.log('listenMatch key handler');
+        newConsole.log(button);
         if (!listenMatchCorrect(button)) {
           e.preventDefault();
           e.stopImmediatePropagation();
