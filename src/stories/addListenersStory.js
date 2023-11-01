@@ -10,12 +10,15 @@ function addStoryListener(storyChoice) {
   storyChoice.addEventListener(
     'click',
     (e) => {
+      newConsole.log(storyChoice);
       const parent = storyChoice.closest(constants.STORY_PARENT);
+      newConsole.log(parent);
       if (!parent) {
         return;
       }
 
       const storyData = getReactFiber(parent)?.return?.memoizedProps?.storyElement;
+      newConsole.log(storyData);
 
       if (storyData && !check.markStorySubmission(storyData, storyChoice)) {
         e.preventDefault();

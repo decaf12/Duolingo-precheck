@@ -1,7 +1,7 @@
 import { n as newConsole, g as getReactFiber } from './getReactFiber-56206b7a.js';
 
 const STORY_PARENT = '[class="_35e5D"]';
-const STORY_CHOICE = '[data-test="stories-choice"]';
+const STORY_CHOICE = '[class="_1eDrh _2ob7j _2mWtz"]';
 
 const STORY_TOKENS = '[class="_1deIS"]';
 const STORY_TOKEN_SELECTED = '[class="LhRk3 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_"]';
@@ -52,6 +52,10 @@ function markStorySubmission(storyData, button) {
       const correctID = storyData.correctAnswerIndex;
       const buttonText = button.nextElementSibling.textContent;
       const correctText = answerArray[correctID].text;
+      newConsole.log(answerArray);
+      newConsole.log(correctID);
+      newConsole.log(buttonText);
+      newConsole.log(correctText);
       return correctText === buttonText;
     }
 
@@ -84,12 +88,15 @@ function addStoryListener(storyChoice) {
   storyChoice.addEventListener(
     'click',
     (e) => {
+      newConsole.log(storyChoice);
       const parent = storyChoice.closest(STORY_PARENT);
+      newConsole.log(parent);
       if (!parent) {
         return;
       }
 
       const storyData = getReactFiber(parent)?.return?.memoizedProps?.storyElement;
+      newConsole.log(storyData);
 
       if (storyData && !markStorySubmission(storyData, storyChoice)) {
         e.preventDefault();

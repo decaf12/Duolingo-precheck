@@ -1,5 +1,5 @@
 export const STORY_PARENT = '[class="_35e5D"]';
-export const STORY_CHOICE = '[data-test="stories-choice"]';
+export const STORY_CHOICE = '[class="_1eDrh _2ob7j _2mWtz"]';
 
 export const STORY_TOKENS = '[class="_1deIS"]';
 export const STORY_TOKEN_SELECTED = '[class="LhRk3 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_"]';

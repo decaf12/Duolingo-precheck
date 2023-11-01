@@ -35,6 +35,10 @@ export function markStorySubmission(storyData, button) {
       const correctID = storyData.correctAnswerIndex;
       const buttonText = button.nextElementSibling.textContent;
       const correctText = answerArray[correctID].text;
+      newConsole.log(answerArray);
+      newConsole.log(correctID);
+      newConsole.log(buttonText);
+      newConsole.log(correctText);
       return correctText === buttonText;
     }
 

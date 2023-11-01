@@ -288,15 +288,12 @@ function getChallengeDataLesson() {
 }
 
 function checkSubmission(submissionButton) {
-  newConsole.log(submissionButton);
   // If the button is "Check" then do not propagate the keypress.
   if (submissionButton?.querySelector(SUBMISSION_BUTTON_SPAN)?.innerHTML !== 'Check') {
-    newConsole.log('button is not check');
     return true;
   }
 
   const challengeData = getChallengeDataLesson();
-  newConsole.log(challengeData);
 
   return markSubmission(challengeData);
 }
@@ -347,10 +344,8 @@ document.addEventListener(
   'keydown',
   (e) => {
     if (e.key === 'Enter') {
-      newConsole.log('Enter key pressed');
       const submissionButton = document.querySelector(SUBMISSION_BUTTON_LESSON);
       if (submissionButton === null) {
-        newConsole.log('Null submission button');
         return;
       }
 
@@ -364,7 +359,6 @@ document.addEventListener(
       newConsole.log(challengeData.type);
       if (challengeData.type === 'match') {
         const button = getButton(e.key);
-        newConsole.log(button);
         if (!matchCorrect(challengeData, button)) {
           e.preventDefault();
           e.stopImmediatePropagation();
