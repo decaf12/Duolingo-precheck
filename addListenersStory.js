@@ -1,7 +1,8 @@
 import { n as newConsole, g as getReactFiber } from './getReactFiber-56206b7a.js';
 
 const STORY_PARENT = '[class="_35e5D"]';
-const STORY_CHOICE = '[class="_1eDrh _2ob7j _2mWtz"]';
+const STORY_CHECKBOX = '[class="_1eDrh _2ob7j _2mWtz"]';
+const STORY_CHOICE = '[class="_3p1ox"]';
 
 const STORY_TOKENS = '[class="_1deIS"]';
 const STORY_TOKEN_SELECTED = '[class="LhRk3 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_"]';
@@ -130,6 +131,11 @@ document.addEventListener(
 );
 
 const observerStory = new MutationObserver(() => {
+  const checkbox = document.querySelectorAll(STORY_CHECKBOX);
+  if (checkbox.length > 0) {
+    checkbox.forEach((button) => addStoryListener(button));
+  }
+
   const storyChoices = document.querySelectorAll(STORY_CHOICE);
   if (storyChoices.length > 0) {
     storyChoices.forEach((button) => addStoryListener(button));

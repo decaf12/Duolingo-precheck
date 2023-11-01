@@ -52,6 +52,11 @@ document.addEventListener(
 );
 
 const observerStory = new MutationObserver(() => {
+  const checkbox = document.querySelectorAll(constants.STORY_CHECKBOX);
+  if (checkbox.length > 0) {
+    checkbox.forEach((button) => addStoryListener(button));
+  }
+
   const storyChoices = document.querySelectorAll(constants.STORY_CHOICE);
   if (storyChoices.length > 0) {
     storyChoices.forEach((button) => addStoryListener(button));
