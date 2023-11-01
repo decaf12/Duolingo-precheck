@@ -10,6 +10,7 @@ function addStoryListener(storyChoice) {
   storyChoice.addEventListener(
     'click',
     (e) => {
+      newConsole.log('addStoryListener');
       newConsole.log(storyChoice);
       const parent = storyChoice.closest(constants.STORY_PARENT);
       newConsole.log(parent);
@@ -53,7 +54,7 @@ document.addEventListener(
       const parent = button.closest(constants.STORY_PARENT);
       const storyData = getReactFiber(parent)?.return?.memoizedProps?.storyElement;
 
-      if (storyData && !check.storyMatchKeyboard(storyData, button)) {
+      if (storyData && !check.markStoryMatch(storyData, button)) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }
@@ -64,7 +65,6 @@ document.addEventListener(
 const observerStory = new MutationObserver(() => {
   const checkboxes = document.querySelectorAll(constants.STORY_CHECKBOX);
   if (checkboxes.length > 0) {
-    newConsole.log('Adding checkboxes');
     newConsole.log(checkboxes);
     checkboxes.forEach((button) => addStoryListener(button));
   }

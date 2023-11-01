@@ -384,9 +384,6 @@ const observerMatch = new MutationObserver(() => {
   const challengeData = getChallengeDataLesson();
   if (challengeData?.type === 'match') {
     const matchButtons = document.querySelectorAll(MATCH_BUTTONS);
-    if (!matchButtons) {
-      return;
-    }
     matchButtons.forEach((button) => {
       button.addEventListener('click', (e) => {
         if (!matchCorrect(challengeData, button)) {
@@ -397,9 +394,6 @@ const observerMatch = new MutationObserver(() => {
     });
   } else if (challengeData?.type === 'listenMatch') {
     const listenMatchButtons = document.querySelectorAll(MATCH_BUTTONS);
-    if (!listenMatchButtons) {
-      return;
-    }
     listenMatchButtons.forEach((button) => {
       button.addEventListener('click', (e) => {
         if (!listenMatchCorrect(button)) {

@@ -9,7 +9,7 @@ const STORY_TOKEN_SELECTED = '[class="LhRk3 WOZnx _275sd _1ZefG notranslate _6No
 const STORY_TOKEN_BANK = '[data-test="stories-element"]';
 
 const MATCH_BUTTONS = '[class="_3Y3Px"]';
-const MATCH_BUTTON_SELECTED = '[class="WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
+const MATCH_BUTTON_SELECTED = '[class="_1N-oo _36Vd3 _16r-S notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
 const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 const MATCH_BUTTON_NUMBER_UNSELECTED = '[class="Z7UoT _2S0Zh _2TrnF"]';
 const MATCH_BUTTON_NUMBER_SELECTED = '[class="_2R_o5 _2S0Zh _2TrnF"]';
@@ -20,13 +20,19 @@ const POINT_TO_PHRASE_BUTTON = '[data-test="challenge-tap-token-text"]';
 
 /* eslint-disable max-len */
 
-function storyMatchKeyboard(storyData, button) {
+function markStoryMatch(storyData, button) {
+  newConsole.log('markStoryMatch');
   const previouslyClicked = document.querySelector(MATCH_BUTTON_SELECTED);
+  newConsole.log(previouslyClicked);
   if (!previouslyClicked) {
     return true;
   }
   const previousText = previouslyClicked.querySelector(MATCH_BUTTON_TEXT).textContent;
+  newConsole.log(previousText);
+
   const currentText = button.querySelector(MATCH_BUTTON_TEXT).textContent;
+  newConsole.log(currentText);
+
   return previousText === currentText
     ? true
     : Object.values(storyData.matches).some((pair) => (previousText === pair.phrase && currentText === pair.translation)
@@ -34,6 +40,7 @@ function storyMatchKeyboard(storyData, button) {
 }
 
 function markStorySubmission(storyData, button) {
+  newConsole.log('markStorySubmission');
   switch (storyData.type) {
     case 'ARRANGE': {
       const tokenBank = button.closest(STORY_TOKEN_BANK);
@@ -45,7 +52,7 @@ function markStorySubmission(storyData, button) {
     }
 
     case 'MATCH': {
-      return storyMatchKeyboard(storyData, button);
+      return markStoryMatch(storyData, button);
     }
 
     case 'MULTIPLE_CHOICE': {
@@ -96,6 +103,7 @@ function addStoryListener(storyChoice) {
   storyChoice.addEventListener(
     'click',
     (e) => {
+      newConsole.log('addStoryListener');
       newConsole.log(storyChoice);
       const parent = storyChoice.closest(STORY_PARENT);
       newConsole.log(parent);
@@ -139,7 +147,7 @@ document.addEventListener(
       const parent = button.closest(STORY_PARENT);
       const storyData = getReactFiber(parent)?.return?.memoizedProps?.storyElement;
 
-      if (storyData && !storyMatchKeyboard(storyData, button)) {
+      if (storyData && !markStoryMatch(storyData, button)) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }
@@ -150,7 +158,6 @@ document.addEventListener(
 const observerStory = new MutationObserver(() => {
   const checkboxes = document.querySelectorAll(STORY_CHECKBOX);
   if (checkboxes.length > 0) {
-    newConsole.log('Adding checkboxes');
     newConsole.log(checkboxes);
     checkboxes.forEach((button) => addStoryListener(button));
   }

@@ -2,13 +2,19 @@
 import * as constants from './challengeTypeConstants';
 import newConsole from '../setUpConsole';
 
-export function storyMatchKeyboard(storyData, button) {
+export function markStoryMatch(storyData, button) {
+  newConsole.log('markStoryMatch');
   const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
+  newConsole.log(previouslyClicked);
   if (!previouslyClicked) {
     return true;
   }
   const previousText = previouslyClicked.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
+  newConsole.log(previousText);
+
   const currentText = button.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
+  newConsole.log(currentText);
+
   return previousText === currentText
     ? true
     : Object.values(storyData.matches).some((pair) => (previousText === pair.phrase && currentText === pair.translation)
@@ -16,6 +22,7 @@ export function storyMatchKeyboard(storyData, button) {
 }
 
 export function markStorySubmission(storyData, button) {
+  newConsole.log('markStorySubmission');
   switch (storyData.type) {
     case 'ARRANGE': {
       const tokenBank = button.closest(constants.STORY_TOKEN_BANK);
@@ -27,7 +34,7 @@ export function markStorySubmission(storyData, button) {
     }
 
     case 'MATCH': {
-      return storyMatchKeyboard(storyData, button);
+      return markStoryMatch(storyData, button);
     }
 
     case 'MULTIPLE_CHOICE': {
