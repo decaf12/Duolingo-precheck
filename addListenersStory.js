@@ -5,7 +5,7 @@ const STORY_CHECKBOX = '[class="_1eDrh _2Qk72"]';
 const STORY_CHOICE = '[class="_3p1ox"]';
 
 const STORY_TOKENS = '[class="_1deIS"]';
-const STORY_TOKEN_SELECTED = '[class="LhRk3 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_"]';
+const STORY_TOKEN_SELECTED = '[class="_33Jbm _1N-oo _36Vd3 _16r-S notranslate _6Nozy _1O290 _2HRY_"]';
 const STORY_TOKEN_BANK = '[data-test="stories-element"]';
 
 const MATCH_BUTTONS = '[class="_3Y3Px"]';
@@ -43,11 +43,22 @@ function markStorySubmission(storyData, button) {
   newConsole.log('markStorySubmission');
   switch (storyData.type) {
     case 'ARRANGE': {
+      newConsole.log('marking arrange');
+
       const tokenBank = button.closest(STORY_TOKEN_BANK);
+      newConsole.log(tokenBank);
+
       const selectedButtonCount = tokenBank.querySelectorAll(STORY_TOKEN_SELECTED).length;
+      newConsole.log(selectedButtonCount);
+
       const phraseArray = storyData.selectablePhrases;
+      newConsole.log(phraseArray);
+
       const correctOrder = storyData.phraseOrder;
+      newConsole.log(correctOrder);
+
       const correctButtonContent = phraseArray[correctOrder[selectedButtonCount]];
+      newConsole.log(correctButtonContent);
       return button.textContent === correctButtonContent;
     }
 

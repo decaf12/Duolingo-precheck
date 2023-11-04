@@ -17,7 +17,9 @@ function checkSubmission(submissionButton) {
     return true;
   }
 
+  newConsole.log('checkSubmission() called');
   const challengeData = getChallengeDataLesson();
+  newConsole.log(challengeData);
 
   return check.markSubmission(challengeData);
 }

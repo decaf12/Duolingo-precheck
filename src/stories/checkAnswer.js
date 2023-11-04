@@ -25,11 +25,22 @@ export function markStorySubmission(storyData, button) {
   newConsole.log('markStorySubmission');
   switch (storyData.type) {
     case 'ARRANGE': {
+      newConsole.log('marking arrange');
+
       const tokenBank = button.closest(constants.STORY_TOKEN_BANK);
+      newConsole.log(tokenBank);
+
       const selectedButtonCount = tokenBank.querySelectorAll(constants.STORY_TOKEN_SELECTED).length;
+      newConsole.log(selectedButtonCount);
+
       const phraseArray = storyData.selectablePhrases;
+      newConsole.log(phraseArray);
+
       const correctOrder = storyData.phraseOrder;
+      newConsole.log(correctOrder);
+
       const correctButtonContent = phraseArray[correctOrder[selectedButtonCount]];
+      newConsole.log(correctButtonContent);
       return button.textContent === correctButtonContent;
     }
 
