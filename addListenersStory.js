@@ -6,7 +6,7 @@ const STORY_CHOICE = '[class="_3p1ox"]';
 
 const STORY_TOKENS = '[class="_1deIS"]';
 const STORY_TOKEN_SELECTED = '[class="_33Jbm _1N-oo _36Vd3 _16r-S notranslate _6Nozy _1O290 _2HRY_"]';
-const STORY_TOKEN_BANK = '[data-test="stories-element"]';
+const STORY_TOKEN_BANK = '[data-test="word-bank"]';
 
 const MATCH_BUTTONS = '[class="_3Y3Px"]';
 const MATCH_BUTTON_SELECTED = '[class="_1N-oo _36Vd3 _16r-S notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
