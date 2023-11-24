@@ -65,22 +65,26 @@ document.addEventListener(
 const observerStory = new MutationObserver(() => {
   const checkboxes = document.querySelectorAll(constants.STORY_CHECKBOX);
   if (checkboxes.length > 0) {
+    newConsole.log('Story checkboxes found.');
     newConsole.log(checkboxes);
     checkboxes.forEach((button) => addStoryListener(button));
   }
 
   const storyChoices = document.querySelectorAll(constants.STORY_CHOICE);
   if (storyChoices.length > 0) {
+    newConsole.log('Story story choices found.');
     storyChoices.forEach((button) => addStoryListener(button));
   }
 
   const tapTokens = document.querySelectorAll(constants.STORY_TOKENS);
   if (tapTokens.length > 0) {
+    newConsole.log('Story tap tokens found.');
     tapTokens.forEach((button) => addStoryListener(button));
   }
 
   const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
   if (matchButtons.length > 0) {
+    newConsole.log('Story match buttons found.');
     matchButtons.forEach((button) => addStoryListener(button));
   }
 });

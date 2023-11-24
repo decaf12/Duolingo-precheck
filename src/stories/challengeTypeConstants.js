@@ -1,5 +1,5 @@
 export const STORY_PARENT = '[class="_35e5D"]';
-export const STORY_CHECKBOX = '[class="_1eDrh _2Qk72"]';
+export const STORY_CHECKBOX = '._1eDrh, ._1ZeuM';
 export const STORY_CHOICE = '[class="_3p1ox"]';
 
 export const STORY_TOKENS = '[class="_1deIS"]';

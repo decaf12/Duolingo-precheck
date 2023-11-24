@@ -1,7 +1,7 @@
 import { n as newConsole, g as getReactFiber } from './getReactFiber-56206b7a.js';
 
 const STORY_PARENT = '[class="_35e5D"]';
-const STORY_CHECKBOX = '[class="_1eDrh _2Qk72"]';
+const STORY_CHECKBOX = '._1eDrh, ._1ZeuM';
 const STORY_CHOICE = '[class="_3p1ox"]';
 
 const STORY_TOKENS = '[class="_1deIS"]';
@@ -169,22 +169,26 @@ document.addEventListener(
 const observerStory = new MutationObserver(() => {
   const checkboxes = document.querySelectorAll(STORY_CHECKBOX);
   if (checkboxes.length > 0) {
+    newConsole.log('Story checkboxes found.');
     newConsole.log(checkboxes);
     checkboxes.forEach((button) => addStoryListener(button));
   }
 
   const storyChoices = document.querySelectorAll(STORY_CHOICE);
   if (storyChoices.length > 0) {
+    newConsole.log('Story story choices found.');
     storyChoices.forEach((button) => addStoryListener(button));
   }
 
   const tapTokens = document.querySelectorAll(STORY_TOKENS);
   if (tapTokens.length > 0) {
+    newConsole.log('Story tap tokens found.');
     tapTokens.forEach((button) => addStoryListener(button));
   }
 
   const matchButtons = document.querySelectorAll(MATCH_BUTTONS);
   if (matchButtons.length > 0) {
+    newConsole.log('Story match buttons found.');
     matchButtons.forEach((button) => addStoryListener(button));
   }
 });
