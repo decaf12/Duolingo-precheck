@@ -4,9 +4,7 @@ function injectScript(src) {
 	script.setAttribute('type', 'module');
 	script.src = chrome.runtime.getURL(src);
 	script.onload = () => script.remove();
-	const injectedScript = (document.head || document.documentElement).appendChild(script);
-	console.log('Injected script');
-	console.log(injectedScript);
+	(document.head || document.documentElement).appendChild(script);
 }
 
 injectScript('src/lessons/addListenersLesson.js');

@@ -5,25 +5,15 @@
     "version": "1.0",
   
     "description": "Pre-submission checks for correctness.",
-  
-    "icons": {
-      "48": "icons/border-48.png"
-    },
     
     "content_scripts": [
       {
-        "matches": [
-          "*://*.duolingo.com/*"
-          ],
-        "js": [
-          "src/injectScripts.js"
-        ]
+        "matches": ["*://*.duolingo.com/*"],
+        "js": ["src/injectScripts.js"]
       }
     ],
 
     "web_accessible_resources": [
       "src/*.js"
-    ],
-    "devtools_page": "devtools/devtools-page.html"
-  
+    ]
   }
