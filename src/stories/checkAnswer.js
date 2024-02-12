@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
-import * as constants from './challengeTypeConstants';
-import newConsole from '../setUpConsole';
+import * as constants from './challengeTypeConstants.js';
+import newConsole from '../setUpConsole.js';
 
 export function markStoryMatch(storyData, button) {
   newConsole.log('markStoryMatch');

@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
-import * as constants from './challengeTypeConstants';
-import * as check from './checkAnswer';
-import getReactFiber from '../getReactFiber';
-import newConsole from '../setUpConsole';
+import * as constants from './challengeTypeConstants.js';
+import * as check from './checkAnswer.js';
+import getReactFiber from '../getReactFiber.js';
+import newConsole from '../setUpConsole.js';
 
 newConsole.log('Adding story listeners');
 

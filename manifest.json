@@ -16,11 +16,14 @@
           "*://*.duolingo.com/*"
           ],
         "js": [
-          "injectScripts.js"
+          "src/injectScripts.js"
         ]
       }
     ],
 
+    "web_accessible_resources": [
+      "src/*.js"
+    ],
     "devtools_page": "devtools/devtools-page.html"
   
   }
