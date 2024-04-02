@@ -9,7 +9,6 @@ newConsole.log('Adding lesson listeners');
 function getChallengeDataLesson() {
   const solution = document.querySelector('[class="_1eZUw _2wxYa"]');
   const fiber = getReactFiber(solution);
-  newConsole.log('fiber: ', fiber);
   return fiber?.return?.memoizedProps?.challenge;
 }
 
