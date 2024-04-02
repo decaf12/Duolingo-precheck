@@ -113,7 +113,7 @@ export const TAPCLOZE_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 export const TYPE_TAPCOMPLETE = 'tapComplete';
 export const TAPCOMPLETE = '[data-test="challenge challenge-tapComplete"]';
 export const TAPCOMPLETE_PROMPT = '[data-test="hint-token"]';
-export const TAPCOMPLETE_SELECTED = '[class="_2Z2xv"]';
+export const TAPCOMPLETE_SELECTED = '[class="_2XXyS"]';
 export const TAPCOMPLETE_SELECTED_TEXT_CLICK = '[data-test="challenge-tap-token-text"]';
 export const TAPCOMPLETE_SELECTED_TEXT_TYPE = '[class="_2J2do"]';
 export const TAPCOMPLETE_SELECTED_TEXT = `${TAPCOMPLETE_SELECTED_TEXT_CLICK}, ${TAPCOMPLETE_SELECTED_TEXT_TYPE}`;

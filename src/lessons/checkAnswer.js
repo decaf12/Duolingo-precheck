@@ -170,7 +170,7 @@ export function markSubmission(challengeData) {
       newConsole.log('tapComplete');
       const selectionArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETE_SELECTED));
       newConsole.log('selectionArray', selectionArray);
-      const selectionText = selectionArray.map((button) => button.querySelector(constants.TAPCOMPLETE_SELECTED_TEXT).textContent).join(' ');
+      const selectionText = selectionArray.map((button) => button.innerText).join(' ');
       newConsole.log('selectionText', selectionText);
       const displayTokens = Array.from(challengeData.displayTokens);
       newConsole.log('displayTokens', displayTokens);
