@@ -149,9 +149,13 @@ export function markSubmission(challengeData) {
     }
 
     case 'partialReverseTranslate': {
+      newConsole.log('partialReverseTranslate');
       const textbox = document.querySelector(constants.PARTIALREVERSETRANSLATE_TEXTBOX);
+      newConsole.log('textbox', textbox);
       const answerArray = Array.from(textbox.querySelectorAll(constants.PARTIALREVERSETRANSLATE_TEXT));
+      newConsole.log('answerArray', answerArray);
       const answer = answerArray.map((x) => x.textContent).join('');
+      newConsole.log('answer', answer);
       return markTranslate(answer, challengeData.grader.vertices);
     }
 
