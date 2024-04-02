@@ -1,4 +1,4 @@
-export const STORY_PARENT = '[class="_2NQne _2nM1L _2FSY0"]';
+export const STORY_PARENT = '[data-test="stories-element"]';
 export const STORY_ANSWERKEY = '[data-test="stories-element"]';
 export const STORY_CHECKBOX = '[class="_1IhmG"]';
 export const STORY_CHOICE = '[class="_3p1ox"]';

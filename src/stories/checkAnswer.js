@@ -57,10 +57,7 @@ export function markStorySubmission(storyData, button) {
       const correctID = storyData.correctAnswerIndex;
       newConsole.log('correctId', correctID);
 
-      const parent = button.closest(constants.MATCH_BUTTON_PARENT);
-      newConsole.log('parent', parent);
-
-      const label = parent.querySelector(constants.MATCH_BUTTON_LABEL);
+      const label = button.nextSibling;
       newConsole.log('label', label);
 
       const labelTokens = Array.from(label.getElementsByTagName('span'));

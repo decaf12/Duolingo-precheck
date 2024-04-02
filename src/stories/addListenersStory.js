@@ -18,13 +18,11 @@ function addStoryListener(storyChoice) {
         return;
       }
 
-      const answerKey = parent.querySelector(constants.STORY_ANSWERKEY);
-      newConsole.log('answerKey', answerKey);
-
-      const fiber = getReactFiber(answerKey);
+      const fiber = getReactFiber(parent);
       newConsole.log('fiber', fiber);
 
-      const storyData = fiber?.return?.memoizedProps?.challengeElement;
+      const storyData = fiber?.return?.memoizedProps?.challengeElement ??
+                        fiber?.return?.memoizedProps?.storyElement;
       newConsole.log('storyData', storyData);
 
       if (storyData && !check.markStorySubmission(storyData, storyChoice)) {
