@@ -194,10 +194,14 @@ export function markSubmission(challengeData) {
       let identicalToCorrectTokens = true;
       if (answer === undefined) {
         const answerArea = document.querySelector(constants.SPEAK_ANSWER_AREA);
+        newConsole.log('answerArea', answerArea);
         const selectionArray = Array.from(answerArea.childNodes).map((div) => div.getElementsByTagName('button')[0]);
+        newConsole.log('selectionArray', selectionArray);
         const selectionArrayText = selectionArray.map((button) => button.innerText);
+        newConsole.log('selectionArrayText', selectionArrayText);
         // eslint-disable-next-line prefer-destructuring
         const correctTokens = challengeData.correctTokens;
+        newConsole.log('correctTokens', correctTokens);
         if (selectionArrayText.length === correctTokens.length) {
           for (let i = 0; i < selectionArrayText.length; ++i) {
             if (selectionArrayText[i] !== correctTokens[i]) {

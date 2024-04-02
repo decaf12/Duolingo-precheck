@@ -15,11 +15,13 @@ function getChallengeDataLesson() {
 
 function checkSubmission(submissionButton) {
   // If the button is "Check" then do not propagate the keypress.
+  newConsole.log('checkSubmission() called');
   if (submissionButton?.querySelector(constants.SUBMISSION_BUTTON_SPAN)?.innerHTML !== 'Check') {
+    newConsole.log('Button is not submit');
     return true;
   }
 
-  newConsole.log('checkSubmission() called');
+  newConsole.log('Checking submission');
   const challengeData = getChallengeDataLesson();
   newConsole.log('challengeData: ', challengeData);
   newConsole.log(challengeData);

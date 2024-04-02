@@ -98,7 +98,7 @@ export const SELECT_CHOICES = '[data-test="challenge-choice"]';
 export const TYPE_SPEAK = 'speak';
 export const SPEAK = '[data-test="challenge challenge-translate"]';
 export const SPEAK_PROMPT = '[data-test="hint-token"]';
-export const SPEAK_ANSWER_AREA = '[class="PcKtj"]';
+export const SPEAK_ANSWER_AREA = '[class="_1Ga4w"]';
 export const SPEAK_BUTTON_CLICK = '[class="_13HXc"]';
 export const SPEAK_BUTTON_TYPE = '[class="_2J2do"]';
 export const SPEAK_BUTTON = `${SPEAK_BUTTON_CLICK}, ${SPEAK_BUTTON_TYPE}`;
