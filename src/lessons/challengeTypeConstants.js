@@ -60,16 +60,16 @@ export const LISTENTAP_BUTTON_TYPE = '[class="_2J2do"]';
 export const LISTENTAP_BUTTON = `${LISTENTAP_BUTTON_CLICK}, ${LISTENTAP_BUTTON_TYPE}`;
 
 export const LISTENMATCH_BUTTON_SELECTED = '[class="LhRk3 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ edf-m"]';
-export const LISTENMATCH_SOUNDWAVE = '[class="_2GTek _1bxd8 _19tAr"]';
+export const LISTENMATCH_SOUNDWAVE = '[class="_2GTek _3ekdw _1B-W0"]';
 
 export const TYPE_MATCH = 'match';
 export const MATCH = '[data-test="challenge challenge-match"]';
-export const MATCH_BUTTONS = '[class="_1deIS"]';
+export const MATCH_BUTTONS = '[class="vOrcA"]';
 export const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
-export const MATCH_BUTTON_SELECTED = '[class="_3CBig _1N-oo _36Vd3 _16r-S notranslate _6Nozy _1O290 _2HRY_ pmjld edf-m"]';
-export const MATCH_BUTTON_NUMBER_UNSELECTED = '[class="Z7UoT _2S0Zh _2TrnF"]';
-export const MATCH_BUTTON_NUMBER_SELECTED = '[class="_2R_o5 _2S0Zh _2TrnF"]';
-export const MATCH_BUTTON_NUMBER_GREYED = '[class="_1KBJW _2S0Zh _2TrnF"]';
+export const MATCH_BUTTON_SELECTED = '[class="_3CBig _1N-oo _36Vd3 _16r-S notranslate _356DE _25kHK _3U5_i _23Y7k KvWGb"]';
+export const MATCH_BUTTON_NUMBER_UNSELECTED = '[class="_2eLV9 _1fa4a _2rSFV"]';
+export const MATCH_BUTTON_NUMBER_SELECTED = '[class="_3Nzby _1fa4a _2rSFV"]';
+export const MATCH_BUTTON_NUMBER_GREYED = '[class="_33WH4 _1fa4a _2rSFV"]';
 
 export const TYPE_NAME = 'name';
 export const NAME = '[data-test="challenge challenge-name"]';
