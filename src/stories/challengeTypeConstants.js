@@ -17,5 +17,5 @@ export const MATCH_BUTTON_NUMBER_UNSELECTED = '[class="_2eLV9 _1fa4a _2rSFV"]';
 export const MATCH_BUTTON_NUMBER_SELECTED = '[class="_3Nzby _1fa4a _2rSFV"]';
 export const MATCH_BUTTON_NUMBER_GREYED = '[class="_33WH4 _1fa4a _2rSFV"]';
 
-export const POINT_TO_PHRASE_BUTTON_BANK = '[class="_3jGFa _1RoWn"]';
+export const POINT_TO_PHRASE_BUTTON_BANK = '[class="_1C962 _2wyod"]';
 export const POINT_TO_PHRASE_BUTTON = '[data-test="challenge-tap-token-text"]';
