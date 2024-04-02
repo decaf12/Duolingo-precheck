@@ -3,8 +3,8 @@ export const STORY_ANSWERKEY = '[data-test="stories-element"]';
 export const STORY_CHECKBOX = '[class="_1IhmG"]';
 export const STORY_CHOICE = '[class="_3p1ox"]';
 
-export const STORY_TOKENS = '[class="_1deIS"]';
-export const STORY_TOKEN_SELECTED = '[class="_33Jbm _1N-oo _36Vd3 _16r-S notranslate _6Nozy _1O290 _2HRY_"]';
+export const STORY_TOKENS = '[class="vOrcA"]';
+export const STORY_TOKEN_SELECTED = '[class="_33Jbm _1N-oo _36Vd3 _16r-S notranslate _356DE _25kHK _3U5_i"]';
 export const STORY_TOKEN_BANK = '[data-test="word-bank"]';
 
 export const MATCH_BUTTONS = '[class="_3Y3Px"]';
