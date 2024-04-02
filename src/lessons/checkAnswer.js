@@ -123,11 +123,14 @@ export function markSubmission(challengeData) {
     }
 
     case 'listenComplete': {
+      newConsole.log('listenComplete');
       const answerArea = document.querySelector(constants.LISTENCOMPLETE_TEXTBOX);
+      newConsole.log('answerArea', answerArea);
       const answer = Array.from(answerArea.children).map((span) => {
         const blank = span.querySelector(constants.LISTENCOMPLETE_BLANK);
         return blank?.getAttribute('value') ?? span.innerText;
       }).join('');
+      newConsole.log('answer', answer);
       return markTranslate(answer, challengeData.grader.vertices);
     }
 
