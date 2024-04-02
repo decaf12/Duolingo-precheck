@@ -43,20 +43,24 @@ document.addEventListener(
       }
 
       const button = buttons.find((x) => {
-        newConsole.log(x);
+        newConsole.log('Story match button: ', x);
         const number = x.querySelector(constants.MATCH_BUTTON_NUMBER_SELECTED)
         ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_UNSELECTED)
         ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_GREYED);
         return number?.innerText === e.key;
       });
 
+      newConsole.log('Story match button selected: ', button);
       if (!button) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }
 
       const parent = button.closest(constants.STORY_PARENT);
+      newConsole.log('parent: ', parent);
+
       const storyData = getReactFiber(parent)?.return?.memoizedProps?.storyElement;
+      newConsole.log('storyData: ', storyData);
 
       if (storyData && !check.markStoryMatch(storyData, button)) {
         e.preventDefault();
