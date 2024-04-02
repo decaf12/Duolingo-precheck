@@ -44,34 +44,25 @@ function matchCorrect(challengeData, button) {
 }
 
 function listenMatchCorrect(button) {
-  newConsole.log('listenMatchCorrect running on: ', button);
   const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
-  newConsole.log('previouslyClicked: ', previouslyClicked);
   if (!previouslyClicked) {
     return true;
   }
 
-  newConsole.log('listenMatchCorrect: second in pair');
   const currClicked = button.getElementsByTagName('button')[0];
-  newConsole.log('currClicked: ', currClicked);
   const prevIsSound = previouslyClicked.querySelector(constants.LISTENMATCH_SOUNDWAVE) !== null;
-  newConsole.log('prevIsSound: ', prevIsSound);
   const currIsSound = currClicked.querySelector(constants.LISTENMATCH_SOUNDWAVE) !== null;
-  newConsole.log('currIsSound: ', currIsSound);
   if (prevIsSound === currIsSound) {
     return true;
   }
 
   const previousText = previouslyClicked.getAttribute('data-test');
-  newConsole.log('previousText: ', previousText);
   const currentText = currClicked.getAttribute('data-test');
-  newConsole.log('currentText: ', currentText);
   return previousText === currentText;
 }
 
 function getButton(key) {
   const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
-  newConsole.log('Match buttons: ', buttons);
   const button = buttons.find((x) => {
     const number = x.querySelector(constants.MATCH_BUTTON_NUMBER_SELECTED)
     ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_UNSELECTED)
@@ -87,7 +78,9 @@ document.addEventListener(
   'keydown',
   (e) => {
     if (e.key === 'Enter') {
+      newConsole.log('Enter key pressed');
       const submissionButton = document.querySelector(constants.SUBMISSION_BUTTON_LESSON);
+      newConsole.log('submissionButton: ', submissionButton);
       if (submissionButton === null) {
         return;
       }
@@ -108,7 +101,6 @@ document.addEventListener(
         }
       } else if (challengeData.type === 'listenMatch') {
         const button = getButton(e.key);
-        newConsole.log('listenMatch key handler');
         newConsole.log(button);
         if (!listenMatchCorrect(button)) {
           e.preventDefault();
@@ -123,7 +115,6 @@ const observerMatch = new MutationObserver(() => {
   const challengeData = getChallengeDataLesson();
   if (challengeData?.type === 'match') {
     const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
-    newConsole.log('matchButtons: ', matchButtons);
     matchButtons.forEach((button) => {
       button.addEventListener('click', (e) => {
         if (!matchCorrect(challengeData, button)) {
@@ -134,10 +125,8 @@ const observerMatch = new MutationObserver(() => {
     });
   } else if (challengeData?.type === 'listenMatch') {
     const listenMatchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
-    newConsole.log('listenMatchButtons: ', listenMatchButtons);
     listenMatchButtons.forEach((button) => {
       button.addEventListener('click', (e) => {
-        newConsole.log('listen match button clicked: ', button);
         if (!listenMatchCorrect(button)) {
           e.preventDefault();
           e.stopImmediatePropagation();
