@@ -11,15 +11,21 @@ function addStoryListener(storyChoice) {
     'click',
     (e) => {
       newConsole.log('addStoryListener');
-      newConsole.log(storyChoice);
+      newConsole.log('storyChoice', storyChoice);
       const parent = storyChoice.closest(constants.STORY_PARENT);
-      newConsole.log(parent);
+      newConsole.log('parent', parent);
       if (!parent) {
         return;
       }
 
-      const storyData = getReactFiber(parent)?.return?.memoizedProps?.storyElement;
-      newConsole.log(storyData);
+      const answerKey = parent.querySelector(constants.STORY_ANSWERKEY);
+      newConsole.log('answerKey', answerKey);
+
+      const fiber = getReactFiber(answerKey);
+      newConsole.log('fiber', fiber);
+
+      const storyData = fiber?.return?.memoizedProps?.challengeElement;
+      newConsole.log('storyData', storyData);
 
       if (storyData && !check.markStorySubmission(storyData, storyChoice)) {
         e.preventDefault();
@@ -63,26 +69,33 @@ document.addEventListener(
 );
 
 const observerStory = new MutationObserver(() => {
+  newConsole.log('Adding listeners to story buttons');
   const checkboxes = document.querySelectorAll(constants.STORY_CHECKBOX);
+  newConsole.log('checkboxes', checkboxes);
   if (checkboxes.length > 0) {
     newConsole.log('Story checkboxes found.');
-    newConsole.log(checkboxes);
-    checkboxes.forEach((button) => addStoryListener(button));
+    checkboxes.forEach((button) => {
+      newConsole.log('adding story listener to checkbox');
+      addStoryListener(button);
+    });
   }
 
   const storyChoices = document.querySelectorAll(constants.STORY_CHOICE);
+  newConsole.log('storyChoices', storyChoices);
   if (storyChoices.length > 0) {
     newConsole.log('Story story choices found.');
     storyChoices.forEach((button) => addStoryListener(button));
   }
 
   const tapTokens = document.querySelectorAll(constants.STORY_TOKENS);
+  newConsole.log('tapTokens', tapTokens);
   if (tapTokens.length > 0) {
     newConsole.log('Story tap tokens found.');
     tapTokens.forEach((button) => addStoryListener(button));
   }
 
   const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
+  newConsole.log('matchButtons', matchButtons);
   if (matchButtons.length > 0) {
     newConsole.log('Story match buttons found.');
     matchButtons.forEach((button) => addStoryListener(button));

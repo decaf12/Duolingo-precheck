@@ -5,15 +5,15 @@ import newConsole from '../setUpConsole.js';
 export function markStoryMatch(storyData, button) {
   newConsole.log('markStoryMatch');
   const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
-  newConsole.log(previouslyClicked);
+  newConsole.log('previouslyClicked', previouslyClicked);
   if (!previouslyClicked) {
     return true;
   }
   const previousText = previouslyClicked.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
-  newConsole.log(previousText);
+  newConsole.log('previousText', previousText);
 
   const currentText = button.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
-  newConsole.log(currentText);
+  newConsole.log('currentText', currentText);
 
   return previousText === currentText
     ? true
@@ -28,19 +28,19 @@ export function markStorySubmission(storyData, button) {
       newConsole.log('marking arrange');
 
       const tokenBank = button.closest(constants.STORY_TOKEN_BANK);
-      newConsole.log(tokenBank);
+      newConsole.log('tokenBank', tokenBank);
 
       const selectedButtonCount = tokenBank.querySelectorAll(constants.STORY_TOKEN_SELECTED).length;
-      newConsole.log(selectedButtonCount);
+      newConsole.log('selectedButtonCount', selectedButtonCount);
 
       const phraseArray = storyData.selectablePhrases;
-      newConsole.log(phraseArray);
+      newConsole.log('phraseArray', phraseArray);
 
       const correctOrder = storyData.phraseOrder;
-      newConsole.log(correctOrder);
+      newConsole.log('correctOrder', correctOrder);
 
       const correctButtonContent = phraseArray[correctOrder[selectedButtonCount]];
-      newConsole.log(correctButtonContent);
+      newConsole.log('correctButtonContent', correctButtonContent);
       return button.textContent === correctButtonContent;
     }
 
@@ -49,37 +49,55 @@ export function markStorySubmission(storyData, button) {
     }
 
     case 'MULTIPLE_CHOICE': {
-      newConsole.log('markStorySubmission button:');
-
-      newConsole.log(button);
+      newConsole.log('multiple choice button:', button);
 
       const answerArray = storyData.answers;
-      newConsole.log(answerArray);
+      newConsole.log('answerArray', answerArray);
 
       const correctID = storyData.correctAnswerIndex;
-      newConsole.log(correctID);
+      newConsole.log('correctId', correctID);
 
-      const buttonText = button.textContent;
-      newConsole.log(buttonText);
+      const parent = button.closest(constants.MATCH_BUTTON_PARENT);
+      newConsole.log('parent', parent);
+
+      const label = parent.querySelector(constants.MATCH_BUTTON_LABEL);
+      newConsole.log('label', label);
+
+      const labelTokens = Array.from(label.getElementsByTagName('span'));
+      newConsole.log('labelTokens', labelTokens);
+
+
+      const buttonText = labelTokens.map((token) => token.innerText).join('');
+      newConsole.log('buttonText', buttonText);
 
       const correctText = answerArray[correctID].text;
-      newConsole.log(correctText);
+      newConsole.log('correctText', correctText);
       return correctText === buttonText;
     }
 
     case 'POINT_TO_PHRASE': {
+      newConsole.log('Point to phrase');
       const buttonBank = button.closest(constants.POINT_TO_PHRASE_BUTTON_BANK);
+      newConsole.log('buttonBank', buttonBank);
       const buttons = Array.from(buttonBank.querySelectorAll(constants.POINT_TO_PHRASE_BUTTON));
+      newConsole.log('buttons', buttons);
       const correctIndex = storyData.correctAnswerIndex;
+      newConsole.log('correctIndex', correctIndex);
       const correctButton = buttons[correctIndex];
+      newConsole.log('correctButton', correctButton);
       return button.innerText === correctButton.innerText;
     }
 
     case 'SELECT_PHRASE': {
+      newConsole.log('select phrase');
       const answerArray = storyData.answers;
+      newConsole.log('answerArray', answerArray);
       const correctID = storyData.correctAnswerIndex;
+      newConsole.log('correctID', correctID);
       const correctText = answerArray[correctID];
+      newConsole.log('correctText', correctText);
       const buttonText = button.innerText;
+      newConsole.log('buttonText', buttonText);
       return correctText === buttonText;
     }
 
