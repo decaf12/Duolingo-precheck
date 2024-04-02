@@ -1,7 +1,7 @@
 export const STORY_PARENT = '[data-test="stories-element"]';
 export const STORY_ANSWERKEY = '[data-test="stories-element"]';
 export const STORY_CHECKBOX = '[class="_1IhmG"]';
-export const STORY_CHOICE = '[class="_3p1ox"]';
+export const STORY_CHOICE = '[class="_34A44"]';
 
 export const STORY_TOKENS = '[class="vOrcA"]';
 export const STORY_TOKEN_SELECTED = '[class="_33Jbm _1N-oo _36Vd3 _16r-S notranslate _356DE _25kHK _3U5_i"]';
