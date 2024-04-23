@@ -200,7 +200,8 @@ export function markSubmission(challengeData) {
       let answer = document.querySelector(constants.TRANSLATE_TEXTBOX)?.value;
       let identicalToCorrectTokens = true;
       if (answer === undefined) {
-        const answerArea = document.querySelector(constants.SPEAK_ANSWER_AREA);
+        const dirArray = Array.from(document.querySelectorAll(constants.SPEAK_ANSWER_AREA));
+        const answerArea = dirArray.at(-1);
         newConsole.log('answerArea', answerArea);
         const selectionArray = Array.from(answerArea.querySelectorAll('button'));
         newConsole.log('selectionArray', selectionArray);
