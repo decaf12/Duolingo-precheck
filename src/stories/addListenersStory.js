@@ -48,16 +48,18 @@ document.addEventListener(
   'keydown',
   (e) => {
     if (/^\d$/.test(e.key)) {
-      const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
+      const matchButtonGroup = document.querySelector(constants.MATCH_BUTTON_GROUP);
+      newConsole.log('matchButtonGroup', matchButtonGroup);
+
+      const buttons = Array.from(matchButtonGroup.querySelectorAll('button'));
+      newConsole.log('buttons', buttons);
       if (!buttons.length) {
         return;
       }
 
       const button = buttons.find((x) => {
         newConsole.log('Story match button: ', x);
-        const number = x.querySelector(constants.MATCH_BUTTON_NUMBER_SELECTED)
-        ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_UNSELECTED)
-        ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_GREYED);
+        const number = x.querySelector(constants.MATCH_BUTTON_NUMBER);
         return number?.innerText === e.key;
       });
 
@@ -107,8 +109,12 @@ const observerStory = new MutationObserver(() => {
     tapTokens.forEach((button) => addStoryListener(button));
   }
 
-  const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
+  const matchButtonGroup = document.querySelector(constants.MATCH_BUTTON_GROUP);
+  newConsole.log('matchButtonGroup', matchButtonGroup);
+
+  const matchButtons = matchButtonGroup.querySelectorAll('li');
   newConsole.log('matchButtons', matchButtons);
+  
   if (matchButtons.length > 0) {
     newConsole.log('Story match buttons found.');
     matchButtons.forEach((button) => addStoryListener(button));
