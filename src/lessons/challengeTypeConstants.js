@@ -48,7 +48,7 @@ export const JUDGE = '[data-test="challenge challenge-judge"]';
 export const JUDGE_PROMPT = '[class="_3-JBe"]';
 export const JUDGE_CHOICES = '[data-test="challenge-choice"]';
 
-export const LISTENCOMPLETE_TEXTBOX = '[class="Su6WY _2mrQw RpiVp"]';
+export const LISTENCOMPLETE_TEXTBOX = 'label[dir]';
 export const LISTENCOMPLETE_BLANK = '[data-test="challenge-text-input"]';
 
 export const TYPE_LISTENLAP = 'listenTap';
