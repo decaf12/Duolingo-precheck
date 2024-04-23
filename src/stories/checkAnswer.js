@@ -76,7 +76,7 @@ export function markStorySubmission(storyData, button) {
       newConsole.log('Point to phrase');
       const buttonBank = button.closest(constants.POINT_TO_PHRASE_BUTTON_BANK);
       newConsole.log('buttonBank', buttonBank);
-      const buttons = Array.from(buttonBank.querySelectorAll(constants.POINT_TO_PHRASE_BUTTON));
+      const buttons = Array.from(buttonBank.querySelectorAll('button'));
       newConsole.log('buttons', buttons);
       const correctIndex = storyData.correctAnswerIndex;
       newConsole.log('correctIndex', correctIndex);
