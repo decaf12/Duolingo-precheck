@@ -7,30 +7,32 @@ import newConsole from '../setUpConsole.js';
 newConsole.log('Adding story listeners');
 
 function addStoryListener(storyChoice) {
-  storyChoice.addEventListener(
-    'click',
-    (e) => {
-      newConsole.log('addStoryListener');
-      newConsole.log('storyChoice', storyChoice);
-      const parent = storyChoice.closest(constants.STORY_PARENT);
-      newConsole.log('parent', parent);
-      if (!parent) {
-        return;
-      }
-
-      const fiber = getReactFiber(parent);
-      newConsole.log('fiber', fiber);
-
-      const storyData = fiber?.return?.memoizedProps?.challengeElement ??
-                        fiber?.return?.memoizedProps?.storyElement;
-      newConsole.log('storyData', storyData);
-
-      if (storyData && !check.markStorySubmission(storyData, storyChoice)) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-      }
-    },
-  );
+  newConsole.log('addStoryListener() on', storyChoice);
+  ['click', 'keydown'].forEach((e) => {
+    storyChoice.addEventListener(
+      e,
+      (e) => {
+        newConsole.log('storyChoice', storyChoice);
+        const parent = storyChoice.closest(constants.STORY_PARENT);
+        newConsole.log('parent', parent);
+        if (!parent) {
+          return;
+        }
+  
+        const fiber = getReactFiber(parent);
+        newConsole.log('fiber', fiber);
+  
+        const storyData = fiber?.return?.memoizedProps?.challengeElement ??
+                          fiber?.return?.memoizedProps?.storyElement;
+        newConsole.log('storyData', storyData);
+  
+        if (storyData && !check.markStorySubmission(storyData, storyChoice)) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      },
+    );
+  });
 }
 
 document.addEventListener(

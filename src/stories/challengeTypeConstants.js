@@ -1,6 +1,6 @@
 export const STORY_PARENT = '[data-test="stories-element"]';
 export const STORY_ANSWERKEY = '[data-test="stories-element"]';
-export const STORY_CHECKBOX = '[class="_1IhmG"]';
+export const STORY_CHECKBOX = 'button[data-test="stories-choice"]';
 export const STORY_CHOICE = '[class="_34A44"]';
 
 export const STORY_TOKENS = '[class="vOrcA"]';
