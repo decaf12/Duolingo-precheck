@@ -7,7 +7,12 @@ import newConsole from '../setUpConsole.js';
 newConsole.log('Adding lesson listeners');
 
 function getChallengeDataLesson() {
-  const solution = document.querySelector('[class="_1eZUw _2wxYa"]');
+  const solution = document.querySelector(constants.CHALLENGE_AREA);
+  newConsole.log('solution: ', solution);
+  if (solution === null) {
+    newConsole.log('Solution not found.');
+    return null;
+  }
   const fiber = getReactFiber(solution);
   return fiber?.return?.memoizedProps?.challenge;
 }

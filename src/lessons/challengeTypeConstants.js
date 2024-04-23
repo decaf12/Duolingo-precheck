@@ -1,4 +1,4 @@
-export const CHALLENGE_AREA = '[class="_863KE"]';
+export const CHALLENGE_AREA = '[data-test^="challenge "]';
 export const SUBMISSION_BUTTON_LESSON = '[data-test="player-next"]';
 export const SUBMISSION_BUTTON_SPAN = '[class="_1fHYG"]';
 export const SUBMISSION_BUTTON_STORY = '[data-test="stories-player-continue"]';
