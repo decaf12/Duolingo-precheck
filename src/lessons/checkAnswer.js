@@ -168,7 +168,9 @@ export function markSubmission(challengeData) {
 
     case 'tapComplete': {
       newConsole.log('tapComplete');
-      const selectionArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETE_SELECTED));
+      const answerArea = document.querySelector(constants.TAPCOMPLETE_ANSWER_AREA);
+      newConsole.log('answerArea', answerArea);
+      const selectionArray = Array.from(answerArea.querySelectorAll(constants.TAPCOMPLETE_SELECTED));
       newConsole.log('selectionArray', selectionArray);
       const selectionText = selectionArray.map((button) => button.innerText).join(' ');
       newConsole.log('selectionText', selectionText);
