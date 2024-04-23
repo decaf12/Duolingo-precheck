@@ -50,32 +50,44 @@ function matchCorrect(challengeData, button) {
 }
 
 function listenMatchCorrect(button) {
-  const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
+  newConsole.log('listenMatchCorrect()');
+  newConsole.log('button: ', button);
+  newConsole.log('button group: ', button.parentNode);
+  const previouslyClicked = button.parentNode.querySelector(constants.MATCH_BUTTON_SELECTED);
+  newConsole.log('previouslyClicked: ', previouslyClicked);
   if (!previouslyClicked) {
     return true;
   }
 
-  const currClicked = button.getElementsByTagName('button')[0];
+  const currClicked = button.querySelector('button');
+  newConsole.log('currClicked: ', currClicked);
+
   const prevIsSound = previouslyClicked.querySelector(constants.LISTENMATCH_SOUNDWAVE) !== null;
+  newConsole.log('prevIsSound: ', prevIsSound);
   const currIsSound = currClicked.querySelector(constants.LISTENMATCH_SOUNDWAVE) !== null;
+  newConsole.log('currIsSound: ', currIsSound);
   if (prevIsSound === currIsSound) {
     return true;
   }
 
   const previousText = previouslyClicked.getAttribute('data-test');
+  newConsole.log('previousText', previousText);
+  
   const currentText = currClicked.getAttribute('data-test');
+  newConsole.log('currentText', currentText);
   return previousText === currentText;
 }
 
 function getButton(key) {
+  newConsole.log('getButton');
   const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
+  newConsole.log('buttons: ', buttons);
   const button = buttons.find((x) => {
-    const number = x.querySelector(constants.MATCH_BUTTON_NUMBER_SELECTED)
-    ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_UNSELECTED)
-    ?? x.querySelector(constants.MATCH_BUTTON_NUMBER_GREYED);
+    const number = x.querySelector(constants.MATCH_BUTTON_NUMBER);
     return number?.innerText === key;
   });
 
+  newConsole.log('buttons ', button);
   return button;
 }
 
@@ -109,6 +121,7 @@ document.addEventListener(
         const button = getButton(e.key);
         newConsole.log(button);
         if (!listenMatchCorrect(button)) {
+          newConsole.log('listenMatch incorrect match.');
           e.preventDefault();
           e.stopImmediatePropagation();
         }

@@ -202,7 +202,7 @@ export function markSubmission(challengeData) {
       if (answer === undefined) {
         const answerArea = document.querySelector(constants.SPEAK_ANSWER_AREA);
         newConsole.log('answerArea', answerArea);
-        const selectionArray = Array.from(answerArea.childNodes).map((div) => div.getElementsByTagName('button')[0]);
+        const selectionArray = Array.from(answerArea.querySelectorAll('button'));
         newConsole.log('selectionArray', selectionArray);
         const selectionArrayText = selectionArray.map((button) => button.innerText);
         newConsole.log('selectionArrayText', selectionArrayText);

@@ -1,6 +1,6 @@
 export const CHALLENGE_AREA = '[data-test^="challenge "]';
 export const SUBMISSION_BUTTON_LESSON = '[data-test="player-next"]';
-export const SUBMISSION_BUTTON_SPAN = '[class="_1fHYG"]';
+export const SUBMISSION_BUTTON_SPAN = 'span';
 export const SUBMISSION_BUTTON_STORY = '[data-test="stories-player-continue"]';
 export const START_BUTTON_STORY = '[data-test="story-start"]';
 export const SKIP_CHECKING_TRUE = 'skip checking: true';
@@ -60,13 +60,13 @@ export const LISTENTAP_BUTTON_TYPE = '[class="_2J2do"]';
 export const LISTENTAP_BUTTON = `${LISTENTAP_BUTTON_CLICK}, ${LISTENTAP_BUTTON_TYPE}`;
 
 export const LISTENMATCH_BUTTON_SELECTED = '[class="LhRk3 WOZnx _275sd _1ZefG notranslate _6Nozy _1O290 _2HRY_ edf-m"]';
-export const LISTENMATCH_SOUNDWAVE = '[class="_2GTek _3ekdw _1B-W0"]';
-
+export const LISTENMATCH_SOUNDWAVE = 'span[style^="--animated-speaker-icon-color"]';
 export const TYPE_MATCH = 'match';
 export const MATCH = '[data-test="challenge challenge-match"]';
-export const MATCH_BUTTONS = '[class="vOrcA"]';
+export const MATCH_BUTTONS = '[class="_3VyQa"]';
 export const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
-export const MATCH_BUTTON_SELECTED = '[class="_3CBig _1N-oo _36Vd3 _16r-S notranslate _356DE _25kHK _3U5_i _23Y7k KvWGb"]';
+export const MATCH_BUTTON_SELECTED = 'button[class*="_3Nuad"]';
+export const MATCH_BUTTON_NUMBER = 'span[class^="_3"]';
 export const MATCH_BUTTON_NUMBER_UNSELECTED = '[class="_2eLV9 _1fa4a _2rSFV"]';
 export const MATCH_BUTTON_NUMBER_SELECTED = '[class="_3Nzby _1fa4a _2rSFV"]';
 export const MATCH_BUTTON_NUMBER_GREYED = '[class="_33WH4 _1fa4a _2rSFV"]';
@@ -98,7 +98,7 @@ export const SELECT_CHOICES = '[data-test="challenge-choice"]';
 export const TYPE_SPEAK = 'speak';
 export const SPEAK = '[data-test="challenge challenge-translate"]';
 export const SPEAK_PROMPT = '[data-test="hint-token"]';
-export const SPEAK_ANSWER_AREA = '[class="_1Ga4w"]';
+export const SPEAK_ANSWER_AREA = 'div[dir]';
 export const SPEAK_BUTTON_CLICK = '[class="_13HXc"]';
 export const SPEAK_BUTTON_TYPE = '[class="_2J2do"]';
 export const SPEAK_BUTTON = `${SPEAK_BUTTON_CLICK}, ${SPEAK_BUTTON_TYPE}`;
