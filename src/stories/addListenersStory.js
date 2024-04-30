@@ -8,14 +8,14 @@ newConsole.log('Adding story listeners');
 
 function addStoryListener(storyChoice) {
   newConsole.log('addStoryListener() on', storyChoice);
-  // for (const key in storyChoice) {
-  //   if(/^on/.test(key)) {
-  //       const eventType = key.substr(2);
-  //       storyChoice.addEventListener(eventType, () => {
-  //         newConsole.log('event firing', eventType);
-  //       });
-  //   }
-  // }
+    for (const key in storyChoice) {
+      if(/^on/.test(key)) {
+          const eventType = key.substr(2);
+          storyChoice.addEventListener(eventType, () => {
+            newConsole.log('event firing', eventType);
+          });
+      }
+    }
 
   ['click', 'keydown'].forEach((e) => {
     storyChoice.addEventListener(

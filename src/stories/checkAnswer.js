@@ -26,6 +26,7 @@ export function markStorySubmission(storyData, button) {
   switch (storyData.type) {
     case 'ARRANGE': {
       newConsole.log('marking arrange');
+      newConsole.log('button', button);
 
       const tokenBank = button.closest(constants.STORY_TOKEN_BANK);
       newConsole.log('tokenBank', tokenBank);
@@ -41,6 +42,7 @@ export function markStorySubmission(storyData, button) {
 
       const correctButtonContent = phraseArray[correctOrder[selectedButtonCount]];
       newConsole.log('correctButtonContent', correctButtonContent);
+      newConsole.log('button content', button.textContent);
       return button.textContent === correctButtonContent;
     }
 
@@ -82,6 +84,8 @@ export function markStorySubmission(storyData, button) {
       newConsole.log('correctIndex', correctIndex);
       const correctButton = buttons[correctIndex];
       newConsole.log('correctButton', correctButton);
+      newConsole.log('button', button);
+      newConsole.log('button innertext', button.innerText);
       return button.innerText === correctButton.innerText;
     }
 
