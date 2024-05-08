@@ -19,7 +19,7 @@ export const ASSIST_CHOICES = '[data-test="challenge-choice"]';
 export const TYPE_COMPLETEREVERSETRANSLATION = 'completeReverseTranslation';
 export const COMPLETEREVERSETRANSLATION = '[data-test="challenge challenge-completeReverseTranslation"]';
 export const COMPLETEREVERSETRANSLATION_PROMPT = '[data-test="hint-token"]';
-export const COMPLETEREVERSETRANSLATION_TEXTBOX = '[class="_3f_Q3 _2FKqf _2ti2i"]';
+export const COMPLETEREVERSETRANSLATION_TEXTBOX = 'label[dir][lang]';
 export const COMPLETEREVERSETRANSLATION_BLANK = '[data-test="challenge-text-input"]';
 export const COMPLETEREVERSETRANSLATION_PLACEHOLDER = '[class="caPDQ"]';
 
