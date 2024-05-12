@@ -87,7 +87,7 @@ export const READCOMPREHENSION_BUTTONS = '[data-test="challenge-choice"]';
 export const TYPE_PARTIALREVERSETRANSLATE = 'partialReverseTranslate';
 export const PARTIALREVERSETRANSLATE = '[data-test="challenge challenge-partialReverseTranslate"]';
 export const PARTIALREVERSETRANSLATE_PROMPT = '[data-test="hint-token"]';
-export const PARTIALREVERSETRANSLATE_TEXTBOX = '[class="_33ZFr _2mrQw RpiVp"]';
+export const PARTIALREVERSETRANSLATE_TEXTBOX = 'label[dir][lang]';
 export const PARTIALREVERSETRANSLATE_TEXT = 'span:not([class]), [contenteditable="true"]';
 
 export const TYPE_SELECT = 'select';
