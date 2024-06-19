@@ -4,13 +4,13 @@ import * as check from './checkAnswer.js';
 import getReactFiber from '../getReactFiber.js';
 import newConsole from '../setUpConsole.js';
 
-newConsole.log('Adding lesson listeners');
+newConsole.debug('Adding lesson listeners');
 
 function getChallengeDataLesson() {
   const solution = document.querySelector(constants.CHALLENGE_AREA);
-  newConsole.log('solution: ', solution);
+  newConsole.info('solution: ', solution);
   if (solution === null) {
-    newConsole.log('Solution not found.');
+    newConsole.debug('Solution not found.');
     return null;
   }
   const fiber = getReactFiber(solution);
@@ -19,16 +19,15 @@ function getChallengeDataLesson() {
 
 function checkSubmission(submissionButton) {
   // If the button is "Check" then do not propagate the keypress.
-  newConsole.log('checkSubmission() called');
+  newConsole.debug('checkSubmission() called');
   if (submissionButton?.querySelector(constants.SUBMISSION_BUTTON_SPAN)?.innerHTML !== 'Check') {
-    newConsole.log('Button is not submit');
+    newConsole.debug('Button is not submit');
     return true;
   }
 
-  newConsole.log('Checking submission');
+  newConsole.debug('Checking submission');
   const challengeData = getChallengeDataLesson();
-  newConsole.log('challengeData: ', challengeData);
-  newConsole.log(challengeData);
+  newConsole.info('challengeData: ', challengeData);
 
   return check.markSubmission(challengeData);
 }
@@ -50,44 +49,44 @@ function matchCorrect(challengeData, button) {
 }
 
 function listenMatchCorrect(button) {
-  newConsole.log('listenMatchCorrect()');
-  newConsole.log('button: ', button);
-  newConsole.log('button group: ', button.parentNode);
+  newConsole.debug('listenMatchCorrect()');
+  newConsole.debug('button: ', button);
+  newConsole.debug('button group: ', button.parentNode);
   const previouslyClicked = button.parentNode.querySelector(constants.MATCH_BUTTON_SELECTED);
-  newConsole.log('previouslyClicked: ', previouslyClicked);
+  newConsole.debug('previouslyClicked: ', previouslyClicked);
   if (!previouslyClicked) {
     return true;
   }
 
   const currClicked = button.querySelector('button');
-  newConsole.log('currClicked: ', currClicked);
+  newConsole.debug('currClicked: ', currClicked);
 
   const prevIsSound = previouslyClicked.querySelector(constants.LISTENMATCH_SOUNDWAVE) !== null;
-  newConsole.log('prevIsSound: ', prevIsSound);
+  newConsole.debug('prevIsSound: ', prevIsSound);
   const currIsSound = currClicked.querySelector(constants.LISTENMATCH_SOUNDWAVE) !== null;
-  newConsole.log('currIsSound: ', currIsSound);
+  newConsole.debug('currIsSound: ', currIsSound);
   if (prevIsSound === currIsSound) {
     return true;
   }
 
   const previousText = previouslyClicked.getAttribute('data-test');
-  newConsole.log('previousText', previousText);
+  newConsole.debug('previousText', previousText);
   
   const currentText = currClicked.getAttribute('data-test');
-  newConsole.log('currentText', currentText);
+  newConsole.debug('currentText', currentText);
   return previousText === currentText;
 }
 
 function getButton(key) {
-  newConsole.log('getButton');
+  newConsole.debug('getButton');
   const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
-  newConsole.log('buttons: ', buttons);
+  newConsole.debug('buttons: ', buttons);
   const button = buttons.find((x) => {
     const number = x.querySelector(constants.MATCH_BUTTON_NUMBER);
     return number?.innerText === key;
   });
 
-  newConsole.log('buttons ', button);
+  newConsole.debug('buttons ', button);
   return button;
 }
 
@@ -96,9 +95,9 @@ document.addEventListener(
   'keydown',
   (e) => {
     if (e.key === 'Enter') {
-      newConsole.log('Enter key pressed');
+      newConsole.debug('Enter key pressed');
       const submissionButton = document.querySelector(constants.SUBMISSION_BUTTON_LESSON);
-      newConsole.log('submissionButton: ', submissionButton);
+      newConsole.debug('submissionButton: ', submissionButton);
       if (submissionButton === null) {
         return;
       }
@@ -109,8 +108,6 @@ document.addEventListener(
       }
     } else if (/^\d$/.test(e.key)) {
       const challengeData = getChallengeDataLesson();
-      newConsole.log(challengeData);
-      newConsole.log(challengeData.type);
       if (challengeData.type === 'match') {
         const button = getButton(e.key);
         if (!matchCorrect(challengeData, button)) {
@@ -119,9 +116,9 @@ document.addEventListener(
         }
       } else if (challengeData.type === 'listenMatch') {
         const button = getButton(e.key);
-        newConsole.log(button);
+        newConsole.debug(button);
         if (!listenMatchCorrect(button)) {
-          newConsole.log('listenMatch incorrect match.');
+          newConsole.debug('listenMatch incorrect match.');
           e.preventDefault();
           e.stopImmediatePropagation();
         }

@@ -4,36 +4,27 @@ import * as check from './checkAnswer.js';
 import getReactFiber from '../getReactFiber.js';
 import newConsole from '../setUpConsole.js';
 
-newConsole.log('Adding story listeners');
+newConsole.debug('Adding story listeners');
 
 function addStoryListener(storyChoice) {
-  newConsole.log('addStoryListener() on', storyChoice);
-    // for (const key in storyChoice) {
-    //   if(/^on/.test(key)) {
-    //       const eventType = key.substr(2);
-    //       storyChoice.addEventListener(eventType, () => {
-    //         newConsole.log('event firing', eventType);
-    //       });
-    //   }
-    // }
-
+  newConsole.debug('addStoryListener() on', storyChoice);
   ['click', 'keydown'].forEach((e) => {
     storyChoice.addEventListener(
       e,
       (e) => {
-        newConsole.log('storyChoice', storyChoice);
+        newConsole.debug('storyChoice', storyChoice);
         const parent = storyChoice.closest(constants.STORY_PARENT);
-        newConsole.log('parent', parent);
+        newConsole.debug('parent', parent);
         if (!parent) {
           return;
         }
   
         const fiber = getReactFiber(parent);
-        newConsole.log('fiber', fiber);
+        newConsole.debug('fiber', fiber);
   
         const storyData = fiber?.return?.memoizedProps?.challengeElement ??
                           fiber?.return?.memoizedProps?.storyElement;
-        newConsole.log('storyData', storyData);
+        newConsole.debug('storyData', storyData);
   
         if (storyData && !check.markStorySubmission(storyData, storyChoice)) {
           e.preventDefault();
@@ -49,31 +40,31 @@ document.addEventListener(
   (e) => {
     if (/^\d$/.test(e.key)) {
       const matchButtonGroup = document.querySelector(constants.MATCH_BUTTON_GROUP);
-      newConsole.log('matchButtonGroup', matchButtonGroup);
+      newConsole.debug('matchButtonGroup', matchButtonGroup);
 
       const buttons = Array.from(matchButtonGroup.querySelectorAll('button'));
-      newConsole.log('buttons', buttons);
+      newConsole.debug('buttons', buttons);
       if (!buttons.length) {
         return;
       }
 
       const button = buttons.find((x) => {
-        newConsole.log('Story match button: ', x);
+        newConsole.debug('Story match button: ', x);
         const number = x.querySelector(constants.MATCH_BUTTON_NUMBER);
         return number?.innerText === e.key;
       });
 
-      newConsole.log('Story match button selected: ', button);
+      newConsole.debug('Story match button selected: ', button);
       if (!button) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }
 
       const parent = button.closest(constants.STORY_PARENT);
-      newConsole.log('parent: ', parent);
+      newConsole.debug('parent: ', parent);
 
       const storyData = getReactFiber(parent)?.return?.memoizedProps?.storyElement;
-      newConsole.log('storyData: ', storyData);
+      newConsole.debug('storyData: ', storyData);
 
       if (storyData && !check.markStoryMatch(storyData, button)) {
         e.preventDefault();
@@ -84,39 +75,43 @@ document.addEventListener(
 );
 
 const observerStory = new MutationObserver(() => {
-  newConsole.log('Adding listeners to story buttons');
+  newConsole.debug('Adding listeners to story buttons');
   const checkboxes = document.querySelectorAll(constants.STORY_CHECKBOX);
-  newConsole.log('checkboxes', checkboxes);
+  newConsole.debug('checkboxes', checkboxes);
   if (checkboxes.length > 0) {
-    newConsole.log('Story checkboxes found.');
+    newConsole.debug('Story checkboxes found.');
     checkboxes.forEach((button) => {
-      newConsole.log('adding story listener to checkbox');
+      newConsole.debug('adding story listener to checkbox');
       addStoryListener(button);
     });
   }
 
   const storyChoices = document.querySelectorAll(constants.STORY_CHOICE);
-  newConsole.log('storyChoices', storyChoices);
+  newConsole.debug('storyChoices', storyChoices);
   if (storyChoices.length > 0) {
-    newConsole.log('Story story choices found.');
+    newConsole.debug('Story story choices found.');
     storyChoices.forEach((button) => addStoryListener(button));
   }
 
   const tapTokens = document.querySelectorAll(constants.STORY_TOKENS);
-  newConsole.log('tapTokens', tapTokens);
+  newConsole.debug('tapTokens', tapTokens);
   if (tapTokens.length > 0) {
-    newConsole.log('Story tap tokens found.');
+    newConsole.debug('Story tap tokens found.');
     tapTokens.forEach((button) => addStoryListener(button));
   }
 
   const matchButtonGroup = document.querySelector(constants.MATCH_BUTTON_GROUP);
-  newConsole.log('matchButtonGroup', matchButtonGroup);
+  newConsole.debug('matchButtonGroup', matchButtonGroup);
+
+  if (!matchButtonGroup) {
+    return;
+  }
 
   const matchButtons = matchButtonGroup.querySelectorAll('li');
-  newConsole.log('matchButtons', matchButtons);
+  newConsole.debug('matchButtons', matchButtons);
   
   if (matchButtons.length > 0) {
-    newConsole.log('Story match buttons found.');
+    newConsole.debug('Story match buttons found.');
     matchButtons.forEach((button) => addStoryListener(button));
   }
 });
