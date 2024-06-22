@@ -88,7 +88,7 @@ export function markSubmission(challengeData) {
   switch (challengeData.type) {
     case 'assist':
     case 'definition':
-    case 'diadebugue':
+    case 'dialogue':
     case 'form':
     case 'gapFill':
     case 'listenComprehension':
