@@ -39,32 +39,30 @@ function markTranslate(answer, vertices) {
   const answerNoSpaces = answer.replace(constants.IGNORED_CHARACTERS, '');
   const lastVertexID = vertices.length - 1;
   const lastPos = answerNoSpaces.length;
-  const stack = [[0, 0, { 0: null }]];
+  const stack = [[0, 0]];
 
   while (stack.length > 0) {
-    const [currVertexID, currPos, currVisited] = stack.pop();
+    const [currVertexID, currPos] = stack.pop();
 
     if (currVertexID === lastVertexID && currPos >= lastPos) {
       return true;
     }
 
     vertices[currVertexID].forEach((vertex) => {
-      if (!(vertex.to in currVisited)) {
-        const lenientLen = vertex.lenient.length;
+      const lenientLen = vertex.lenient.length;
 
-        if (!vertex.lenient.trim().length) {
-          stack.push([vertex.to, currPos, { ...currVisited, [vertex.to]: null }]);
-        } else if (startsWithAt(vertex.lenient, answerNoSpaces, currPos, false)) {
-          stack.push([vertex.to, currPos + lenientLen, { ...currVisited, [vertex.to]: null }]);
-        } else if ('orig' in vertex) {
-          const origLen = vertex.orig.length;
-          const origNoPunctuation = vertex.orig.replace(constants.IGNORED_CHARACTERS, '');
-          const origNoPunctuationLen = origNoPunctuation.length;
-          if (startsWithAt(vertex.orig, answerNoSpaces, currPos, false)) {
-            stack.push([vertex.to, currPos + origLen, { ...currVisited, [vertex.to]: null }]);
-          } else if (startsWithAt(origNoPunctuation, answerNoSpaces, currPos, false)) {
-            stack.push([vertex.to, currPos + origNoPunctuationLen, { ...currVisited, [vertex.to]: null }]);
-          }
+      if (!vertex.lenient.trim().length) {
+        stack.push([vertex.to, currPos]);
+      } else if (startsWithAt(vertex.lenient, answerNoSpaces, currPos, false)) {
+        stack.push([vertex.to, currPos + lenientLen]);
+      } else if ('orig' in vertex) {
+        const origLen = vertex.orig.length;
+        const origNoPunctuation = vertex.orig.replace(constants.IGNORED_CHARACTERS, '');
+        const origNoPunctuationLen = origNoPunctuation.length;
+        if (startsWithAt(vertex.orig, answerNoSpaces, currPos, false)) {
+          stack.push([vertex.to, currPos + origLen]);
+        } else if (startsWithAt(origNoPunctuation, answerNoSpaces, currPos, false)) {
+          stack.push([vertex.to, currPos + origNoPunctuationLen]);
         }
       }
     });
