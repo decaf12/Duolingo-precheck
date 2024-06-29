@@ -13,15 +13,15 @@ function startsWithAt(target, candidate, startPos, strictCmp) {
     return false;
   }
 
-  for (let i = 0; i < targetLen; i += 1) {
+  for (let i = 0; i < targetLen; ++i) {
     const targetLetter = target[i];
     const candidateLetter = candidate[startPos + i];
 
     const targetLetterUpper = targetLetter.toUpperCase();
     const candidateLetterUpper = candidateLetter.toUpperCase();
 
-    const targetLetterLenient = accentMap[targetLetterUpper] || targetLetterUpper;
-    const candidateLetterLenient = accentMap[candidateLetterUpper] || candidateLetterUpper;
+    const targetLetterLenient = accentMap[targetLetterUpper] ?? targetLetterUpper;
+    const candidateLetterLenient = accentMap[candidateLetterUpper] ?? candidateLetterUpper;
 
     if (strictCmp && targetLetter !== candidateLetter) {
       return false;
@@ -41,8 +41,8 @@ function markTranslate(answer, vertices) {
   const lastPos = answerNoSpaces.length;
   const stack = [[0, 0, { 0: null }]];
 
-  while (stack.length > 0) {
-    const [currVertexID, currPos, currVisited] = stack.pop();
+  while (stack.length) {
+    const [currVertexID, currPos] = stack.pop();
 
     if (currVertexID === lastVertexID && currPos >= lastPos) {
       return true;
@@ -52,19 +52,18 @@ function markTranslate(answer, vertices) {
       if (!(vertex.to in currVisited)) {
         const lenientLen = vertex.lenient.length;
 
-        if (!vertex.lenient.trim().length) {
-          stack.push([vertex.to, currPos, { ...currVisited, [vertex.to]: null }]);
-        } else if (startsWithAt(vertex.lenient, answerNoSpaces, currPos, false)) {
-          stack.push([vertex.to, currPos + lenientLen, { ...currVisited, [vertex.to]: null }]);
-        } else if ('orig' in vertex) {
-          const origLen = vertex.orig.length;
-          const origNoPunctuation = vertex.orig.replace(constants.IGNORED_CHARACTERS, '');
-          const origNoPunctuationLen = origNoPunctuation.length;
-          if (startsWithAt(vertex.orig, answerNoSpaces, currPos, false)) {
-            stack.push([vertex.to, currPos + origLen, { ...currVisited, [vertex.to]: null }]);
-          } else if (startsWithAt(origNoPunctuation, answerNoSpaces, currPos, false)) {
-            stack.push([vertex.to, currPos + origNoPunctuationLen, { ...currVisited, [vertex.to]: null }]);
-          }
+      if (!vertex.lenient.trim().length) {
+        stack.push([vertex.to, currPos]);
+      } else if (startsWithAt(vertex.lenient, answerNoSpaces, currPos, false)) {
+        stack.push([vertex.to, currPos + lenientLen]);
+      } else if (vertex.orig) {
+        const origLen = vertex.orig.length;
+        const origNoPunctuation = vertex.orig.replace(constants.IGNORED_CHARACTERS, '');
+        const origNoPunctuationLen = origNoPunctuation.length;
+        if (startsWithAt(vertex.orig, answerNoSpaces, currPos, false)) {
+          stack.push([vertex.to, currPos + origLen]);
+        } else if (startsWithAt(origNoPunctuation, answerNoSpaces, currPos, false)) {
+          stack.push([vertex.to, currPos + origNoPunctuationLen]);
         }
       }
     });

@@ -6,7 +6,6 @@ import newConsole from '../setUpConsole.js';
 
 function getChallengeDataLesson() {
   const solution = document.querySelector(constants.CHALLENGE_AREA);
-  newConsole.info('solution: ', solution);
   if (!solution) {
     return null;
   }
@@ -92,7 +91,6 @@ document.addEventListener(
         }
       } else if (challengeData.type === 'listenMatch') {
         const button = getButton(e.key);
-        newConsole.debug(button);
         if (!listenMatchCorrect(button)) {
           e.preventDefault();
           e.stopImmediatePropagation();
