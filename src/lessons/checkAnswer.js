@@ -74,7 +74,6 @@ function markTranslate(answer, vertices) {
 }
 
 function markMultipleChoice(challengeData) {
-  newConsole.debug('markMultipleChoice() called');
   const choices = Array.from(document.querySelectorAll(constants.MULTIPLE_CHOICE_CHOICES));
   newConsole.debug(choices);
   const choiceID = choices.findIndex((x) => x.tabIndex === 0);
@@ -84,7 +83,6 @@ function markMultipleChoice(challengeData) {
 }
 
 export function markSubmission(challengeData) {
-  newConsole.debug('markSubmission() called');
   switch (challengeData.type) {
     case 'assist':
     case 'definition':
@@ -100,18 +98,13 @@ export function markSubmission(challengeData) {
 
     case 'completeReverseTranslation': {
       let answer = document.querySelector(constants.TRANSLATE_TEXTBOX)?.value;
-      newConsole.debug(`answer: ${answer}`);
       if (answer === undefined) {
-        newConsole.debug('Answer undefined');
         const textbox = Array.from(document.querySelector(constants.COMPLETEREVERSETRANSLATION_TEXTBOX).children);
-        newConsole.debug(textbox);
         const answerArray = textbox.map((element) => {
           const blank = element.querySelector(constants.COMPLETEREVERSETRANSLATION_BLANK);
           return blank?.value || element.textContent;
         });
-        newConsole.debug(answerArray);
         answer = answerArray.join('');
-        newConsole.debug(`new answer: ${answer}`);
       }
       return markTranslate(answer, challengeData.grader.vertices);
     }
@@ -123,14 +116,11 @@ export function markSubmission(challengeData) {
     }
 
     case 'listenComplete': {
-      newConsole.debug('listenComplete');
       const answerArea = document.querySelector(constants.LISTENCOMPLETE_TEXTBOX);
-      newConsole.debug('answerArea', answerArea);
       const answer = Array.from(answerArea.children).map((span) => {
         const blank = span.querySelector(constants.LISTENCOMPLETE_BLANK);
         return blank?.getAttribute('value') ?? span.innerText;
       }).join('');
-      newConsole.debug('answer', answer);
       return markTranslate(answer, challengeData.grader.vertices);
     }
 
@@ -149,13 +139,9 @@ export function markSubmission(challengeData) {
     }
 
     case 'partialReverseTranslate': {
-      newConsole.debug('partialReverseTranslate');
       const textbox = document.querySelector(constants.PARTIALREVERSETRANSLATE_TEXTBOX);
-      newConsole.debug('textbox', textbox);
       const answerArray = Array.from(textbox.querySelectorAll(constants.PARTIALREVERSETRANSLATE_TEXT));
-      newConsole.debug('answerArray', answerArray);
       const answer = answerArray.map((x) => x.textContent).join('');
-      newConsole.debug('answer', answer);
       return markTranslate(answer, challengeData.grader.vertices);
     }
 
@@ -167,15 +153,10 @@ export function markSubmission(challengeData) {
     }
 
     case 'tapComplete': {
-      newConsole.debug('tapComplete');
       const answerArea = document.querySelector(constants.TAPCOMPLETE_ANSWER_AREA);
-      newConsole.debug('answerArea', answerArea);
       const selectionArray = Array.from(answerArea.querySelectorAll(constants.TAPCOMPLETE_SELECTED));
-      newConsole.debug('selectionArray', selectionArray);
       const selectionText = selectionArray.map((button) => button.innerText).join(' ');
-      newConsole.debug('selectionText', selectionText);
       const displayTokens = Array.from(challengeData.displayTokens);
-      newConsole.debug('displayTokens', displayTokens);
       return selectionText === displayTokens.filter((x) => x.isBlank).map((x) => x.text).join(' ');
     }
 
@@ -204,14 +185,10 @@ export function markSubmission(challengeData) {
       if (answer === undefined) {
         const dirArray = Array.from(document.querySelectorAll(constants.SPEAK_ANSWER_AREA));
         const answerArea = dirArray.at(-1);
-        newConsole.debug('answerArea', answerArea);
         const selectionArray = Array.from(answerArea.querySelectorAll('button'));
-        newConsole.debug('selectionArray', selectionArray);
         const selectionArrayText = selectionArray.map((button) => button.innerText);
-        newConsole.debug('selectionArrayText', selectionArrayText);
         // eslint-disable-next-line prefer-destructuring
         const correctTokens = challengeData.correctTokens;
-        newConsole.debug('correctTokens', correctTokens);
         if (selectionArrayText.length === correctTokens.length) {
           for (let i = 0; i < selectionArrayText.length; ++i) {
             if (selectionArrayText[i] !== correctTokens[i]) {
