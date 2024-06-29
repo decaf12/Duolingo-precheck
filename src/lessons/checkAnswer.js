@@ -39,7 +39,7 @@ function markTranslate(answer, vertices) {
   const answerNoSpaces = answer.replace(constants.IGNORED_CHARACTERS, '');
   const lastVertexID = vertices.length - 1;
   const lastPos = answerNoSpaces.length;
-  const stack = [[0, 0, { 0: null }]];
+  const stack = [[0, 0]];
 
   while (stack.length) {
     const [currVertexID, currPos] = stack.pop();
@@ -49,8 +49,7 @@ function markTranslate(answer, vertices) {
     }
 
     vertices[currVertexID].forEach((vertex) => {
-      if (!(vertex.to in currVisited)) {
-        const lenientLen = vertex.lenient.length;
+      const lenientLen = vertex.lenient.length;
 
       if (!vertex.lenient.trim().length) {
         stack.push([vertex.to, currPos]);
