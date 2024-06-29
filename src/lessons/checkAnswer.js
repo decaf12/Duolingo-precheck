@@ -100,7 +100,6 @@ export function markSubmission(challengeData) {
         });
         answer = answerArray.join('');
       }
-      debugger;
       return markTranslate(answer, challengeData.grader.vertices);
     }
 
