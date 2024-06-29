@@ -33,6 +33,10 @@ document.addEventListener(
     if (/^\d$/.test(e.key)) {
       const matchButtonGroup = document.querySelector(constants.MATCH_BUTTON_GROUP);
 
+      if (!matchButtonGroup) {
+        return;
+      }
+
       const buttons = Array.from(matchButtonGroup.querySelectorAll('button'));
       if (!buttons.length) {
         return;

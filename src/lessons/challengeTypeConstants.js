@@ -1,4 +1,5 @@
 export const CHALLENGE_AREA = '[data-test^="challenge "]';
+export const COMPLETEREVERSETRANSLATION_TEXTBOX = 'label[dir][lang]';
 export const SUBMISSION_BUTTON_LESSON = '[data-test="player-next"]';
 export const SUBMISSION_BUTTON_SPAN = 'span';
 export const MULTIPLE_CHOICE_CHOICES = '[data-test="challenge-choice"]';
