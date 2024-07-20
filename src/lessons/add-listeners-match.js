@@ -10,7 +10,8 @@ const observerMatch = new MutationObserver(() => {
     return;
   }
 
-  const checker = challengeType === 'match' ? checkMatch : checkListenMatch;
+  const checker = challengeType === 'match'
+    ? (button) => checkMatch(challengeData, button) : checkListenMatch;
   const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
   matchButtons.forEach((button) => {
     button.addEventListener('click', (e) => {
