@@ -6,10 +6,12 @@ import { checkMatch } from './utils/check-match';
 import { checkListenMatch } from './utils/check-listen-match';
 import { getButton } from './utils/get-button';
 
+debugger;
 document.addEventListener(
   'keydown',
   (e) => {
     if (e.key === 'Enter') {
+      debugger;
       const submissionButton = document.querySelector(constants.SUBMISSION_BUTTON_LESSON);
 
       if (submissionButton && !checkSubmission(submissionButton)) {
@@ -17,6 +19,7 @@ document.addEventListener(
         e.stopImmediatePropagation();
       }
     } else if (/^\d$/.test(e.key)) {
+      debugger;
       const challengeData = getChallengeDataLesson();
       if (challengeData.type !== 'match' && challengeData.type !== 'listenMatch') {
         return;

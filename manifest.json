@@ -8,7 +8,7 @@
     "content_scripts": [
       {
         "matches": ["*://*.duolingo.com/*"],
-        "js": ["src/injectScripts.js"]
+        "js": ["src/inject-scripts.js"]
       }
     ],
 
