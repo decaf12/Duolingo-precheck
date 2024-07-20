@@ -4,17 +4,16 @@ function injectScript(src) {
   script.setAttribute('type', 'module');
   script.src = browser.runtime.getURL(src);
   script.onload = () => {
-    debugger;
     script.remove();
   };
   script.onerror = (error) => {
     debugger;
   };
-  (document.head || document.documentElement).appendChild(script);
+  document.body.appendChild(script);
 }
 
-debugger;
-injectScript('src/lessons/add-listeners-lesson.js');
-injectScript('src/lessons/add-listeners-match.js');
-injectScript('src/stories/add-match-keyboard-listener-story.js');
-injectScript('src/stories/add-selectable-listener-story.js');
+// injectScript('src/lessons/add-listeners-lesson.js');
+// injectScript('src/lessons/add-listeners-match.js');
+// injectScript('src/stories/add-match-keyboard-listener-story.js');
+// injectScript('src/stories/add-selectable-listener-story.js');
+injectScript('src/lessons/temp.js');
