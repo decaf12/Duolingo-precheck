@@ -1,8 +1,7 @@
 /* eslint-disable max-len */
-import * as constants from './challengeTypeConstants.js';
-import newConsole from '../setUpConsole.js';
+import * as constants from './challengeTypeConstants';
 
-export function markStoryMatch(storyData, button) {
+export const markStoryMatch = (storyData, button) => {
   const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
   if (!previouslyClicked) {
     return true;
@@ -15,9 +14,9 @@ export function markStoryMatch(storyData, button) {
     ? true
     : Object.values(storyData.matches).some((pair) => (previousText === pair.phrase && currentText === pair.translation)
       || (currentText === pair.phrase && previousText === pair.translation));
-}
+};
 
-export function markStorySubmission(storyData, button) {
+export const markStorySubmission = (storyData, button) => {
   switch (storyData.type) {
     case 'ARRANGE': {
       const tokenBank = button.closest(constants.STORY_TOKEN_BANK);
@@ -61,4 +60,4 @@ export function markStorySubmission(storyData, button) {
     default:
       return false;
   }
-}
+};
