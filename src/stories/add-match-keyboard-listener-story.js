@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import * as constants from './challenge-type-constants';
 import * as check from './check-answer';
-import getReactFiber from '../get-react-fiber';
+import getFiberNode from '../get-fiber-node';
 
 document.addEventListener(
   'keydown',
@@ -14,25 +14,25 @@ document.addEventListener(
       }
 
       const buttons = Array.from(matchButtonGroup.querySelectorAll('button'));
-      if (!buttons.length) {
+      if (!buttons?.length) {
         return;
       }
 
-      const button = buttons.find((x) => {
-        const number = x.querySelector(constants.MATCH_BUTTON_NUMBER);
+      const pressedButton = buttons.find((button) => {
+        const number = button.querySelector(constants.MATCH_BUTTON_NUMBER);
         return number?.innerText === e.key;
       });
 
-      if (!button) {
+      if (!pressedButton) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }
 
-      const parent = button.closest(constants.STORY_PARENT);
+      const parent = pressedButton.closest(constants.STORY_PARENT);
 
-      const storyData = getReactFiber(parent)?.return?.memoizedProps?.storyElement;
+      const storyData = getFiberNode(parent)?.return?.memoizedProps?.bustoryElement;
 
-      if (storyData && !check.markStoryMatch(storyData, button)) {
+      if (storyData && !check.markStoryMatch(storyData, pressedButton)) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }

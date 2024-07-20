@@ -1,5 +1,5 @@
 import * as constants from './challenge-type-constants';
-import getReactFiber from '../get-react-fiber';
+import getFiberNode from '../get-fiber-node';
 import * as check from './check-answer';
 
 const addStoryListener = (storyChoice) => {
@@ -11,7 +11,7 @@ const addStoryListener = (storyChoice) => {
         if (!parent) {
           return;
         }
-        const fiber = getReactFiber(parent);
+        const fiber = getFiberNode(parent);
         const storyData = fiber?.return?.memoizedProps?.challengeElement
           ?? fiber?.return?.memoizedProps?.storyElement;
         if (storyData && !check.markStorySubmission(storyData, storyChoice)) {
