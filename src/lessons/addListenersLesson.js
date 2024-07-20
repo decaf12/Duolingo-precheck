@@ -15,7 +15,7 @@ const getChallengeDataLesson = () => {
   return fiber?.return?.memoizedProps?.challenge;
 };
 
-const checkSubmission = () => (submissionButton) {
+const checkSubmission = (submissionButton) => {
   if (submissionButton?.querySelector(constants.SUBMISSION_BUTTON_SPAN)?.innerHTML !== 'Check') {
     return true;
   }
@@ -62,12 +62,11 @@ const listenMatchCorrect = (button) => {
 
 const getButton = (key) => {
   const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
-  const button = buttons.find((x) => {
+
+  return buttons.find((x) => {
     const number = x.querySelector(constants.MATCH_BUTTON_NUMBER);
     return number?.innerText === key;
   });
-
-  return button;
 };
 
 // Check user submission whenever the Enter key is pressed
