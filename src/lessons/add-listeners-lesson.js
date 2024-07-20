@@ -1,34 +1,8 @@
 /* eslint-disable max-len */
 import * as constants from './challenge-type-constants';
-import * as check from './check-answer';
-import newConsole from '../set-up-console';
 import { getChallengeDataLesson } from './utils/get-challenge-data';
-
-const checkSubmission = (submissionButton) => {
-  if (submissionButton?.querySelector(constants.SUBMISSION_BUTTON_SPAN)?.innerHTML !== 'Check') {
-    return true;
-  }
-
-  const challengeData = getChallengeDataLesson();
-  newConsole.log('challengeData', challengeData);
-  return check.markSubmission(challengeData);
-};
-
-const matchCorrect = (challengeData, button) => {
-  if (!button) {
-    return false;
-  }
-
-  const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
-  if (!previouslyClicked) {
-    return true;
-  }
-
-  const previousText = previouslyClicked.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
-  const currentButton = button.textContent;
-  const currentText = currentButton.slice(1);
-  return check.markMatch(challengeData, previousText, currentText);
-};
+import { checkSubmission } from './utils/check-submission';
+import { checkMatch } from './utils/check-match';
 
 const listenMatchCorrect = (button) => {
   const previouslyClicked = button.parentNode.querySelector(constants.MATCH_BUTTON_SELECTED);
@@ -76,7 +50,7 @@ document.addEventListener(
       const challengeData = getChallengeDataLesson();
       if (challengeData.type === 'match') {
         const button = getButton(e.key);
-        if (!matchCorrect(challengeData, button)) {
+        if (!checkMatch(challengeData, button)) {
           e.preventDefault();
           e.stopImmediatePropagation();
         }
@@ -97,7 +71,7 @@ const observerMatch = new MutationObserver(() => {
     const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
     matchButtons.forEach((button) => {
       button.addEventListener('click', (e) => {
-        if (!matchCorrect(challengeData, button)) {
+        if (!checkMatch(challengeData, button)) {
           e.preventDefault();
           e.stopImmediatePropagation();
         }

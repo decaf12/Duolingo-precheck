@@ -11,3 +11,5 @@ export const getChallengeDataLesson = () => {
   const fiber = getReactFiber(solution);
   return fiber?.return?.memoizedProps?.challenge;
 };
+
+export default getChallengeDataLesson;
