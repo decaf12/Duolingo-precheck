@@ -18,7 +18,7 @@ document.addEventListener(
       }
     } else if (/^\d$/.test(e.key)) {
       const challengeData = getChallengeDataLesson();
-      if (challengeData.type !== 'match' || challengeData.type !== 'listenMatch') {
+      if (challengeData.type !== 'match' && challengeData.type !== 'listenMatch') {
         return;
       }
 
