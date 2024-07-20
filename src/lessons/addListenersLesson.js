@@ -1,19 +1,8 @@
 /* eslint-disable max-len */
 import * as constants from './challengeTypeConstants';
 import * as check from './checkAnswer';
-import getReactFiber from '../getReactFiber';
 import newConsole from '../setUpConsole';
-
-const getChallengeDataLesson = () => {
-  const solution = document.querySelector(constants.CHALLENGE_AREA);
-
-  if (!solution) {
-    return null;
-  }
-
-  const fiber = getReactFiber(solution);
-  return fiber?.return?.memoizedProps?.challenge;
-};
+import { getChallengeDataLesson } from './utils/get-challenge-data';
 
 const checkSubmission = (submissionButton) => {
   if (submissionButton?.querySelector(constants.SUBMISSION_BUTTON_SPAN)?.innerHTML !== 'Check') {
