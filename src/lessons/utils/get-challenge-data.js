@@ -1,5 +1,5 @@
-import * as constants from '../challengeTypeConstants';
-import getReactFiber from '../../getReactFiber';
+import * as constants from '../challenge-type-constants';
+import getReactFiber from '../../get-react-fiber';
 
 export const getChallengeDataLesson = () => {
   const solution = document.querySelector(constants.CHALLENGE_AREA);

@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
-import * as constants from './challengeTypeConstants';
-import * as check from './checkAnswer';
-import newConsole from '../setUpConsole';
+import * as constants from './challenge-type-constants';
+import * as check from './check-answer';
+import newConsole from '../set-up-console';
 import { getChallengeDataLesson } from './utils/get-challenge-data';
 
 const checkSubmission = (submissionButton) => {

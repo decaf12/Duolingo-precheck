@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import * as constants from './challengeTypeConstants';
+import * as constants from './challenge-type-constants';
 
 export const markStoryMatch = (storyData, button) => {
   const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);

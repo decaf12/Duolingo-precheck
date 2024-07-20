@@ -7,5 +7,5 @@ function injectScript(src) {
   (document.head || document.documentElement).appendChild(script);
 }
 
-injectScript('src/lessons/addListenersLesson.js');
-injectScript('src/stories/addListenersStory.js');
+injectScript('src/lessons/add-listeners-lesson.js');
+injectScript('src/stories/add-listeners-story.js');
