@@ -4,7 +4,7 @@ import * as check from './checkAnswer';
 import getReactFiber from '../getReactFiber';
 import newConsole from '../setUpConsole';
 
-function addStoryListener(storyChoice) {
+const addStoryListener = (storyChoice) => {
   ['click', 'keydown'].forEach((e) => {
     storyChoice.addEventListener(
       e,
@@ -25,7 +25,7 @@ function addStoryListener(storyChoice) {
       },
     );
   });
-}
+};
 
 document.addEventListener(
   'keydown',
