@@ -11,28 +11,23 @@ document.addEventListener(
   (e) => {
     if (e.key === 'Enter') {
       const submissionButton = document.querySelector(constants.SUBMISSION_BUTTON_LESSON);
-      if (submissionButton === null) {
-        return;
-      }
 
-      if (!checkSubmission(submissionButton)) {
+      if (submissionButton && !checkSubmission(submissionButton)) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }
     } else if (/^\d$/.test(e.key)) {
       const challengeData = getChallengeDataLesson();
-      if (challengeData.type === 'match') {
-        const button = getButton(e.key);
-        if (!checkMatch(challengeData, button)) {
-          e.preventDefault();
-          e.stopImmediatePropagation();
-        }
-      } else if (challengeData.type === 'listenMatch') {
-        const button = getButton(e.key);
-        if (!checkListenMatch(button)) {
-          e.preventDefault();
-          e.stopImmediatePropagation();
-        }
+      if (challengeData.type !== 'match' || challengeData.type !== 'listenMatch') {
+        return;
+      }
+
+      const button = getButton(e.key);
+      const checker = challengeData.type === 'match' ? checkMatch : checkListenMatch;
+
+      if (!checker(challengeData, button)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
       }
     }
   },
