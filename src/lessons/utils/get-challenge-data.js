@@ -1,5 +1,5 @@
-import * as constants from '../challenge-type-constants';
-import getFiberNode from '../../get-fiber-node';
+import * as constants from '../challenge-type-constants.js';
+import getFiberNode from '../../get-fiber-node.js';
 
 export const getChallengeDataLesson = () => {
   const solution = document.querySelector(constants.CHALLENGE_AREA);

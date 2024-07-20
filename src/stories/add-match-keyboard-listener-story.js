@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
-import * as constants from './challenge-type-constants';
-import * as check from './check-answer';
-import getFiberNode from '../get-fiber-node';
+import * as constants from './challenge-type-constants.js';
+import * as check from './check-answer.js';
+import getFiberNode from '../get-fiber-node.js';
 
 document.addEventListener(
   'keydown',

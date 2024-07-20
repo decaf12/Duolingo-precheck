@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
-import * as constants from './challenge-type-constants';
-import { getChallengeDataLesson } from './utils/get-challenge-data';
-import { checkSubmission } from './utils/check-submission';
-import { checkMatch } from './utils/check-match';
-import { checkListenMatch } from './utils/check-listen-match';
-import { getButton } from './utils/get-button';
+import * as constants from './challenge-type-constants.js';
+import { getChallengeDataLesson } from './utils/get-challenge-data.js';
+import { checkSubmission } from './utils/check-submission.js';
+import { checkMatch } from './utils/check-match.js';
+import { checkListenMatch } from './utils/check-listen-match.js';
+import { getButton } from './utils/get-button.js';
 
 debugger;
 document.addEventListener(

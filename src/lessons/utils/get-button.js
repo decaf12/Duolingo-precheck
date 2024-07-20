@@ -1,4 +1,4 @@
-import * as constants from '../challenge-type-constants';
+import * as constants from '../challenge-type-constants.js';
 
 export const getButton = (key) => {
   const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));

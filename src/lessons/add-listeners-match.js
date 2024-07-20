@@ -1,7 +1,7 @@
-import * as constants from './challenge-type-constants';
-import { checkMatch } from './utils/check-match';
-import { getChallengeDataLesson } from './utils/get-challenge-data';
-import { checkListenMatch } from './utils/check-listen-match';
+import * as constants from './challenge-type-constants.js';
+import { checkMatch } from './utils/check-match.js';
+import { getChallengeDataLesson } from './utils/get-challenge-data.js';
+import { checkListenMatch } from './utils/check-listen-match.js';
 
 const observerMatch = new MutationObserver(() => {
   const challengeData = getChallengeDataLesson();

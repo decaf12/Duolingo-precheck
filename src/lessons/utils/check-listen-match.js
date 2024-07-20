@@ -1,4 +1,4 @@
-import * as constants from '../challenge-type-constants';
+import * as constants from '../challenge-type-constants.js';
 
 export const checkListenMatch = (button) => {
   const previouslyClicked = button.parentNode.querySelector(constants.MATCH_BUTTON_SELECTED);

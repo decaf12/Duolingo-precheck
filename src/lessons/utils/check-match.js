@@ -1,5 +1,5 @@
-import * as constants from '../challenge-type-constants';
-import * as check from '../check-answer';
+import * as constants from '../challenge-type-constants.js';
+import * as check from '../check-answer.js';
 
 export const checkMatch = (challengeData, button) => {
   if (!button) {

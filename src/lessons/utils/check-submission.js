@@ -1,7 +1,7 @@
-import * as constants from '../challenge-type-constants';
-import { getChallengeDataLesson } from './get-challenge-data';
-import newConsole from '../../set-up-console';
-import * as check from '../check-answer';
+import * as constants from '../challenge-type-constants.js';
+import { getChallengeDataLesson } from './get-challenge-data.js';
+import newConsole from '../../set-up-console.js';
+import * as check from '../check-answer.js';
 
 export const checkSubmission = (submissionButton) => {
   if (submissionButton?.querySelector(constants.SUBMISSION_BUTTON_SPAN)?.innerHTML !== 'Check') {

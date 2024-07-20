@@ -6,14 +6,10 @@ function injectScript(src) {
   script.onload = () => {
     script.remove();
   };
-  script.onerror = (error) => {
-    debugger;
-  };
   document.body.appendChild(script);
 }
 
-// injectScript('src/lessons/add-listeners-lesson.js');
-// injectScript('src/lessons/add-listeners-match.js');
-// injectScript('src/stories/add-match-keyboard-listener-story.js');
-// injectScript('src/stories/add-selectable-listener-story.js');
-injectScript('src/lessons/temp.js');
+injectScript('src/lessons/add-listeners-lesson.js');
+injectScript('src/lessons/add-listeners-match.js');
+injectScript('src/stories/add-match-keyboard-listener-story.js');
+injectScript('src/stories/add-selectable-listener-story.js');

@@ -1,6 +1,6 @@
-import * as constants from './challenge-type-constants';
-import getFiberNode from '../get-fiber-node';
-import * as check from './check-answer';
+import * as constants from './challenge-type-constants.js';
+import getFiberNode from '../get-fiber-node.js';
+import * as check from './check-answer.js';
 
 const addStoryListener = (storyChoice) => {
   ['click', 'keydown'].forEach((event) => {
