@@ -1,19 +1,21 @@
 /* eslint-disable max-len */
-import * as constants from './challengeTypeConstants.js';
-import * as check from './checkAnswer.js';
-import getReactFiber from '../getReactFiber.js';
-import newConsole from '../setUpConsole.js';
+import * as constants from './challengeTypeConstants';
+import * as check from './checkAnswer';
+import getReactFiber from '../getReactFiber';
+import newConsole from '../setUpConsole';
 
-function getChallengeDataLesson() {
+const getChallengeDataLesson = () => {
   const solution = document.querySelector(constants.CHALLENGE_AREA);
+
   if (!solution) {
     return null;
   }
+
   const fiber = getReactFiber(solution);
   return fiber?.return?.memoizedProps?.challenge;
-}
+};
 
-function checkSubmission(submissionButton) {
+const checkSubmission = () => (submissionButton) {
   if (submissionButton?.querySelector(constants.SUBMISSION_BUTTON_SPAN)?.innerHTML !== 'Check') {
     return true;
   }
@@ -21,9 +23,9 @@ function checkSubmission(submissionButton) {
   const challengeData = getChallengeDataLesson();
   newConsole.log('challengeData', challengeData);
   return check.markSubmission(challengeData);
-}
+};
 
-function matchCorrect(challengeData, button) {
+const matchCorrect = (challengeData, button) => {
   if (!button) {
     return false;
   }
@@ -37,9 +39,9 @@ function matchCorrect(challengeData, button) {
   const currentButton = button.textContent;
   const currentText = currentButton.slice(1);
   return check.markMatch(challengeData, previousText, currentText);
-}
+};
 
-function listenMatchCorrect(button) {
+const listenMatchCorrect = (button) => {
   const previouslyClicked = button.parentNode.querySelector(constants.MATCH_BUTTON_SELECTED);
   if (!previouslyClicked) {
     return true;
@@ -56,9 +58,9 @@ function listenMatchCorrect(button) {
   const previousText = previouslyClicked.getAttribute('data-test');
   const currentText = currClicked.getAttribute('data-test');
   return previousText === currentText;
-}
+};
 
-function getButton(key) {
+const getButton = (key) => {
   const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
   const button = buttons.find((x) => {
     const number = x.querySelector(constants.MATCH_BUTTON_NUMBER);
@@ -66,7 +68,7 @@ function getButton(key) {
   });
 
   return button;
-}
+};
 
 // Check user submission whenever the Enter key is pressed
 document.addEventListener(

@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
-import * as constants from './challengeTypeConstants.js';
-import * as check from './checkAnswer.js';
-import getReactFiber from '../getReactFiber.js';
-import newConsole from '../setUpConsole.js';
+import * as constants from './challengeTypeConstants';
+import * as check from './checkAnswer';
+import getReactFiber from '../getReactFiber';
+import newConsole from '../setUpConsole';
 
 function addStoryListener(storyChoice) {
   ['click', 'keydown'].forEach((e) => {
