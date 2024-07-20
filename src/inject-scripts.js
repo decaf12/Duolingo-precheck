@@ -9,4 +9,4 @@ function injectScript(src) {
 
 injectScript('src/lessons/add-listeners-lesson.js');
 injectScript('src/lessons/add-listeners-match.js');
-injectScript('src/stories/add-listeners-story.js');
+injectScript('src/stories/add-match-keyboard-listener.js');
