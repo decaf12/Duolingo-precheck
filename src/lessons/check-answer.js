@@ -130,7 +130,7 @@ export const markSubmission = (challengeData) => {
     }
 
     case 'partialReverseTranslate': {
-      const answerArray = Array.from(document.querySelector(constants.PARTIALREVERSETRANSLATE_ANSWER_ARRAY));
+      const answerArray = Array.from(document.querySelectorAll(constants.PARTIALREVERSETRANSLATE_ANSWER_ARRAY));
       const answer = answerArray.map((x) => x.textContent).join('');
       return markTranslate(answer, challengeData.grader.vertices);
     }
@@ -142,15 +142,15 @@ export const markSubmission = (challengeData) => {
     }
 
     case 'tapComplete': {
-      const selectionArray = Array.from(document.querySelector(constants.TAPCOMPLETE_SELECTION_ARRAY));
+      const selectionArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETE_SELECTION_ARRAY));
       const selectionText = selectionArray.map((button) => button.innerText).join(' ');
       const displayTokens = Array.from(challengeData.displayTokens);
       return selectionText === displayTokens.filter((x) => x.isBlank).map((x) => x.text).join(' ');
     }
 
     case 'tapCompleteTable': {
-      const choiceArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETETABLE_CHOICES));
-      const choices = choiceArray.map((x) => x.querySelector(constants.TAPCOMPLETETABLE_CHOICE_TEXT).textContent).join();
+      const choiceArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETE_SELECTION_ARRAY));
+      const choices = choiceArray.map((x) => x.textContent).join();
       const valueArray = [];
       const tokens = challengeData.displayTokens.slice(1);
       tokens.forEach((token) => {

@@ -21,8 +21,7 @@ export const PARTIALREVERSETRANSLATE_ANSWER_ARRAY = 'label[dir][lang] span:not([
 export const SPEAK_ANSWER_AREA = 'div[dir]';
 export const TAPCLOZE_CHOSEN_BUTTON_TEXT = '[class="_1LQx7"] [data-test="challenge-tap-token-text"]';
 export const TAPCOMPLETE_SELECTION_ARRAY = 'div[dir] span[class="_3BS5Z"]';
-export const TAPCOMPLETE_ANSWER_AREA = 'div[dir]';
-export const TAPCOMPLETE_SELECTED = 'span[class="_3BS5Z"]';
+export const TAPCOMPLETETABLE_CHOICE_ARRAY = '[class="_2Z2xv"] [data-test="challenge-tap-token-text"]';
 export const TAPCOMPLETETABLE_CHOICES = '[class="_2Z2xv"]';
 export const TAPCOMPLETETABLE_CHOICE_TEXT = '[data-test="challenge-tap-token-text"]';
 export const TRANSLATE_TEXTBOX = '[data-test="challenge-translate-input"]';
