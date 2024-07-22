@@ -136,8 +136,7 @@ export const markSubmission = (challengeData) => {
     }
 
     case 'tapCloze': {
-      const chosenButton = document.querySelector(constants.TAPCLOZE_SELECTED);
-      const chosenButtonText = chosenButton.querySelector(constants.TAPCLOZE_BUTTON_TEXT).textContent;
+      const chosenButtonText = document.querySelector(constants.TAPCLOZE_CHOSEN_BUTTON_TEXT).textContent;
       const correctChoice = challengeData.correctIndices[0];
       return chosenButtonText === challengeData.choices[correctChoice];
     }
