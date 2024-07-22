@@ -22,8 +22,6 @@ export const SPEAK_ANSWER_AREA = 'div[dir]';
 export const TAPCLOZE_CHOSEN_BUTTON_TEXT = '[class="_1LQx7"] [data-test="challenge-tap-token-text"]';
 export const TAPCOMPLETE_SELECTION_ARRAY = 'div[dir] span[class="_3BS5Z"]';
 export const TAPCOMPLETETABLE_CHOICE_ARRAY = '[class="_2Z2xv"] [data-test="challenge-tap-token-text"]';
-export const TAPCOMPLETETABLE_CHOICES = '[class="_2Z2xv"]';
-export const TAPCOMPLETETABLE_CHOICE_TEXT = '[data-test="challenge-tap-token-text"]';
 export const TRANSLATE_TEXTBOX = '[data-test="challenge-translate-input"]';
 export const TYPECLOZE_BLANK = '[class="_3bKcr"]';
 export const TYPECLOZE_CORRECT = '[class="caPDQ"]';

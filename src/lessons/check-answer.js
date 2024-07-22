@@ -149,7 +149,7 @@ export const markSubmission = (challengeData) => {
     }
 
     case 'tapCompleteTable': {
-      const choiceArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETE_SELECTION_ARRAY));
+      const choiceArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETETABLE_CHOICE_ARRAY));
       const choices = choiceArray.map((x) => x.textContent).join();
       const valueArray = [];
       const tokens = challengeData.displayTokens.slice(1);

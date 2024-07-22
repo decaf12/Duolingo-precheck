@@ -7,13 +7,8 @@ document.addEventListener(
   'keydown',
   (e) => {
     if (/^\d$/.test(e.key)) {
-      const matchButtonGroup = document.querySelector(constants.MATCH_BUTTON_GROUP);
+      const buttons = Array.from(document.querySelectorAll(constants.MATCH_BUTTONS));
 
-      if (!matchButtonGroup) {
-        return;
-      }
-
-      const buttons = Array.from(matchButtonGroup.querySelectorAll('button'));
       if (!buttons?.length) {
         return;
       }

@@ -28,8 +28,7 @@ const selectables = [constants.STORY_CHECKBOX, constants.STORY_CHOICE, constants
 const observerStory = new MutationObserver(() => {
   selectables.forEach((selector) => document.querySelectorAll(selector).forEach(addStoryListener));
 
-  const matchButtonGroup = document.querySelector(constants.MATCH_BUTTON_GROUP);
-  matchButtonGroup?.querySelectorAll('li').forEach(addStoryListener);
+  document.querySelectorAll(constants.MATCH_BUTTON_GROUP)?.forEach(addStoryListener);
 });
 
 observerStory.observe(document.body, { childList: true, subtree: true });
