@@ -20,6 +20,7 @@ export const NAME_TEXTBOX = '[data-test="challenge-text-input"]';
 export const PARTIALREVERSETRANSLATE_ANSWER_ARRAY = 'label[dir][lang] span:not([class]), label[dir][lang] [contenteditable="true"]';
 export const SPEAK_ANSWER_AREA = 'div[dir]';
 export const TAPCLOZE_CHOSEN_BUTTON_TEXT = '[class="_1LQx7"] [data-test="challenge-tap-token-text"]';
+export const TAPCOMPLETE_SELECTION_ARRAY = 'div[dir] span[class="_3BS5Z"]';
 export const TAPCOMPLETE_ANSWER_AREA = 'div[dir]';
 export const TAPCOMPLETE_SELECTED = 'span[class="_3BS5Z"]';
 export const TAPCOMPLETETABLE_CHOICES = '[class="_2Z2xv"]';

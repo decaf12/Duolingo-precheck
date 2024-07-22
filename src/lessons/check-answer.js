@@ -142,8 +142,7 @@ export const markSubmission = (challengeData) => {
     }
 
     case 'tapComplete': {
-      const answerArea = document.querySelector(constants.TAPCOMPLETE_ANSWER_AREA);
-      const selectionArray = Array.from(answerArea.querySelectorAll(constants.TAPCOMPLETE_SELECTED));
+      const selectionArray = Array.from(document.querySelector(constants.TAPCOMPLETE_SELECTION_ARRAY));
       const selectionText = selectionArray.map((button) => button.innerText).join(' ');
       const displayTokens = Array.from(challengeData.displayTokens);
       return selectionText === displayTokens.filter((x) => x.isBlank).map((x) => x.text).join(' ');
