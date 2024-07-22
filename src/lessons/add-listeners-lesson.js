@@ -23,8 +23,10 @@ document.addEventListener(
       }
 
       const button = getButton(e.key);
-      const isCorrect = challengeData.type === 'match' ? checkMatch(challengeData, button) : checkListenMatch(button);
-      if (!isCorrect) {
+      const checker = challengeData.type === 'match'
+        ? (submitButton) => checkMatch(challengeData, submitButton)
+        : checkListenMatch;
+      if (!checker(button)) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }

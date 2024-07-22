@@ -130,8 +130,7 @@ export const markSubmission = (challengeData) => {
     }
 
     case 'partialReverseTranslate': {
-      const textbox = document.querySelector(constants.PARTIALREVERSETRANSLATE_TEXTBOX);
-      const answerArray = Array.from(textbox.querySelectorAll(constants.PARTIALREVERSETRANSLATE_TEXT));
+      const answerArray = Array.from(document.querySelector(constants.PARTIALREVERSETRANSLATE_ANSWER_ARRAY));
       const answer = answerArray.map((x) => x.textContent).join('');
       return markTranslate(answer, challengeData.grader.vertices);
     }
