@@ -30,7 +30,7 @@ document.addEventListener(
 
       const parent = pressedButton.closest(constants.STORY_PARENT);
 
-      const storyData = getFiberNode(parent)?.return?.memoizedProps?.bustoryElement;
+      const storyData = getFiberNode(parent)?.return?.memoizedProps?.storyElement;
 
       if (storyData && !check.markStoryMatch(storyData, pressedButton)) {
         e.preventDefault();
