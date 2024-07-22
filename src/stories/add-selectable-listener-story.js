@@ -23,11 +23,10 @@ const addStoryListener = (storyChoice) => {
   });
 };
 
-const selectables = [constants.STORY_CHECKBOX, constants.STORY_CHOICE, constants.STORY_TOKENS];
+const selectables = `${constants.STORY_CHECKBOX}, ${constants.STORY_CHOICE}, ${constants.STORY_TOKENS}`;
 
 const observerStory = new MutationObserver(() => {
-  selectables.forEach((selector) => document.querySelectorAll(selector).forEach(addStoryListener));
-
+  document.querySelectorAll(selectables).forEach(addStoryListener);
   document.querySelectorAll(constants.MATCH_BUTTON_GROUP)?.forEach(addStoryListener);
 });
 

@@ -6,7 +6,7 @@ export const STORY_TOKEN_SELECTED = `${STORY_TOKENS}[aria-disabled="true"]`;
 export const STORY_TOKEN_BANK = '[data-test="word-bank"]';
 export const MATCH_BUTTON_GROUP = 'div[style^="flex-direction"] li';
 export const MATCH_BUTTONS = 'div[style^="flex-direction"] button';
-export const MATCH_BUTTON_SELECTED = 'button[class*="_3Nuad"]';
+export const MATCH_PREVIOUSLY_CLICKED_TEXT = 'button[class*="_3Nuad"] [data-test="challenge-tap-token-text"]';
 export const MATCH_BUTTON_TEXT = '[data-test="challenge-tap-token-text"]';
 export const MATCH_BUTTON_NUMBER = 'span[class^="_3"]';
 export const POINT_TO_PHRASE_BUTTON_BANK = 'div[dir]';
