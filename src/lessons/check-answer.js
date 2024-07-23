@@ -130,30 +130,27 @@ export const markSubmission = (challengeData) => {
     }
 
     case 'partialReverseTranslate': {
-      const textbox = document.querySelector(constants.PARTIALREVERSETRANSLATE_TEXTBOX);
-      const answerArray = Array.from(textbox.querySelectorAll(constants.PARTIALREVERSETRANSLATE_TEXT));
+      const answerArray = Array.from(document.querySelectorAll(constants.PARTIALREVERSETRANSLATE_ANSWER_ARRAY));
       const answer = answerArray.map((x) => x.textContent).join('');
       return markTranslate(answer, challengeData.grader.vertices);
     }
 
     case 'tapCloze': {
-      const chosenButton = document.querySelector(constants.TAPCLOZE_SELECTED);
-      const chosenButtonText = chosenButton.querySelector(constants.TAPCLOZE_BUTTON_TEXT).textContent;
+      const chosenButtonText = document.querySelector(constants.TAPCLOZE_CHOSEN_BUTTON_TEXT).textContent;
       const correctChoice = challengeData.correctIndices[0];
       return chosenButtonText === challengeData.choices[correctChoice];
     }
 
     case 'tapComplete': {
-      const answerArea = document.querySelector(constants.TAPCOMPLETE_ANSWER_AREA);
-      const selectionArray = Array.from(answerArea.querySelectorAll(constants.TAPCOMPLETE_SELECTED));
+      const selectionArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETE_SELECTION_ARRAY));
       const selectionText = selectionArray.map((button) => button.innerText).join(' ');
       const displayTokens = Array.from(challengeData.displayTokens);
       return selectionText === displayTokens.filter((x) => x.isBlank).map((x) => x.text).join(' ');
     }
 
     case 'tapCompleteTable': {
-      const choiceArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETETABLE_CHOICES));
-      const choices = choiceArray.map((x) => x.querySelector(constants.TAPCOMPLETETABLE_CHOICE_TEXT).textContent).join();
+      const choiceArray = Array.from(document.querySelectorAll(constants.TAPCOMPLETETABLE_CHOICE_ARRAY));
+      const choices = choiceArray.map((x) => x.textContent).join();
       const valueArray = [];
       const tokens = challengeData.displayTokens.slice(1);
       tokens.forEach((token) => {

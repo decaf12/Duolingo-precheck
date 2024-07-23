@@ -2,11 +2,10 @@
 import * as constants from './challenge-type-constants.js';
 
 export const markStoryMatch = (storyData, button) => {
-  const previouslyClicked = document.querySelector(constants.MATCH_BUTTON_SELECTED);
-  if (!previouslyClicked) {
+  const previousText = document.querySelector(constants.MATCH_PREVIOUSLY_CLICKED_TEXT)?.textContent;
+  if (previousText === undefined) {
     return true;
   }
-  const previousText = previouslyClicked.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
 
   const currentText = button.querySelector(constants.MATCH_BUTTON_TEXT).textContent;
 
