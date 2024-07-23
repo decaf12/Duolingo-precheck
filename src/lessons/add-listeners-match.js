@@ -15,7 +15,7 @@ const observerMatch = new MutationObserver(() => {
   const matchButtons = document.querySelectorAll(constants.MATCH_BUTTONS);
   matchButtons.forEach((button) => {
     button.addEventListener('click', (e) => {
-      if (!checker(challengeData, button)) {
+      if (!checker(button)) {
         e.preventDefault();
         e.stopImmediatePropagation();
       }
