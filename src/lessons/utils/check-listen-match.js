@@ -1,3 +1,4 @@
+import getFiberNode from '../../get-fiber-node.js';
 import * as constants from '../challenge-type-constants.js';
 
 export const checkListenMatch = (button) => {
@@ -14,8 +15,10 @@ export const checkListenMatch = (button) => {
     return true;
   }
 
-  const previousText = previouslyClicked.getAttribute('data-test');
-  const currentText = currClicked.getAttribute('data-test');
+  const previousFiberNode = getFiberNode(previouslyClicked);
+  const currFiberNode = getFiberNode(currClicked);
+  const previousText = previousFiberNode.memoizedProps['data-test'];
+  const currentText = currFiberNode.memoizedProps['data-test'];
   return previousText === currentText;
 };
 
