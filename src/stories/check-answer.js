@@ -24,6 +24,7 @@ export const markStorySubmission = (storyData, button) => {
       const correctOrder = storyData.phraseOrder;
       const correctButtonContent = phraseArray[correctOrder[selectedButtonCount]];
       return button.textContent === correctButtonContent;
+      return button.textContent.trim() === correctButtonContent.trim();
     }
 
     case 'MATCH': {
@@ -38,6 +39,7 @@ export const markStorySubmission = (storyData, button) => {
       const buttonText = labelTokens.map((token) => token.innerText).join('');
       const correctText = answerArray[correctID].text;
       return correctText === buttonText;
+      return correctText.trim() === buttonText.trim();
     }
 
     case 'POINT_TO_PHRASE': {
@@ -46,6 +48,7 @@ export const markStorySubmission = (storyData, button) => {
       const correctIndex = storyData.correctAnswerIndex;
       const correctButton = buttons[correctIndex];
       return button.innerText === correctButton.innerText;
+      return button.innerText.trim() === correctButton.innerText.trim();
     }
 
     case 'SELECT_PHRASE': {
@@ -54,6 +57,7 @@ export const markStorySubmission = (storyData, button) => {
       const correctText = answerArray[correctID];
       const buttonText = button.innerText;
       return correctText === buttonText;
+      return correctText.trim() === buttonText.trim();
     }
 
     default:
