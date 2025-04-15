@@ -7,6 +7,11 @@ const addStoryListener = (storyChoice) => {
     storyChoice.addEventListener(
       event,
       (e) => {
+        const continueButton = document.querySelector('[data-test="stories-player-continue"]:not(:disabled)');
+        if (continueButton) {
+          return;
+        }
+
         const parent = storyChoice.closest(constants.STORY_PARENT);
         if (!parent) {
           return;
