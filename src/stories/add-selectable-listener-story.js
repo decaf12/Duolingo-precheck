@@ -12,6 +12,11 @@ const addStoryListener = (storyChoice) => {
           return;
         }
 
+        const storyStartButton = document.querySelector('[data-test="story-start"]:not(:disabled)');
+        if (storyStartButton) {
+          return;
+        }
+
         const parent = storyChoice.closest(constants.STORY_PARENT);
         if (!parent) {
           return;
