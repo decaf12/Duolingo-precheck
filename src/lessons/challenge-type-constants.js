@@ -29,3 +29,4 @@ export const TYPECLOZE_SUBMISSION = '[class="Y5JxA _17nEt"]';
 export const TYPECOMPLETETABLE_BLANKS = '[class="_1Rf3h"]';
 export const TYPECOMPLETETABLE_ANSWER = '[class="caPDQ"]';
 export const TYPECOMPLETETABLE_SUBMISSION = '[class="Y5JxA _17nEt"]';
+export const PATTERNTAPCOMPLETE_CHOICES = '[data-test="word-bank"] button'

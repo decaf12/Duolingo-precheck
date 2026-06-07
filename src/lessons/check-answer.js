@@ -211,6 +211,14 @@ export const markSubmission = (challengeData) => {
       });
     }
 
+    case 'patternTapComplete': {
+      const wordBank = Array.from(document.querySelectorAll(constants.PATTERNTAPCOMPLETE_CHOICES));
+      const actualIndex = wordBank.findIndex((button) => {
+        return button.getAttribute('aria-disabled') === 'true'
+      });
+      return challengeData.correctIndex === actualIndex;
+    }
+
     default:
       return false;
   }
