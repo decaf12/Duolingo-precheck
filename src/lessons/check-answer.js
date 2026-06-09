@@ -174,7 +174,7 @@ export const markSubmission = (challengeData) => {
         const dirArray = Array.from(document.querySelectorAll(constants.SPEAK_ANSWER_AREA));
         const answerArea = dirArray.at(-1);
         const selectionArray = Array.from(answerArea.querySelectorAll('button'));
-        const selectionArrayText = selectionArray.map((button) => button.textContent);
+        const selectionArrayText = selectionArray.map((button) => button.innerText);
         const { correctTokens } = challengeData;
 
         identicalToCorrectTokens = selectionArrayText.length === correctTokens.length && selectionArrayText.every((word, index) => {
