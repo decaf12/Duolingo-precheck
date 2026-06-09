@@ -4,7 +4,7 @@ import newConsole from '../../set-up-console.js';
 import * as check from '../check-answer.js';
 
 export const checkSubmission = (submissionButton) => {
-  if (submissionButton?.querySelector(constants.SUBMISSION_BUTTON_SPAN)?.innerHTML !== 'Check') {
+  if (submissionButton?.textContent !== 'Check') {
     return true;
   }
 

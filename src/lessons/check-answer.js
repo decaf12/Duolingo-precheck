@@ -174,19 +174,12 @@ export const markSubmission = (challengeData) => {
         const dirArray = Array.from(document.querySelectorAll(constants.SPEAK_ANSWER_AREA));
         const answerArea = dirArray.at(-1);
         const selectionArray = Array.from(answerArea.querySelectorAll('button'));
-        const selectionArrayText = selectionArray.map((button) => button.innerText);
+        const selectionArrayText = selectionArray.map((button) => button.textContent);
         const { correctTokens } = challengeData;
 
-        if (selectionArrayText.length === correctTokens.length) {
-          for (let i = 0; i < selectionArrayText.length; ++i) {
-            if (selectionArrayText[i] !== correctTokens[i]) {
-              identicalToCorrectTokens = false;
-              break;
-            }
-          }
-        } else {
-          identicalToCorrectTokens = false;
-        }
+        identicalToCorrectTokens = selectionArrayText.length === correctTokens.length && selectionArrayText.every((word, index) => {
+          return word === correctTokens[index]
+        });
         answer = selectionArrayText.join(' ');
       } else {
         identicalToCorrectTokens = false;

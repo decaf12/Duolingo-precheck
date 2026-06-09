@@ -1,4 +1,8 @@
+/**
+ * 
+ * @param {Object} obj 
+ */
 export default function getFiberNode(obj) {
-  const key = Object.keys(obj).find((s) => s.startsWith('__reactFiber$'));
-  return obj[key];
+  const [_, node] = Object.entries(obj).find(([key]) => key.startsWith('__reactFiber$'));
+  return node;
 }

@@ -1,5 +1,9 @@
 /* eslint-disable max-len */
-function injectScript(src) {
+/**
+ * 
+ * @param {string} src
+ */
+const injectScript = (src) => {
   const script = document.createElement('script');
   script.setAttribute('type', 'module');
   script.src = browser.runtime.getURL(src);
