@@ -1,15 +1,16 @@
 import * as constants from '../challenge-type-constants.js';
 import getFiberNode from '../../get-fiber-node.js';
+import newConsole from '../../set-up-console.js';
 
 export const getChallengeState = () => {
-  const solution = document.querySelector(constants.CHALLENGE_AREA);
-
+  const solution = document.getElementById(constants.CHALLENGE_FOOTER_ID).parentElement;
+  
   if (!solution) {
     return null;
   }
 
   const fiber = getFiberNode(solution);
-  return fiber?.return?.memoizedProps;
+  return fiber?.memoizedProps?.children?.props;
 };
 
 export default getChallengeState;

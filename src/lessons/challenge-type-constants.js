@@ -1,4 +1,5 @@
 export const CHALLENGE_AREA = '[data-test^="challenge "]';
+export const CHALLENGE_FOOTER_ID = 'session/PlayerFooter';
 export const COMPLETEREVERSETRANSLATION_TEXTBOX = 'label[dir][lang]';
 export const COMPLETEREVERSETRANSLATION_BLANK = '[data-test="challenge-text-input"]';
 export const SUBMISSION_BUTTON_LESSON = '[data-test="player-next"]';
