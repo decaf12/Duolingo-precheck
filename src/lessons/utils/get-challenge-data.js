@@ -1,7 +1,7 @@
 import * as constants from '../challenge-type-constants.js';
 import getFiberNode from '../../get-fiber-node.js';
 
-export const getChallengeDataLesson = () => {
+export const getChallengeState = () => {
   const solution = document.querySelector(constants.CHALLENGE_AREA);
 
   if (!solution) {
@@ -9,7 +9,7 @@ export const getChallengeDataLesson = () => {
   }
 
   const fiber = getFiberNode(solution);
-  return fiber?.return?.memoizedProps?.challenge;
+  return fiber?.return?.memoizedProps;
 };
 
-export default getChallengeDataLesson;
+export default getChallengeState;

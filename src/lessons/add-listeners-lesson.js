@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import * as constants from './challenge-type-constants.js';
-import { getChallengeDataLesson } from './utils/get-challenge-data.js';
+import { getChallengeState } from './utils/get-challenge-data.js';
 import { checkSubmission } from './utils/check-submission.js';
 import { checkMatch } from './utils/check-match.js';
 import { checkListenMatch } from './utils/check-listen-match.js';
@@ -17,7 +17,7 @@ document.addEventListener(
         e.stopImmediatePropagation();
       }
     } else if (/^\d$/.test(e.key)) {
-      const challengeData = getChallengeDataLesson();
+      const challengeData = getChallengeState()?.challenge;
       if (challengeData.type !== 'match' && challengeData.type !== 'listenMatch') {
         return;
       }
