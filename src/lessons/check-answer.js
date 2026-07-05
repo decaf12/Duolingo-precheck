@@ -68,10 +68,10 @@ const markTranslate = (answer, vertices) => {
   return false;
 };
 
-const markMultipleChoice = (challengeState) => {
-  const correctIndex = challengeState?.challenge?.correctIndex;
-  const actualIndex = challengeState?.challengeState?.guess;
-  return actualIndex === correctIndex;
+const markMultipleChoice = (challengeData) => {
+  const choices = Array.from(document.querySelectorAll(constants.MULTIPLE_CHOICE_CHOICES));
+  const selectedIndex = choices.findIndex((x) => x.tabIndex === 0);
+  return selectedIndex === challengeData.correctIndex;
 };
 
 export const markSubmission = (challengeState) => {
@@ -88,7 +88,7 @@ export const markSubmission = (challengeState) => {
     case 'readComprehension':
     case 'select':
     case 'selectTranscription':
-      return markMultipleChoice(challengeState);
+      return markMultipleChoice(challengeData);
 
     case 'completeReverseTranslation': {
       let answer = document.querySelector(constants.TRANSLATE_TEXTBOX)?.value;
