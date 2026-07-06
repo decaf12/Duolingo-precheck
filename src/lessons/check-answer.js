@@ -76,7 +76,7 @@ const markMultipleChoice = (challengeData) => {
 
 export const markSubmission = (challengeState) => {
   const challengeData = challengeState?.challenge;
-  newConsole.log('challengeData', challengeState);
+  newConsole.log('challengeData', challengeData);
   switch (challengeData.type) {
     case 'assist':
     case 'definition':

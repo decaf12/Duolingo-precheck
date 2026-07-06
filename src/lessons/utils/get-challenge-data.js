@@ -1,6 +1,5 @@
 import * as constants from '../challenge-type-constants.js';
 import getFiberNode from '../../get-fiber-node.js';
-import newConsole from '../../set-up-console.js';
 
 export const getChallengeState = () => {
   const solution = document.getElementById(constants.CHALLENGE_FOOTER_ID).parentElement;
